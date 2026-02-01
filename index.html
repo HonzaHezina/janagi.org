@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>janAGI – Budoucnost AI orchestrace</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-content">
+            <div class="loader-logo">jan<span>AGI</span></div>
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Načítání budoucnosti AI...</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Particle Background -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="main-nav-fixed" id="mainNav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">jan<span>AGI</span></a>
+            <div class="nav-links" id="navLinks">
+                <a href="#problem" class="nav-link">Problém</a>
+                <a href="#architecture" class="nav-link">Architektura</a>
+                <a href="#roadmap" class="nav-link">Roadmapa</a>
+                <a href="#workflow" class="nav-link">Jak to funguje</a>
+                <a href="#audience" class="nav-link">Pro koho</a>
+                <a href="#janagi" class="nav-link">Investoři</a>
+            </div>
+            <!-- Dark/Light Mode Toggle -->
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="hero-header">
+        <!-- Animated blob shapes -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        
+        <div class="container">
+            <div class="status-badge" data-aos="fade-down" data-aos-delay="200">
+                <i class="fas fa-rocket"></i> Hledáme investory
+            </div>
+            
+            <div class="logo-main" data-aos="fade-up" data-aos-delay="400">jan<span>AGI</span></div>
+            
+            <h1 id="typingHeadline" class="typing-headline" data-aos="fade-up" data-aos-delay="600"></h1>
+            
+            <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
+                Představujeme janAGI – open‑source framework pro orchestraci umělé inteligence. 
+                Zapomeňte na řetězení nástrojů: zadáte cíl, centrální Planner naplánuje, 
+                specializovaní agenti vykonají a vše sledujete v transparentním UI.
+            </p>
+
+            <!-- Enhanced Email Form -->
+            <form class="email-form" id="heroEmailForm" data-aos="fade-up" data-aos-delay="1000">
+                <div class="input-wrapper">
+                    <input type="email" id="heroEmail" placeholder="Zadejte váš e-mail" required>
+                    <div class="input-border"></div>
+                </div>
+                <button type="submit" class="cta-button ripple-effect">
+                    <span>Chci vědět o spuštění</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="1200">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <p>Scrollujte dolů</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Problem Section -->
+        <section id="problem" class="section-problem">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Už vás unavuje chaos v AI nástrojích?
+                    <div class="title-underline"></div>
+                </h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                    Současný svět AI agentů je plný nespolehlivých experimentů a uzavřených systémů. 
+                    janAGI přináší řád, transparentnost a skutečnou sílu do vašich rukou.
+                </p>
+                
+                <div class="features-grid">
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </div>
+                        <h3>Problém: Černé skříňky</h3>
+                        <p class="card-problem">Nevíte, co AI přesně dělá, proč selhává, a nemáte nad procesem kontrolu.</p>
+                        <div class="solution-divider"></div>
+                        <p class="card-solution">
+                            <strong><i class="fas fa-lightbulb"></i> Řešení janAGI:</strong> 
+                            Plná transparentnost díky interaktivnímu UI, kde vidíte každý krok plánu i výstupy agentů v reálném čase.
+                        </p>
+                        <button class="card-learn-more" onclick="openModal('blackbox')">
+                            Zjistit více <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-bug"></i>
+                        </div>
+                        <h3>Problém: Nespolehlivost</h3>
+                        <p class="card-problem">AI agenti často selhávají na komplexnějších úlohách a nedokáží se zotavit z chyby.</p>
+                        <div class="solution-divider"></div>
+                        <p class="card-solution">
+                            <strong><i class="fas fa-lightbulb"></i> Řešení janAGI:</strong> 
+                            Modulární architektura se specializovanými agenty a centrálním mozkem, který umí reagovat na chyby a upravit plán.
+                        </p>
+                        <button class="card-learn-more" onclick="openModal('reliability')">
+                            Zjistit více <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3>Problém: Uzavřené ekosystémy</h3>
+                        <p class="card-problem">Jste vázáni na jednoho poskytovatele, jeho nástroje a jeho ceny.</p>
+                        <div class="solution-divider"></div>
+                        <p class="card-solution">
+                            <strong><i class="fas fa-lightbulb"></i> Řešení janAGI:</strong> 
+                            100% open-source framework. Můžete si ho provozovat kdekoliv a rozšiřovat o vlastní agenty bez omezení.
+                        </p>
+                        <button class="card-learn-more" onclick="openModal('opensource')">
+                            Zjistit více <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture" class="section-architecture">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Architektura janAGI
+                    <div class="title-underline"></div>
+                </h2>
+                
+                <div class="architecture-diagram" data-aos="zoom-in" data-aos-delay="200">
+                    <svg viewBox="0 0 800 400" class="arch-svg">
+                        <!-- Animated connections -->
+                        <g class="connections">
+                            <line x1="400" y1="80" x2="200" y2="250" class="connection-line" stroke-dasharray="5,5">
+                                <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                            </line>
+                            <line x1="400" y1="80" x2="400" y2="250" class="connection-line" stroke-dasharray="5,5">
+                                <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                            </line>
+                            <line x1="400" y1="80" x2="600" y2="250" class="connection-line" stroke-dasharray="5,5">
+                                <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                            </line>
+                        </g>
+                        
+                        <!-- Central Brain Node -->
+                        <g class="arch-node brain-node" data-tooltip="Centrální mozek koordinuje všechny agenty">
+                            <circle cx="400" cy="80" r="60" class="node-bg"/>
+                            <text x="400" y="75" text-anchor="middle" class="node-icon">🧠</text>
+                            <text x="400" y="95" text-anchor="middle" class="node-label">Planner</text>
+                        </g>
+                        
+                        <!-- Agent Nodes -->
+                        <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
+                            <circle cx="200" cy="280" r="50" class="node-bg"/>
+                            <text x="200" y="275" text-anchor="middle" class="node-icon">🤖</text>
+                            <text x="200" y="295" text-anchor="middle" class="node-label">Agent 1</text>
+                        </g>
+                        
+                        <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
+                            <circle cx="400" cy="280" r="50" class="node-bg"/>
+                            <text x="400" y="275" text-anchor="middle" class="node-icon">🤖</text>
+                            <text x="400" y="295" text-anchor="middle" class="node-label">Agent 2</text>
+                        </g>
+                        
+                        <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
+                            <circle cx="600" cy="280" r="50" class="node-bg"/>
+                            <text x="600" y="275" text-anchor="middle" class="node-icon">🤖</text>
+                            <text x="600" y="295" text-anchor="middle" class="node-label">Agent 3</text>
+                        </g>
+                    </svg>
+                    <div class="svg-tooltip" id="svgTooltip"></div>
+                </div>
+
+                <div class="architecture-grid">
+                    <div class="glass-card interactive-card" data-aos="fade-right" data-aos-delay="300">
+                        <div class="card-glow"></div>
+                        <div class="card-number">01</div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3>Mozek (Planner)</h3>
+                        <p>Centrální plánovač analyzuje váš záměr a sestaví detailní plán kroků, které vedou k cíli.</p>
+                        <div class="feature-tags">
+                            <span class="tag">AI Planning</span>
+                            <span class="tag">Koordinace</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="card-glow"></div>
+                        <div class="card-number">02</div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3>Agentní systém</h3>
+                        <p>Specializovaní agenti plní jednotlivé úlohy, od generování kódu po analýzu dat, a komunikují přes API.</p>
+                        <div class="feature-tags">
+                            <span class="tag">Modularita</span>
+                            <span class="tag">Specializace</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card interactive-card" data-aos="fade-left" data-aos-delay="500">
+                        <div class="card-glow"></div>
+                        <div class="card-number">03</div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-display"></i>
+                        </div>
+                        <h3>Transparentní UI</h3>
+                        <p>Interaktivní uživatelské rozhraní vám umožní sledovat a upravovat každý krok v reálném čase.</p>
+                        <div class="feature-tags">
+                            <span class="tag">Real-time</span>
+                            <span class="tag">Kontrola</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Roadmap Section -->
+        <section id="roadmap" class="section-roadmap">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Roadmapa janAGI
+                    <div class="title-underline"></div>
+                </h2>
+                
+                <div class="interactive-timeline">
+                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="100" onclick="toggleTimelineItem(this)">
+                        <div class="timeline-marker">
+                            <div class="marker-icon"><i class="fa-solid fa-rocket"></i></div>
+                            <div class="marker-pulse"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge">Q1 2025</div>
+                            <h3>Alpha verze</h3>
+                            <p>První veřejné vydání s základní orchestrací agentů a otevřeným repozitářem na GitHubu.</p>
+                            <div class="timeline-details">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> Základní Planner</li>
+                                    <li><i class="fas fa-check"></i> 3 specializované agenty</li>
+                                    <li><i class="fas fa-check"></i> Dokumentace</li>
+                                    <li><i class="fas fa-check"></i> CLI interface</li>
+                                </ul>
+                            </div>
+                            <button class="expand-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-left" data-aos-delay="200" onclick="toggleTimelineItem(this)">
+                        <div class="timeline-marker">
+                            <div class="marker-icon"><i class="fa-solid fa-plug"></i></div>
+                            <div class="marker-pulse"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge">Q2 2025</div>
+                            <h3>Beta a pluginy</h3>
+                            <p>Přidání modulárních pluginů pro integraci se službami třetích stran a vylepšení UI.</p>
+                            <div class="timeline-details">
+                                <ul>
+                                    <li><i class="fas fa-check"></i> Plugin systém</li>
+                                    <li><i class="fas fa-check"></i> Web UI</li>
+                                    <li><i class="fas fa-check"></i> API Gateway</li>
+                                    <li><i class="fas fa-check"></i> Integrace s GPT-4</li>
+                                </ul>
+                            </div>
+                            <button class="expand-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="300" onclick="toggleTimelineItem(this)">
+                        <div class="timeline-marker">
+                            <div class="marker-icon"><i class="fa-solid fa-users"></i></div>
+                            <div class="marker-pulse"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge">Q3 2025</div>
+                            <h3>Komunitní rozšíření</h3>
+                            <p>Spuštění komunitního portálu, kde mohou vývojáři sdílet vlastní agenty a workflow.</p>
+                            <div class="timeline-details">
+                                <ul>
+                                    <li><i class="fas fa-hourglass-half"></i> Marketplace</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Agent SDK</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Community forum</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Tutorials</li>
+                                </ul>
+                            </div>
+                            <button class="expand-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-aos="fade-left" data-aos-delay="400" onclick="toggleTimelineItem(this)">
+                        <div class="timeline-marker">
+                            <div class="marker-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+                            <div class="marker-pulse"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge">Q4 2025</div>
+                            <h3>Veřejné uvedení</h3>
+                            <p>Plná verze s podporou multi‑agentních systémů a první enterprise nasazení.</p>
+                            <div class="timeline-details">
+                                <ul>
+                                    <li><i class="fas fa-hourglass-half"></i> Enterprise features</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Security audit</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Cloud hosting</li>
+                                    <li><i class="fas fa-hourglass-half"></i> 24/7 Support</li>
+                                </ul>
+                            </div>
+                            <button class="expand-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-section" data-aos="zoom-in">
+                    <h3>Zapojte se do vývoje</h3>
+                    <p>janAGI je open‑source projekt a potřebuje vaši podporu. Přidejte se k nám na GitHubu nebo nám napište.</p>
+                    <div class="cta-buttons">
+                        <a href="#" class="btn-primary ripple-effect">
+                            <i class="fab fa-github"></i> GitHub Repozitář
+                        </a>
+                        <a href="#janagi" class="btn-secondary ripple-effect">
+                            <i class="fas fa-envelope"></i> Kontaktujte nás
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workflow Section -->
+        <section id="workflow" class="section-workflow">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Jak to funguje? Jednoduše.
+                    <div class="title-underline"></div>
+                </h2>
+
+                <div class="workflow-steps">
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-number">
+                            <span>01</span>
+                            <div class="number-glow"></div>
+                        </div>
+                        <div class="step-content glass-card">
+                            <div class="card-glow"></div>
+                            <div class="step-icon">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <h3>Zadáte záměr</h3>
+                            <p>Jednoduše v přirozeném jazyce popíšete, čeho chcete dosáhnout. Např. "Vytvoř mi landing page pro prodej kávy, včetně textů a obrázků."</p>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">
+                            <span>02</span>
+                            <div class="number-glow"></div>
+                        </div>
+                        <div class="step-content glass-card">
+                            <div class="card-glow"></div>
+                            <div class="step-icon">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+                            <h3>AI navrhne plán</h3>
+                            <p>Centrální mozek janAGI analyzuje váš záměr a navrhne sérii kroků k jeho dosažení (vytvořit HTML, napsat texty, vygenerovat obrázky, ...).</p>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-number">
+                            <span>03</span>
+                            <div class="number-glow"></div>
+                        </div>
+                        <div class="step-content glass-card">
+                            <div class="card-glow"></div>
+                            <div class="step-icon">
+                                <i class="fa-solid fa-check-circle"></i>
+                            </div>
+                            <h3>Plán schválíte</h3>
+                            <p>V přehledném rozhraní si prohlédnete navržený plán a máte plnou kontrolu ho schválit nebo upravit. Žádné nečekané akce.</p>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">
+                            <span>04</span>
+                            <div class="number-glow"></div>
+                        </div>
+                        <div class="step-content glass-card">
+                            <div class="card-glow"></div>
+                            <div class="step-icon">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <h3>Sledujete exekuci</h3>
+                            <p>Po schválení se specializovaní agenti pustí do práce. V reálném čase sledujete jejich výstupy a postup celého projektu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audience Section -->
+        <section id="audience" class="section-audience">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Pro koho je janAGI?
+                    <div class="title-underline"></div>
+                </h2>
+
+                <div class="audience-grid">
+                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="100">
+                        <div class="card-glow"></div>
+                        <div class="audience-icon">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3>Pro vývojáře a integrátory</h3>
+                        <p>Získejte mocný, open-source framework pro rychlé prototypování a integraci AI do vašich systémů. Zapomeňte na lepení skriptů, využijte robustní API.</p>
+                        <ul class="benefit-list">
+                            <li><i class="fas fa-check-circle"></i> Robustní API</li>
+                            <li><i class="fas fa-check-circle"></i> Snadná integrace</li>
+                            <li><i class="fas fa-check-circle"></i> Dokumentace</li>
+                        </ul>
+                    </div>
+
+                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="200">
+                        <div class="card-glow"></div>
+                        <div class="audience-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Pro produktové manažery</h3>
+                        <p>Soustřeďte se na "co" a nechte "jak" na umělé inteligenci. Urychlete vývoj a testování nápadů bez potřeby velkého vývojového týmu.</p>
+                        <ul class="benefit-list">
+                            <li><i class="fas fa-check-circle"></i> Rychlé prototypy</li>
+                            <li><i class="fas fa-check-circle"></i> Flexibilita</li>
+                            <li><i class="fas fa-check-circle"></i> Cost-effective</li>
+                        </ul>
+                    </div>
+
+                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="300">
+                        <div class="card-glow"></div>
+                        <div class="audience-icon">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <h3>Pro technologické nadšence</h3>
+                        <p>Buďte u zrodu další generace AI nástrojů. Experimentujte, tvořte vlastní agenty a posouvejte hranice toho, co je možné.</p>
+                        <ul class="benefit-list">
+                            <li><i class="fas fa-check-circle"></i> Open-source</li>
+                            <li><i class="fas fa-check-circle"></i> Komunitní podpora</li>
+                            <li><i class="fas fa-check-circle"></i> Cutting-edge tech</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Stats Counter -->
+                <div class="stats-section" data-aos="fade-up">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">% Open-source</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">+ Specializovaní agenti</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1000">0</div>
+                        <div class="stat-label">+ Vývojářů v komunitě</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="24">0</div>
+                        <div class="stat-label">/7 Support</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investors Section -->
+        <section id="janagi" class="section-investors">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Staňte se součástí janAGI
+                    <div class="title-underline"></div>
+                </h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                    janAGI je open‑source framework s velkým potenciálem a hledáme investory a strategické partnery. 
+                    Zajímá vás spolupráce nebo chcete být mezi prvními, kdo se dozví novinky? Ozvěte se nám.
+                </p>
+
+                <div class="investor-forms">
+                    <!-- Investor Form -->
+                    <div class="form-card glass-card" data-aos="fade-right" data-aos-delay="200">
+                        <div class="card-glow"></div>
+                        <div class="form-header">
+                            <div class="form-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Zájem investora</h3>
+                            <p>Máte zájem investovat do vývoje janAGI nebo chcete spolupracovat? Napište nám.</p>
+                        </div>
+                        <form action="contact.php" method="POST" class="enhanced-form" id="investorForm">
+                            <input type="hidden" name="subject" value="Zájem investora">
+                            <input type="hidden" name="website">
+                            
+                            <div class="form-group">
+                                <label for="investorName">Jméno *</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="investorName" name="name" required>
+                                    <i class="fas fa-user input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="investorEmail">E-mail *</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="investorEmail" name="email" required>
+                                    <i class="fas fa-envelope input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="investorMessage">Zpráva *</label>
+                                <div class="input-wrapper">
+                                    <textarea id="investorMessage" name="message" rows="4" required></textarea>
+                                    <i class="fas fa-comment input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn ripple-effect">
+                                <span>Odeslat</span>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Newsletter Form -->
+                    <div class="form-card glass-card" data-aos="fade-left" data-aos-delay="300">
+                        <div class="card-glow"></div>
+                        <div class="form-header">
+                            <div class="form-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <h3>Přihlášení k novinkám</h3>
+                            <p>Nechte nám svůj e-mail a budeme vás informovat o novinkách a roadmapě janAGI.</p>
+                        </div>
+                        <form action="contact.php" method="POST" class="enhanced-form" id="newsletterForm">
+                            <input type="hidden" name="subject" value="Přihlášení k novinkám">
+                            <input type="hidden" name="message" value="Žádost o zasílání novinek o janAGI">
+                            <input type="hidden" name="website">
+                            
+                            <div class="form-group">
+                                <label for="newsletterName">Jméno *</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="newsletterName" name="name" required>
+                                    <i class="fas fa-user input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newsletterEmail">E-mail *</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="newsletterEmail" name="email" required>
+                                    <i class="fas fa-envelope input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn ripple-effect">
+                                <span>Přihlásit se</span>
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">jan<span>AGI</span></div>
+                <p class="footer-tagline">Připravujeme budoucnost inteligentní automatizace.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Discord">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+                <p class="copyright">&copy; 2025 janAGI Project. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal System -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content" id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
