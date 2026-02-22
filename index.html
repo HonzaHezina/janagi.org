@@ -71,9 +71,8 @@
             <h1 id="typingHeadline" class="typing-headline" data-aos="fade-up" data-aos-delay="600"></h1>
             
             <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
-                janAGI propojuje AI, lidi a firemní systémy do řízených workflow. 
-                Modulární architektura nad n8n a OpenClaw přináší transparentní provoz, 
-                bezpečné schvalování a minimum vendor lock-inu.
+                AI orchestrace pro reálné firemní workflow.
+                n8n řídí procesy, OpenClaw dodává AI schopnosti a pluginy propojují firemní systémy.
             </p>
 
             <!-- Enhanced Email Form -->
@@ -193,30 +192,35 @@
                         <g class="arch-node brain-node" data-tooltip="Centrální mozek koordinuje všechny agenty">
                             <circle cx="400" cy="80" r="60" class="node-bg"/>
                             <text x="400" y="75" text-anchor="middle" class="node-icon">🧠</text>
-                            <text x="400" y="95" text-anchor="middle" class="node-label">Planner</text>
+                            <text x="400" y="95" text-anchor="middle" class="node-label">Orchestrace</text>
                         </g>
                         
                         <!-- Agent Nodes -->
                         <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
                             <circle cx="200" cy="280" r="50" class="node-bg"/>
                             <text x="200" y="275" text-anchor="middle" class="node-icon">🤖</text>
-                            <text x="200" y="295" text-anchor="middle" class="node-label">Agent 1</text>
+                            <text x="200" y="295" text-anchor="middle" class="node-label">Workflow</text>
                         </g>
                         
                         <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
                             <circle cx="400" cy="280" r="50" class="node-bg"/>
                             <text x="400" y="275" text-anchor="middle" class="node-icon">🤖</text>
-                            <text x="400" y="295" text-anchor="middle" class="node-label">Agent 2</text>
+                            <text x="400" y="295" text-anchor="middle" class="node-label">AI vrstva</text>
                         </g>
                         
                         <g class="arch-node agent-node" data-tooltip="Specializovaní AI agenti">
                             <circle cx="600" cy="280" r="50" class="node-bg"/>
                             <text x="600" y="275" text-anchor="middle" class="node-icon">🤖</text>
-                            <text x="600" y="295" text-anchor="middle" class="node-label">Agent 3</text>
+                            <text x="600" y="295" text-anchor="middle" class="node-label">Integrace</text>
                         </g>
                     </svg>
                     <div class="svg-tooltip" id="svgTooltip"></div>
                 </div>
+
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                    janAGI je postavené jako vrstvená orchestrace, kde má každá část jasnou roli.
+                    Díky tomu lze systém bezpečně rozšiřovat, ladit a měnit bez přepisování celé infrastruktury.
+                </p>
 
                 <div class="architecture-grid">
                     <div class="glass-card interactive-card" data-aos="fade-right" data-aos-delay="300">
@@ -226,10 +230,10 @@
                             <i class="fa-solid fa-brain"></i>
                         </div>
                         <h3>Orchestrace workflow (n8n)</h3>
-                        <p>n8n řídí business logiku, napojuje API a poskytuje auditovatelný přehled každého kroku workflow.</p>
+                        <p>n8n je řídicí vrstva procesu: orchestrace, routing, schvalování a auditovatelný přehled každého kroku.</p>
                         <div class="feature-tags">
-                            <span class="tag">Orchestrace</span>
-                            <span class="tag">Audit</span>
+                            <span class="tag">API + webhooky</span>
+                            <span class="tag">Human-in-the-loop</span>
                         </div>
                     </div>
 
@@ -239,11 +243,11 @@
                         <div class="card-icon">
                             <i class="fa-solid fa-robot"></i>
                         </div>
-                        <h3>AI rozhodování (OpenClaw)</h3>
-                        <p>OpenClaw funguje jako LLM/tool vrstva pro reasoning, specializované role agentů a řízení schopností.</p>
+                        <h3>AI rozhodování a schopnosti (OpenClaw)</h3>
+                        <p>OpenClaw je LLM endpoint a runtime pro specializované agenty, reasoning, klasifikaci i sumarizaci přes tool policy.</p>
                         <div class="feature-tags">
-                            <span class="tag">Specializace</span>
-                            <span class="tag">Tool policy</span>
+                            <span class="tag">Reasoning</span>
+                            <span class="tag">Specializované role</span>
                         </div>
                     </div>
 
@@ -253,13 +257,27 @@
                         <div class="card-icon">
                             <i class="fa-solid fa-display"></i>
                         </div>
-                        <h3>Integrace a konektory</h3>
-                        <p>Pluginy a adaptéry propojují e-mail, web, databáze i ERP/CRM tak, aby každá vrstva zůstala vyměnitelná.</p>
+                        <h3>Integrace a konektory (pluginy / adaptéry)</h3>
+                        <p>Konektory propojují e-mail, web, databáze i ERP/CRM tak, aby při změně systému stačilo vyměnit pouze adaptér.</p>
                         <div class="feature-tags">
-                            <span class="tag">API/Pluginy</span>
+                            <span class="tag">Vyměnitelné konektory</span>
                             <span class="tag">Vendor-neutral</span>
                         </div>
                     </div>
+                </div>
+
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="550">
+                    <div class="card-glow"></div>
+                    <h3>Jak vrstvy spolupracují v praxi</h3>
+                    <p>Člověk zadá záměr (např. zpracovat e-mail). n8n vyhodnotí proces a spustí workflow, OpenClaw dodá AI rozhodování a plugin provede akci v cílovém systému. Výsledek se vrací zpět do workflow včetně schválení, logu a dalšího routingu.</p>
+                    <p><strong>Příklad:</strong> E-mail assistant — n8n řídí workflow, OpenClaw připraví návrh odpovědi a mail plugin odešle zprávu přes firemní účet.</p>
+                </div>
+
+                <div class="glass-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="card-glow"></div>
+                    <h3>Proč ne další chatbot</h3>
+                    <p>janAGI nenahrazuje vaše systémy. janAGI propojuje AI s procesy, které už ve firmě existují.</p>
+                    <p>Nejde o jeden „AI mozek", ale o řízenou spolupráci vrstev: vyměnitelnou, auditovatelnou a škálovatelnou podle potřeb firmy.</p>
                 </div>
             </div>
         </section>
@@ -489,20 +507,20 @@
                 <!-- Stats Counter -->
                 <div class="stats-section" data-aos="fade-up">
                     <div class="stat-item">
-                        <div class="stat-number" data-target="100">0</div>
-                        <div class="stat-label">% Open-source</div>
+                        <div class="stat-number">Open-source základ</div>
+                        <div class="stat-label">Transparentní stack bez black-box lock-inu</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" data-target="10">0</div>
-                        <div class="stat-label">+ Specializovaní agenti</div>
+                        <div class="stat-number">Modulární vrstvy</div>
+                        <div class="stat-label">Orchestrace, AI schopnosti a integrace odděleně</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" data-target="1000">0</div>
-                        <div class="stat-label">+ Vývojářů v komunitě</div>
+                        <div class="stat-number">Pilot-ready</div>
+                        <div class="stat-label">Navržené pro rychlé SME nasazení</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" data-target="24">0</div>
-                        <div class="stat-label">/7 Support</div>
+                        <div class="stat-number">Human-in-the-loop</div>
+                        <div class="stat-label">Schvalování i odpovědnost zůstává u lidí</div>
                     </div>
                 </div>
             </div>
@@ -628,7 +646,7 @@
                         <i class="fab fa-discord"></i>
                     </a>
                 </div>
-                <p class="copyright">&copy; 2025 janAGI Project. All rights reserved.</p>
+                <p class="copyright">&copy; 2025–2026 janAGI Project. All rights reserved.</p>
             </div>
         </div>
     </footer>
