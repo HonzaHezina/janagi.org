@@ -294,33 +294,36 @@ function initFlowExample() {
     const flowData = {
         email: {
             summary: 'Email Assistant: Záměr → workflow kroky → AI návrh → provedení → schválení → audit',
+            caption: 'Ukázka třídění příchozí komunikace a návrhu odpovědi s kontrolovaným schválením.',
             steps: [
                 ['fa-inbox', 'Inbound', 'Inbound (Email/Chat)', 'Příchozí zpráva nebo chat vytvoří ticket a přidá historii komunikace.', 'Trigger v n8n zachytí zprávu a připojí CRM kontext.'],
                 ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, review, retries a governance pravidla.', 'Workflow branch určí prioritu a připraví úkol pro AI vrstvu.'],
                 ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI klasifikuje intent, připraví draft a navrhne další bezpečné kroky.', 'Role main/web/spec/fast se volí podle typu požadavku.'],
-                ['fa-plug', 'Adapter', 'Tools/Adapters', 'Pluginy propojí SMTP/IMAP, DB nebo webové API s workflow kontextem.', 'Integration layer volá jen nástroje povolené tool policy.'],
+                ['fa-plug', 'Adapter', 'Tools/Adapters', 'Adapter provede akci v cílovém systému (SMTP/IMAP, REST API, DB).', 'Integration layer volá jen nástroje povolené tool policy.'],
                 ['fa-user-check', 'Human-in-the-loop', 'Human-in-the-loop (schválení)', 'Volitelná schvalovací brána dovolí schválení před finálním provedením.', 'Operátor může upravit draft, schválit nebo vrátit krok zpět.'],
                 ['fa-clipboard-check', 'Audit', 'Action + review log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.', 'Každý krok je auditovatelný včetně vstupu, rozhodnutí i výstupu.']
             ]
         },
         research: {
             summary: 'Web Research: Záměr → workflow kroky → AI návrh → provedení → schválení → audit',
+            caption: 'Ukázka sběru zdrojů, AI sumarizace a schválení analytikem před publikací.',
             steps: [
                 ['fa-magnifying-glass', 'Inbound', 'Inbound (Email/Chat)', 'Přijde požadavek na výzkum trhu nebo monitoring konkurence.', 'Trigger vytvoří brief, termín a očekávaný formát výstupu.'],
                 ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow spustí sběr zdrojů, ohlídá priority a retry při chybách.', 'Routing oddělí veřejné zdroje od interních podkladů.'],
                 ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI hodnotí relevanci zdrojů, extrahuje fakta a připraví shrnutí.', 'AI layer drží konzistentní metodiku citací i confidence score.'],
-                ['fa-globe', 'Adapter', 'Tools/Adapters', 'Web adapter volá search/read nástroje a zapisuje citace do reportu.', 'Integration layer sjednocuje výsledky ze search API a interní DB.'],
+                ['fa-globe', 'Adapter', 'Tools/Adapters', 'Adapter provede akci v cílovém systému (SMTP/IMAP, REST API, DB).', 'Integration layer sjednocuje výsledky ze search API a interní DB.'],
                 ['fa-user-check', 'Human-in-the-loop', 'Human-in-the-loop (schválení)', 'Analytik schválí závěry a doplní obchodní doporučení.', 'Human-in-the-loop potvrzuje kvalitu a rozhoduje o publikaci.'],
                 ['fa-clipboard-check', 'Audit', 'Action + review log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.', 'Audit log zachová zdroje, reasoning i finální rozhodnutí.']
             ]
         },
         erp: {
             summary: 'ERP/CRM: Záměr → workflow kroky → AI návrh → provedení → schválení → audit',
+            caption: 'Ukázka řízené změny v ERP/CRM s validací, schválením a auditovatelným výstupem.',
             steps: [
                 ['fa-file-import', 'Inbound', 'Inbound (Email/Chat)', 'Požadavek na změnu objednávky nebo zákaznického záznamu v ERP/CRM.', 'Workflow layer založí transakční task s identifikátorem požadavku.'],
                 ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow mapuje pole, kontroluje pravidla a řídí schvalovací větve.', 'Orchestrace vynutí validační kroky před zásahem do ERP/CRM.'],
                 ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI vyhodnotí intent, navrhne validní update a ohlídá tool policy limit.', 'AI layer srovná návrh s historií a zvýrazní rizikové změny.'],
-                ['fa-database', 'Adapter', 'Tools/Adapters', 'ERP/CRM adapter provede zápis přes API a vrátí stav operace.', 'Integration layer umožní výměnu adaptéru bez přepisu workflow.'],
+                ['fa-database', 'Adapter', 'Tools/Adapters', 'Adapter provede akci v cílovém systému (SMTP/IMAP, REST API, DB).', 'Integration layer umožní výměnu adaptéru bez přepisu workflow.'],
                 ['fa-user-check', 'Human-in-the-loop', 'Human-in-the-loop (schválení)', 'Citlivé změny čekají na schválení odpovědnou osobou.', 'Schvalovací krok zahrne SLA časovač a eskalaci při prodlení.'],
                 ['fa-clipboard-check', 'Audit', 'Action + review log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.', 'Log ukládá snapshot před/po změně i identitu schvalujícího.']
             ]
@@ -328,6 +331,7 @@ function initFlowExample() {
     };
 
     const sequences = Array.from(timeline.querySelectorAll('.flow-sequence'));
+    const tabCaption = document.getElementById('flowTabCaption');
 
     function renderFlow(usecase) {
         const target = timeline.querySelector(`.flow-sequence[data-usecase="${usecase}"]`);
@@ -366,6 +370,14 @@ function initFlowExample() {
         if (headline) {
             headline.textContent = `Flow Example: ${flowData[usecase].summary}`;
         }
+
+        if (tabCaption) {
+            tabCaption.textContent = flowData[usecase].caption;
+        }
+
+        timeline.classList.remove('is-switching');
+        void timeline.offsetWidth;
+        timeline.classList.add('is-switching');
     }
 
     switchButtons.forEach(btn => {
