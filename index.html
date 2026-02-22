@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>janAGI – Budoucnost AI orchestrace</title>
+    <title>janAGI – AI orchestrace pro reálné firemní workflow</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -16,7 +16,7 @@
         <div class="loader-content">
             <div class="loader-logo">jan<span>AGI</span></div>
             <div class="loader-spinner"></div>
-            <div class="loader-text">Načítání budoucnosti AI...</div>
+            <div class="loader-text">Načítání AI orchestrace...</div>
         </div>
     </div>
 
@@ -37,10 +37,10 @@
             <div class="nav-links" id="navLinks">
                 <a href="#problem" class="nav-link">Problém</a>
                 <a href="#architecture" class="nav-link">Architektura</a>
-                <a href="#roadmap" class="nav-link">Roadmapa</a>
-                <a href="#workflow" class="nav-link">Jak to funguje</a>
+                <a href="#roadmap" class="nav-link">Vývoj</a>
+                <a href="#workflow" class="nav-link">Use-cases</a>
                 <a href="#audience" class="nav-link">Pro koho</a>
-                <a href="#janagi" class="nav-link">Investoři</a>
+                <a href="#janagi" class="nav-link">Piloty &amp; partneři</a>
             </div>
             <!-- Dark/Light Mode Toggle -->
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -63,7 +63,7 @@
         
         <div class="container">
             <div class="status-badge" data-aos="fade-down" data-aos-delay="200">
-                <i class="fas fa-rocket"></i> Hledáme investory
+                <i class="fas fa-diagram-project"></i> Praktická AI orchestrace pro SME
             </div>
             
             <div class="logo-main" data-aos="fade-up" data-aos-delay="400">jan<span>AGI</span></div>
@@ -71,9 +71,9 @@
             <h1 id="typingHeadline" class="typing-headline" data-aos="fade-up" data-aos-delay="600"></h1>
             
             <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
-                Představujeme janAGI – open‑source framework pro orchestraci umělé inteligence. 
-                Zapomeňte na řetězení nástrojů: zadáte cíl, centrální Planner naplánuje, 
-                specializovaní agenti vykonají a vše sledujete v transparentním UI.
+                janAGI propojuje AI, lidi a firemní systémy do řízených workflow. 
+                Modulární architektura nad n8n a OpenClaw přináší transparentní provoz, 
+                bezpečné schvalování a minimum vendor lock-inu.
             </p>
 
             <!-- Enhanced Email Form -->
@@ -83,7 +83,7 @@
                     <div class="input-border"></div>
                 </div>
                 <button type="submit" class="cta-button ripple-effect">
-                    <span>Chci vědět o spuštění</span>
+                    <span>Domluvit pilot</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
             </form>
@@ -170,7 +170,7 @@
         <section id="architecture" class="section-architecture">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Architektura janAGI
+                    Aktuální architektura janAGI
                     <div class="title-underline"></div>
                 </h2>
                 
@@ -225,11 +225,11 @@
                         <div class="card-icon">
                             <i class="fa-solid fa-brain"></i>
                         </div>
-                        <h3>Mozek (Planner)</h3>
-                        <p>Centrální plánovač analyzuje váš záměr a sestaví detailní plán kroků, které vedou k cíli.</p>
+                        <h3>Orchestrace workflow (n8n)</h3>
+                        <p>n8n řídí business logiku, napojuje API a poskytuje auditovatelný přehled každého kroku workflow.</p>
                         <div class="feature-tags">
-                            <span class="tag">AI Planning</span>
-                            <span class="tag">Koordinace</span>
+                            <span class="tag">Orchestrace</span>
+                            <span class="tag">Audit</span>
                         </div>
                     </div>
 
@@ -239,11 +239,11 @@
                         <div class="card-icon">
                             <i class="fa-solid fa-robot"></i>
                         </div>
-                        <h3>Agentní systém</h3>
-                        <p>Specializovaní agenti plní jednotlivé úlohy, od generování kódu po analýzu dat, a komunikují přes API.</p>
+                        <h3>AI rozhodování (OpenClaw)</h3>
+                        <p>OpenClaw funguje jako LLM/tool vrstva pro reasoning, specializované role agentů a řízení schopností.</p>
                         <div class="feature-tags">
-                            <span class="tag">Modularita</span>
                             <span class="tag">Specializace</span>
+                            <span class="tag">Tool policy</span>
                         </div>
                     </div>
 
@@ -253,11 +253,11 @@
                         <div class="card-icon">
                             <i class="fa-solid fa-display"></i>
                         </div>
-                        <h3>Transparentní UI</h3>
-                        <p>Interaktivní uživatelské rozhraní vám umožní sledovat a upravovat každý krok v reálném čase.</p>
+                        <h3>Integrace a konektory</h3>
+                        <p>Pluginy a adaptéry propojují e-mail, web, databáze i ERP/CRM tak, aby každá vrstva zůstala vyměnitelná.</p>
                         <div class="feature-tags">
-                            <span class="tag">Real-time</span>
-                            <span class="tag">Kontrola</span>
+                            <span class="tag">API/Pluginy</span>
+                            <span class="tag">Vendor-neutral</span>
                         </div>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
         <section id="roadmap" class="section-roadmap">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Roadmapa janAGI
+                    Vývoj janAGI: NOW / NEXT / LATER
                     <div class="title-underline"></div>
                 </h2>
                 
@@ -279,15 +279,15 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">Q1 2025</div>
-                            <h3>Alpha verze</h3>
-                            <p>První veřejné vydání s základní orchestrací agentů a otevřeným repozitářem na GitHubu.</p>
+                            <div class="timeline-badge">NOW (2026)</div>
+                            <h3>Co už běží</h3>
+                            <p>Modulární orchestrace workflow v reálném provozu a pilotní use-cases pro SME.</p>
                             <div class="timeline-details">
                                 <ul>
-                                    <li><i class="fas fa-check"></i> Základní Planner</li>
-                                    <li><i class="fas fa-check"></i> 3 specializované agenty</li>
-                                    <li><i class="fas fa-check"></i> Dokumentace</li>
-                                    <li><i class="fas fa-check"></i> CLI interface</li>
+                                    <li><i class="fas fa-check"></i> n8n orchestrace a business logika</li>
+                                    <li><i class="fas fa-check"></i> OpenClaw LLM/tool vrstva</li>
+                                    <li><i class="fas fa-check"></i> Piloty: e-mail, web research, interní automatizace</li>
+                                    <li><i class="fas fa-check"></i> Klientské integrace přes API a pluginy</li>
                                 </ul>
                             </div>
                             <button class="expand-btn">
@@ -302,15 +302,15 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">Q2 2025</div>
-                            <h3>Beta a pluginy</h3>
-                            <p>Přidání modulárních pluginů pro integraci se službami třetích stran a vylepšení UI.</p>
+                            <div class="timeline-badge">NEXT</div>
+                            <h3>Co právě ladíme</h3>
+                            <p>Standardizace opakovatelných šablon workflow a lepší monitoring pro bezpečné škálování.</p>
                             <div class="timeline-details">
                                 <ul>
-                                    <li><i class="fas fa-check"></i> Plugin systém</li>
-                                    <li><i class="fas fa-check"></i> Web UI</li>
-                                    <li><i class="fas fa-check"></i> API Gateway</li>
-                                    <li><i class="fas fa-check"></i> Integrace s GPT-4</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Reusable workflow templates</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Rozšíření konektorů a pluginů</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Monitoring, audit a governance</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Jednodušší nasazení pro SME</li>
                                 </ul>
                             </div>
                             <button class="expand-btn">
@@ -325,15 +325,15 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">Q3 2025</div>
-                            <h3>Komunitní rozšíření</h3>
-                            <p>Spuštění komunitního portálu, kde mohou vývojáři sdílet vlastní agenty a workflow.</p>
+                            <div class="timeline-badge">LATER</div>
+                            <h3>Dlouhodobý směr</h3>
+                            <p>Širší ekosystém agentů a partnerství, které zrychlí adopci řízené AI orchestrace.</p>
                             <div class="timeline-details">
                                 <ul>
-                                    <li><i class="fas fa-hourglass-half"></i> Marketplace</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Agent SDK</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Community forum</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Tutorials</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Komunitní rozšíření agentů a pluginů</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Segmentové balíčky pro enterprise</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Silnější partner network</li>
+                                    <li><i class="fas fa-hourglass-half"></i> Open-source marketplace</li>
                                 </ul>
                             </div>
                             <button class="expand-btn">
@@ -342,39 +342,17 @@
                         </div>
                     </div>
 
-                    <div class="timeline-item" data-aos="fade-left" data-aos-delay="400" onclick="toggleTimelineItem(this)">
-                        <div class="timeline-marker">
-                            <div class="marker-icon"><i class="fa-solid fa-flag-checkered"></i></div>
-                            <div class="marker-pulse"></div>
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-badge">Q4 2025</div>
-                            <h3>Veřejné uvedení</h3>
-                            <p>Plná verze s podporou multi‑agentních systémů a první enterprise nasazení.</p>
-                            <div class="timeline-details">
-                                <ul>
-                                    <li><i class="fas fa-hourglass-half"></i> Enterprise features</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Security audit</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Cloud hosting</li>
-                                    <li><i class="fas fa-hourglass-half"></i> 24/7 Support</li>
-                                </ul>
-                            </div>
-                            <button class="expand-btn">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="cta-section" data-aos="zoom-in">
-                    <h3>Zapojte se do vývoje</h3>
-                    <p>janAGI je open‑source projekt a potřebuje vaši podporu. Přidejte se k nám na GitHubu nebo nám napište.</p>
+                    <h3>Open-source základ. Praktická implementace.</h3>
+                    <p>Každá vrstva má jasnou odpovědnost, takže můžete měnit model, workflow i konektory bez přepisování celého systému.</p>
                     <div class="cta-buttons">
                         <a href="#" class="btn-primary ripple-effect">
                             <i class="fab fa-github"></i> GitHub Repozitář
                         </a>
                         <a href="#janagi" class="btn-secondary ripple-effect">
-                            <i class="fas fa-envelope"></i> Kontaktujte nás
+                            <i class="fas fa-envelope"></i> Konzultace architektury
                         </a>
                     </div>
                 </div>
@@ -385,7 +363,7 @@
         <section id="workflow" class="section-workflow">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Jak to funguje? Jednoduše.
+                    Příklady použití v praxi
                     <div class="title-underline"></div>
                 </h2>
 
@@ -400,8 +378,8 @@
                             <div class="step-icon">
                                 <i class="fa-solid fa-bullseye"></i>
                             </div>
-                            <h3>Zadáte záměr</h3>
-                            <p>Jednoduše v přirozeném jazyce popíšete, čeho chcete dosáhnout. Např. "Vytvoř mi landing page pro prodej kávy, včetně textů a obrázků."</p>
+                            <h3>AI Email Assistant pro SME</h3>
+                            <p>Třídění e-mailů, návrhy odpovědí přes AI a možnost schválení člověkem před odesláním.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -416,8 +394,8 @@
                             <div class="step-icon">
                                 <i class="fa-solid fa-lightbulb"></i>
                             </div>
-                            <h3>AI navrhne plán</h3>
-                            <p>Centrální mozek janAGI analyzuje váš záměr a navrhne sérii kroků k jeho dosažení (vytvořit HTML, napsat texty, vygenerovat obrázky, ...).</p>
+                            <h3>Web research a shrnutí</h3>
+                            <p>Automatizované dohledání informací na webu, sumarizace a předání výstupu do CRM, reportu nebo interního procesu.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -432,8 +410,8 @@
                             <div class="step-icon">
                                 <i class="fa-solid fa-check-circle"></i>
                             </div>
-                            <h3>Plán schválíte</h3>
-                            <p>V přehledném rozhraní si prohlédnete navržený plán a máte plnou kontrolu ho schválit nebo upravit. Žádné nečekané akce.</p>
+                            <h3>Interní procesy a ERP/CRM</h3>
+                            <p>AI vrstva nad vašimi daty a procesy bez nutnosti přepisovat existující infrastrukturu.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -448,8 +426,8 @@
                             <div class="step-icon">
                                 <i class="fa-solid fa-eye"></i>
                             </div>
-                            <h3>Sledujete exekuci</h3>
-                            <p>Po schválení se specializovaní agenti pustí do práce. V reálném čase sledujete jejich výstupy a postup celého projektu.</p>
+                            <h3>Řízená spolupráce člověk + AI</h3>
+                            <p>Záměr, schválení i kontrola zůstávají u lidí. AI urychluje execution, ale nevytváří black box.</p>
                         </div>
                     </div>
                 </div>
@@ -470,12 +448,12 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-code"></i>
                         </div>
-                        <h3>Pro vývojáře a integrátory</h3>
-                        <p>Získejte mocný, open-source framework pro rychlé prototypování a integraci AI do vašich systémů. Zapomeňte na lepení skriptů, využijte robustní API.</p>
+                        <h3>Pro SME firmy</h3>
+                        <p>Potřebujete AI, která se napojí na reálné procesy a dá se řídit. Začínáme pilotem s jasnou metrikou přínosu.</p>
                         <ul class="benefit-list">
-                            <li><i class="fas fa-check-circle"></i> Robustní API</li>
-                            <li><i class="fas fa-check-circle"></i> Snadná integrace</li>
-                            <li><i class="fas fa-check-circle"></i> Dokumentace</li>
+                            <li><i class="fas fa-check-circle"></i> Rychlý pilot</li>
+                            <li><i class="fas fa-check-circle"></i> Měřitelný dopad</li>
+                            <li><i class="fas fa-check-circle"></i> Transparentní provoz</li>
                         </ul>
                     </div>
 
@@ -484,12 +462,12 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
-                        <h3>Pro produktové manažery</h3>
-                        <p>Soustřeďte se na "co" a nechte "jak" na umělé inteligenci. Urychlete vývoj a testování nápadů bez potřeby velkého vývojového týmu.</p>
+                        <h3>Pro integrátory a IT architekty</h3>
+                        <p>Využijte modulární orchestration layer místo jednorázových skriptů a těžko udržovatelných automatizací.</p>
                         <ul class="benefit-list">
-                            <li><i class="fas fa-check-circle"></i> Rychlé prototypy</li>
-                            <li><i class="fas fa-check-circle"></i> Flexibilita</li>
-                            <li><i class="fas fa-check-circle"></i> Cost-effective</li>
+                            <li><i class="fas fa-check-circle"></i> Oddělené vrstvy odpovědností</li>
+                            <li><i class="fas fa-check-circle"></i> Snadné rozšíření</li>
+                            <li><i class="fas fa-check-circle"></i> Governance ready</li>
                         </ul>
                     </div>
 
@@ -498,12 +476,12 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-rocket"></i>
                         </div>
-                        <h3>Pro technologické nadšence</h3>
-                        <p>Buďte u zrodu další generace AI nástrojů. Experimentujte, tvořte vlastní agenty a posouvejte hranice toho, co je možné.</p>
+                        <h3>Pro vývojáře a open-source komunitu</h3>
+                        <p>Rozšiřujte agenty, pluginy a workflow nad otevřenou architekturou bez vendor lock-inu.</p>
                         <ul class="benefit-list">
                             <li><i class="fas fa-check-circle"></i> Open-source</li>
-                            <li><i class="fas fa-check-circle"></i> Komunitní podpora</li>
-                            <li><i class="fas fa-check-circle"></i> Cutting-edge tech</li>
+                            <li><i class="fas fa-check-circle"></i> Reálné use-cases</li>
+                            <li><i class="fas fa-check-circle"></i> Rozšiřitelný stack</li>
                         </ul>
                     </div>
                 </div>
@@ -534,12 +512,12 @@
         <section id="janagi" class="section-investors">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Staňte se součástí janAGI
+                    Spolupráce: piloty, partnerství, investoři
                     <div class="title-underline"></div>
                 </h2>
                 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-                    janAGI je open‑source framework s velkým potenciálem a hledáme investory a strategické partnery. 
-                    Zajímá vás spolupráce nebo chcete být mezi prvními, kdo se dozví novinky? Ozvěte se nám.
+                    Chcete AI workflow, které je vidět, řídit a rozšiřovat? Začněme pilotním procesem. 
+                    Pokud jste investor nebo strategický partner, rádi představíme i roadmapu rozvoje janAGI.
                 </p>
 
                 <div class="investor-forms">
@@ -550,11 +528,11 @@
                             <div class="form-icon">
                                 <i class="fas fa-handshake"></i>
                             </div>
-                            <h3>Zájem investora</h3>
-                            <p>Máte zájem investovat do vývoje janAGI nebo chcete spolupracovat? Napište nám.</p>
+                            <h3>Pilot / partnerství</h3>
+                            <p>Popište proces, který chcete automatizovat, a navrhneme pilot s jasným cílem a metrikou.</p>
                         </div>
                         <form action="contact.php" method="POST" class="enhanced-form" id="investorForm">
-                            <input type="hidden" name="subject" value="Zájem investora">
+                            <input type="hidden" name="subject" value="Zájem o pilot / partnerství">
                             <input type="hidden" name="website">
                             
                             <div class="form-group">
@@ -595,8 +573,8 @@
                             <div class="form-icon">
                                 <i class="fas fa-bell"></i>
                             </div>
-                            <h3>Přihlášení k novinkám</h3>
-                            <p>Nechte nám svůj e-mail a budeme vás informovat o novinkách a roadmapě janAGI.</p>
+                            <h3>Investor / aktuality</h3>
+                            <p>Nechte nám kontakt, pokud chcete pravidelné update o roadmapě, partnerství nebo investičních milnících.</p>
                         </div>
                         <form action="contact.php" method="POST" class="enhanced-form" id="newsletterForm">
                             <input type="hidden" name="subject" value="Přihlášení k novinkám">

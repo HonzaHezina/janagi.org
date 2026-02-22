@@ -274,7 +274,7 @@ function initTypingEffect() {
     const headline = document.getElementById('typingHeadline');
     if (!headline) return;
     
-    const text = "Budoucnost AI orchestrace: zadáte cíl, janAGI zařídí vše.";
+    const text = "janAGI propojuje AI, lidi a firemní systémy do řízených workflow.";
     let index = 0;
     
     headline.innerHTML = '<span class="cursor"></span>';
