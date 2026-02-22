@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initFormHandling();
     initModalSystem();
     initFlowExample();
+    initAudienceToggle();
     initAnchorHighlights();
     initSVGTooltips();
 });
@@ -385,6 +386,27 @@ function initFlowExample() {
     });
 
     setActiveUsecase('email');
+}
+
+
+function initAudienceToggle() {
+    const buttons = document.querySelectorAll('[data-audience-filter]');
+    const cards = document.querySelectorAll('.audience-card[data-audience]');
+    if (!buttons.length || !cards.length) return;
+
+    function applyFilter(filter) {
+        buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.audienceFilter === filter));
+        cards.forEach(card => {
+            const show = filter === 'all' || card.dataset.audience === filter;
+            card.style.display = show ? 'block' : 'none';
+        });
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => applyFilter(btn.dataset.audienceFilter));
+    });
+
+    applyFilter('biz');
 }
 
 // ========================================

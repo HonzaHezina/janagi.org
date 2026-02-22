@@ -2130,3 +2130,73 @@ button:disabled {
         border-left: 1px solid rgba(126, 200, 213, 0.5);
     }
 }
+
+.hero-bullets {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.hero-bullets li::before {
+    content: '✓';
+    color: var(--primary-color);
+    margin-right: 0.6rem;
+    font-weight: 700;
+}
+
+.section-manifesto,
+.section-proof {
+    padding: var(--section-padding) 0 40px;
+}
+
+.manifesto-grid,
+.proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.manifesto-conclusion {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.proof-grid figure img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 0.8rem;
+}
+
+.audience-toggle {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0 0 1.2rem;
+    flex-wrap: wrap;
+}
+
+.audience-toggle-btn {
+    background: var(--glass-bg);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.audience-toggle-btn.active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.pilot-scope {
+    margin-bottom: 1.5rem;
+    padding: 1.2rem;
+}
+
+.pilot-scope ul {
+    margin-left: 1.1rem;
+}
