@@ -292,30 +292,39 @@ function initFlowExample() {
     if (!timeline || switchButtons.length === 0) return;
 
     const flowData = {
-        email: [
-            ['fa-inbox', 'Inbound', 'Inbound (Email/Chat)', 'Příchozí zpráva nebo chat vytvoří ticket a přidá historii komunikace.'],
-            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, schválení, retries a governance pravidla.'],
-            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI klasifikuje intent, připraví draft a navrhne další bezpečné kroky.'],
-            ['fa-plug', 'Adapter', 'Tools/Adapters', 'Pluginy propojí SMTP/IMAP, DB nebo webové API s workflow kontextem.'],
-            ['fa-user-check', 'Review', 'Human review', 'Volitelná schvalovací brána dovolí review před finálním provedením.'],
-            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.']
-        ],
-        research: [
-            ['fa-magnifying-glass', 'Inbound', 'Inbound (Email/Chat)', 'Přijde požadavek na výzkum trhu nebo monitoring konkurence.'],
-            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow spustí sběr zdrojů, ohlídá priority a retry při chybách.'],
-            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI hodnotí relevanci zdrojů, extrahuje fakta a připraví shrnutí.'],
-            ['fa-globe', 'Adapter', 'Tools/Adapters', 'Web adapter volá search/read nástroje a zapisuje citace do reportu.'],
-            ['fa-user-check', 'Review', 'Human review', 'Analytik udělá review závěrů a doplní obchodní doporučení.'],
-            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.']
-        ],
-        erp: [
-            ['fa-file-import', 'Inbound', 'Inbound (Email/Chat)', 'Požadavek na změnu objednávky nebo zákaznického záznamu v ERP/CRM.'],
-            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow mapuje pole, kontroluje pravidla a řídí schvalovací větve.'],
-            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI vyhodnotí intent, navrhne validní update a ohlídá policy limit.'],
-            ['fa-database', 'Adapter', 'Tools/Adapters', 'ERP/CRM adapter provede zápis přes API a vrátí stav operace.'],
-            ['fa-user-check', 'Review', 'Human review', 'Citlivé změny čekají na review odpovědnou osobou.'],
-            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.']
-        ]
+        email: {
+            summary: 'Email Assistant: inbound → orchestrace → reasoning → adapter → review → audit',
+            steps: [
+                ['fa-inbox', 'Inbound', 'Inbound (Email/Chat)', 'Příchozí zpráva nebo chat vytvoří ticket a přidá historii komunikace.', 'Trigger v n8n zachytí zprávu a připojí CRM kontext.'],
+                ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, review, retries a governance pravidla.', 'Workflow branch určí prioritu a připraví úkol pro AI vrstvu.'],
+                ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI klasifikuje intent, připraví draft a navrhne další bezpečné kroky.', 'Role main/web/spec/fast se volí podle typu požadavku.'],
+                ['fa-plug', 'Adapter', 'Tools/Adapters', 'Pluginy propojí SMTP/IMAP, DB nebo webové API s workflow kontextem.', 'Integration layer volá jen nástroje povolené tool policy.'],
+                ['fa-user-check', 'Review', 'Human review', 'Volitelná schvalovací brána dovolí review před finálním provedením.', 'Operátor může upravit draft, schválit nebo vrátit krok zpět.'],
+                ['fa-clipboard-check', 'Audit', 'Action + review log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.', 'Každý krok je auditovatelný včetně vstupu, rozhodnutí i výstupu.']
+            ]
+        },
+        research: {
+            summary: 'Web Research: požadavek → sběr zdrojů → analýza → výstupní report → review → audit',
+            steps: [
+                ['fa-magnifying-glass', 'Inbound', 'Inbound (Email/Chat)', 'Přijde požadavek na výzkum trhu nebo monitoring konkurence.', 'Trigger vytvoří brief, termín a očekávaný formát výstupu.'],
+                ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow spustí sběr zdrojů, ohlídá priority a retry při chybách.', 'Routing oddělí veřejné zdroje od interních podkladů.'],
+                ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI hodnotí relevanci zdrojů, extrahuje fakta a připraví shrnutí.', 'AI layer drží konzistentní metodiku citací i confidence score.'],
+                ['fa-globe', 'Adapter', 'Tools/Adapters', 'Web adapter volá search/read nástroje a zapisuje citace do reportu.', 'Integration layer sjednocuje výsledky ze search API a interní DB.'],
+                ['fa-user-check', 'Review', 'Human review', 'Analytik udělá review závěrů a doplní obchodní doporučení.', 'Human-in-the-loop potvrzuje kvalitu a rozhoduje o publikaci.'],
+                ['fa-clipboard-check', 'Audit', 'Action + review log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.', 'Audit log zachová zdroje, reasoning i finální rozhodnutí.']
+            ]
+        },
+        erp: {
+            summary: 'ERP/CRM: požadavek na změnu → validace workflow → AI návrh → adapter zápis → review → audit',
+            steps: [
+                ['fa-file-import', 'Inbound', 'Inbound (Email/Chat)', 'Požadavek na změnu objednávky nebo zákaznického záznamu v ERP/CRM.', 'Workflow layer založí transakční task s identifikátorem požadavku.'],
+                ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow mapuje pole, kontroluje pravidla a řídí schvalovací větve.', 'Orchestrace vynutí validační kroky před zásahem do ERP/CRM.'],
+                ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI vyhodnotí intent, navrhne validní update a ohlídá tool policy limit.', 'AI layer srovná návrh s historií a zvýrazní rizikové změny.'],
+                ['fa-database', 'Adapter', 'Tools/Adapters', 'ERP/CRM adapter provede zápis přes API a vrátí stav operace.', 'Integration layer umožní výměnu adaptéru bez přepisu workflow.'],
+                ['fa-user-check', 'Review', 'Human review', 'Citlivé změny čekají na review odpovědnou osobou.', 'Review krok zahrne SLA časovač a eskalaci při prodlení.'],
+                ['fa-clipboard-check', 'Audit', 'Action + review log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.', 'Log ukládá snapshot před/po změně i identitu schvalujícího.']
+            ]
+        }
     };
 
     const sequences = Array.from(timeline.querySelectorAll('.flow-sequence'));
@@ -324,13 +333,15 @@ function initFlowExample() {
         const target = timeline.querySelector(`.flow-sequence[data-usecase="${usecase}"]`);
         if (!target) return;
 
-        target.innerHTML = flowData[usecase]
-            .map(([icon, tag, title, text], index) => `
-                <article class="flow-step-card${index === 0 ? ' is-active' : ''}${index > 0 ? ' arrow-step' : ''}">
+        target.innerHTML = flowData[usecase].steps
+            .map(([icon, tag, title, text, detail], index) => `
+                <article class="flow-step-card${index === 0 ? ' is-active' : ''}${index > 0 ? ' arrow-step' : ''}" tabindex="0">
+                    <span class="flow-step-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                     <span class="flow-step-icon"><i class="fas ${icon}"></i></span>
                     <span class="flow-step-tag">${tag}</span>
                     <h4>${title}</h4>
                     <p>${text}</p>
+                    <div class="flow-step-detail">${detail}</div>
                 </article>
             `)
             .join('');
@@ -346,9 +357,15 @@ function initFlowExample() {
         });
 
         sequences.forEach(sequence => {
-            sequence.classList.toggle('active', sequence.dataset.usecase === usecase);
-            sequence.style.display = sequence.dataset.usecase === usecase ? 'grid' : 'none';
+            const visible = sequence.dataset.usecase === usecase;
+            sequence.classList.toggle('active', visible);
+            sequence.style.display = visible ? 'grid' : 'none';
         });
+
+        const headline = document.querySelector('.flow-example h3');
+        if (headline) {
+            headline.textContent = `Flow Example: ${flowData[usecase].summary}`;
+        }
     }
 
     switchButtons.forEach(btn => {
@@ -666,6 +683,19 @@ function getModalContent(type) {
                 <li><i class="fas fa-check-circle" style="color: var(--primary-color);"></i> Testování na reálných scénářích</li>
             </ul>
             <p>janAGI je navržen tak, aby zvládl i ty nejnáročnější úlohy bez selhání.</p>
+        `,
+        'email-flow': `
+            <h2><i class="fas fa-envelope-open-text"></i> Email Assistant: cesta procesu krok za krokem</h2>
+            <p>Ukázka reálného průchodu jedním požadavkem přes všechny vrstvy: workflow layer, AI layer a integration layer.</p>
+            <ol style="margin: 1.2rem 0 0 1.2rem; line-height: 1.9; color: var(--text-muted);">
+                <li><strong>Inbound:</strong> e-mail přijde na sdílenou schránku a n8n trigger vytvoří ticket + načte kontext zákazníka.</li>
+                <li><strong>Workflow layer (n8n):</strong> orchestrace vyhodnotí prioritu, SLA a přiřadí správnou větev procesu.</li>
+                <li><strong>AI layer (OpenClaw):</strong> role <em>main/spec</em> připraví návrh odpovědi, role <em>fast</em> dělá quick-check.</li>
+                <li><strong>Tool policy + adapter:</strong> volání SMTP/CRM API proběhne jen přes povolené konektory integration layeru.</li>
+                <li><strong>Human review:</strong> operátor návrh schválí nebo upraví, teprve pak jde odpověď ven.</li>
+                <li><strong>Audit:</strong> uloží se vstup, reasoning, výstup i identita schvalující osoby pro dohledatelnost.</li>
+            </ol>
+            <p style="margin-top: 1rem;">Výsledek: rychlejší odpovědi bez black-boxu a s jasnou odpovědností lidí i AI.</p>
         `,
         opensource: `
             <h2><i class="fas fa-code-branch"></i> Open-Source Freedom</h2>

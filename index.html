@@ -201,7 +201,7 @@
                         <p>Řídí celý proces od triggeru po výstup, včetně routingu, schválení a logiky workflow.</p>
                         <ul class="layer-bullets">
                             <li>Trigger &amp; routing</li>
-                            <li>Schválení a governance</li>
+                            <li>Review a governance</li>
                             <li>Auditovatelný běh workflow</li>
                         </ul>
                     </section>
@@ -253,14 +253,21 @@
                         <button class="flow-switch-btn" data-usecase="erp" role="tab" aria-selected="false" aria-controls="flowTimeline">ERP/CRM</button>
                     </div>
                     <div class="flow-legend" aria-hidden="true">
-                        <span>data/intent</span>
+                        <span>inbound</span>
                         <i class="fas fa-arrow-right"></i>
-                        <span>plan</span>
+                        <span>orchestrace</span>
                         <i class="fas fa-arrow-right"></i>
-                        <span>tool calls</span>
+                        <span>reasoning</span>
                         <i class="fas fa-arrow-right"></i>
-                        <span>results + audit</span>
+                        <span>adapter</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>review</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>audit</span>
                     </div>
+                    <button class="flow-deepdive-btn" type="button" onclick="openModal('email-flow')">
+                        <i class="fas fa-layer-group"></i> Zobrazit detailní cestu „Email Assistant"
+                    </button>
                     <div class="flow-timeline" id="flowTimeline" role="tabpanel">
                         <div class="flow-sequence active" data-usecase="email">
                             <article class="flow-step-card is-active">
@@ -322,7 +329,7 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">NOW (2026)</div>
+                            <div class="timeline-badge">NOW · 2026</div>
                             <h3>Co už běží</h3>
                             <p>Modulární orchestrace workflow v reálném provozu a pilotní use-cases pro SME.</p>
                             <div class="timeline-details">
@@ -345,7 +352,7 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">NEXT</div>
+                            <div class="timeline-badge">NEXT · 2026+</div>
                             <h3>Co právě ladíme</h3>
                             <p>Standardizace opakovatelných šablon workflow a lepší monitoring pro bezpečné škálování.</p>
                             <div class="timeline-details">
@@ -368,7 +375,7 @@
                             <div class="marker-pulse"></div>
                         </div>
                         <div class="timeline-content">
-                            <div class="timeline-badge">LATER</div>
+                            <div class="timeline-badge">LATER · 2027+</div>
                             <h3>Dlouhodobý směr</h3>
                             <p>Širší ekosystém agentů a partnerství, které zrychlí adopci řízené AI orchestrace.</p>
                             <div class="timeline-details">
@@ -479,7 +486,7 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-code"></i>
                         </div>
-                        <h3>Pro SME firmy</h3>
+                        <h3>SME firmy</h3>
                         <p>Potřebujete AI, která se napojí na reálné procesy a dá se řídit. Začínáme pilotem s jasnou metrikou přínosu.</p>
                         <ul class="benefit-list">
                             <li><i class="fas fa-check-circle"></i> Rychlý pilot</li>
@@ -493,7 +500,7 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
-                        <h3>Pro integrátory a IT architekty</h3>
+                        <h3>Integrátoři &amp; IT architekti</h3>
                         <p>Využijte modulární orchestration layer místo jednorázových skriptů a těžko udržovatelných automatizací.</p>
                         <ul class="benefit-list">
                             <li><i class="fas fa-check-circle"></i> Oddělené vrstvy odpovědností</li>
@@ -507,7 +514,7 @@
                         <div class="audience-icon">
                             <i class="fa-solid fa-rocket"></i>
                         </div>
-                        <h3>Pro vývojáře a open-source komunitu</h3>
+                        <h3>Open-source komunita</h3>
                         <p>Rozšiřujte agenty, pluginy a workflow nad otevřenou architekturou bez vendor lock-inu.</p>
                         <ul class="benefit-list">
                             <li><i class="fas fa-check-circle"></i> Open-source</li>
@@ -517,24 +524,8 @@
                     </div>
                 </div>
 
-                <!-- Stats Counter -->
-                <div class="stats-section" data-aos="fade-up">
-                    <div class="stat-item">
-                        <div class="stat-number">Open-source základ</div>
-                        <div class="stat-label">Transparentní stack bez black-box lock-inu</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Modulární vrstvy</div>
-                        <div class="stat-label">Orchestrace, AI schopnosti a integrace odděleně</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Pilot-ready</div>
-                        <div class="stat-label">Navržené pro rychlé SME nasazení</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Human-in-the-loop</div>
-                        <div class="stat-label">Schvalování i odpovědnost zůstává u lidí</div>
-                    </div>
+                <div class="audience-notice" data-aos="fade-up">
+                    <p>Hledáte pilot-ready AI orchestraci, kde je jasná odpovědnost workflow layeru, AI layeru i integration layeru? janAGI je navržený pro transparentní provoz i rozšiřování bez vendor lock-inu.</p>
                 </div>
             </div>
         </section>
