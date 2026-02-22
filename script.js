@@ -294,34 +294,39 @@ function initFlowExample() {
     const flowData = {
         email: [
             ['fa-inbox', 'Inbound', 'Inbound (Email/Chat)', 'Příchozí zpráva nebo chat vytvoří ticket a přidá historii komunikace.'],
-            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, approvals, retries a governance pravidla.'],
+            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, schválení, retries a governance pravidla.'],
             ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI klasifikuje intent, připraví draft a navrhne další bezpečné kroky.'],
             ['fa-plug', 'Adapter', 'Tools/Adapters', 'Pluginy propojí SMTP/IMAP, DB nebo webové API s workflow kontextem.'],
-            ['fa-user-check', 'HITL', 'Human approval', 'Volitelná schvalovací brána dovolí revizi před finálním provedením.'],
-            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.']
+            ['fa-user-check', 'Review', 'Human review', 'Volitelná schvalovací brána dovolí review před finálním provedením.'],
+            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.']
         ],
         research: [
             ['fa-magnifying-glass', 'Inbound', 'Inbound (Email/Chat)', 'Přijde požadavek na výzkum trhu nebo monitoring konkurence.'],
             ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow spustí sběr zdrojů, ohlídá priority a retry při chybách.'],
             ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI hodnotí relevanci zdrojů, extrahuje fakta a připraví shrnutí.'],
             ['fa-globe', 'Adapter', 'Tools/Adapters', 'Web adapter volá search/read nástroje a zapisuje citace do reportu.'],
-            ['fa-user-check', 'HITL', 'Human approval', 'Analytik schválí závěry a doplní obchodní doporučení.'],
-            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.']
+            ['fa-user-check', 'Review', 'Human review', 'Analytik udělá review závěrů a doplní obchodní doporučení.'],
+            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.']
         ],
         erp: [
             ['fa-file-import', 'Inbound', 'Inbound (Email/Chat)', 'Požadavek na změnu objednávky nebo zákaznického záznamu v ERP/CRM.'],
             ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow mapuje pole, kontroluje pravidla a řídí schvalovací větve.'],
             ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI vyhodnotí intent, navrhne validní update a ohlídá policy limit.'],
             ['fa-database', 'Adapter', 'Tools/Adapters', 'ERP/CRM adapter provede zápis přes API a vrátí stav operace.'],
-            ['fa-user-check', 'HITL', 'Human approval', 'Citlivé změny čekají na schválení odpovědnou osobou.'],
-            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.']
+            ['fa-user-check', 'Review', 'Human review', 'Citlivé změny čekají na review odpovědnou osobou.'],
+            ['fa-clipboard-check', 'Audit', 'Action + review log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.']
         ]
     };
 
+    const sequences = Array.from(timeline.querySelectorAll('.flow-sequence'));
+
     function renderFlow(usecase) {
-        timeline.innerHTML = flowData[usecase]
+        const target = timeline.querySelector(`.flow-sequence[data-usecase="${usecase}"]`);
+        if (!target) return;
+
+        target.innerHTML = flowData[usecase]
             .map(([icon, tag, title, text], index) => `
-                <article class="flow-step-card${index === 0 ? ' is-active' : ''}">
+                <article class="flow-step-card${index === 0 ? ' is-active' : ''}${index > 0 ? ' arrow-step' : ''}">
                     <span class="flow-step-icon"><i class="fas ${icon}"></i></span>
                     <span class="flow-step-tag">${tag}</span>
                     <h4>${title}</h4>
@@ -331,19 +336,26 @@ function initFlowExample() {
             .join('');
     }
 
-    switchButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            switchButtons.forEach(item => {
-                item.classList.remove('active');
-                item.setAttribute('aria-selected', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
-            renderFlow(btn.dataset.usecase);
+    Object.keys(flowData).forEach(renderFlow);
+
+    function setActiveUsecase(usecase) {
+        switchButtons.forEach(item => {
+            const isCurrent = item.dataset.usecase === usecase;
+            item.classList.toggle('active', isCurrent);
+            item.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
         });
+
+        sequences.forEach(sequence => {
+            sequence.classList.toggle('active', sequence.dataset.usecase === usecase);
+            sequence.style.display = sequence.dataset.usecase === usecase ? 'grid' : 'none';
+        });
+    }
+
+    switchButtons.forEach(btn => {
+        btn.addEventListener('click', () => setActiveUsecase(btn.dataset.usecase));
     });
 
-    renderFlow('email');
+    setActiveUsecase('email');
 }
 
 // ========================================

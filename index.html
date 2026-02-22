@@ -71,8 +71,8 @@
             <h1 id="typingHeadline" class="typing-headline" data-aos="fade-up" data-aos-delay="600"></h1>
             
             <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
-                AI orchestrace pro reálné firemní workflow.
-                n8n řídí procesy, OpenClaw dodává AI schopnosti a pluginy propojují firemní systémy.
+                Vrstvená AI orchestrace pro reálné SME workflow.
+                Workflow Layer v n8n řídí procesy, AI Layer v OpenClaw přináší reasoning a Integration Layer přes pluginy propojuje firemní systémy.
             </p>
 
             <!-- Enhanced Email Form -->
@@ -184,55 +184,30 @@
                     <a class="architecture-inline-link" href="#flow-example">Prohlédnout si příklad flow</a>
                 </div>
 
-                <div class="architecture-boundary-diagram glass-card" data-aos="fade-up" data-aos-delay="180" aria-label="Diagram hranic vrstev janAGI">
-                    <div class="boundary-node">
-                        <span class="boundary-node-label">Inbound</span>
-                        <p>Email / Chat / API trigger</p>
-                    </div>
-                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
-                    <div class="boundary-node layer-node">
-                        <span class="boundary-node-label">Workflow Layer (n8n)</span>
-                        <p><strong>Owner:</strong> proces workflow</p>
-                        <p><strong>Vyměnitelné:</strong> workflow templates</p>
-                    </div>
-                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
-                    <div class="boundary-node layer-node">
-                        <span class="boundary-node-label">AI Layer (OpenClaw)</span>
-                        <p><strong>Owner:</strong> AI reasoning</p>
-                        <p><strong>Vyměnitelné:</strong> LLM modely a role</p>
-                    </div>
-                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
-                    <div class="boundary-node layer-node">
-                        <span class="boundary-node-label">Integration Layer (Plugins &amp; Adapters)</span>
-                        <p><strong>Owner:</strong> integrace</p>
-                        <p><strong>Vyměnitelné:</strong> SMTP/IMAP, DB, ERP/CRM konektory</p>
-                    </div>
-                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
-                    <div class="boundary-node">
-                        <span class="boundary-node-label">Systems</span>
-                        <p>Akce, update, uzavření smyčky</p>
-                    </div>
+                <div class="architecture-badges" data-aos="fade-up" data-aos-delay="140">
+                    <span>Open-source core</span>
+                    <span>Human-in-the-loop</span>
+                    <span>Pilot-ready</span>
+                    <span>Vendor-neutral</span>
                 </div>
 
                 <div class="architecture-grid">
-                    <div class="glass-card interactive-card" data-aos="fade-right" data-aos-delay="300">
+                    <section class="glass-card interactive-card architecture-layer-card workflow-layer" data-aos="fade-right" data-aos-delay="300">
                         <div class="card-glow"></div>
-                        <div class="card-number">01</div>
                         <div class="card-icon">
                             <i class="fa-solid fa-diagram-project"></i>
                         </div>
                         <h3>Workflow Layer (n8n)</h3>
-                        <p>Řídí celý proces od triggeru po výstup, včetně routingu, schvalování a logiky workflow.</p>
+                        <p>Řídí celý proces od triggeru po výstup, včetně routingu, schválení a logiky workflow.</p>
                         <ul class="layer-bullets">
                             <li>Trigger &amp; routing</li>
-                            <li>Approvals a governance</li>
+                            <li>Schválení a governance</li>
                             <li>Auditovatelný běh workflow</li>
                         </ul>
-                    </div>
+                    </section>
 
-                    <div class="glass-card interactive-card" data-aos="fade-up" data-aos-delay="400">
+                    <section class="glass-card interactive-card architecture-layer-card ai-layer" data-aos="fade-up" data-aos-delay="400">
                         <div class="card-glow"></div>
-                        <div class="card-number">02</div>
                         <div class="card-icon">
                             <i class="fa-solid fa-robot"></i>
                         </div>
@@ -243,18 +218,19 @@
                             <li>Specializované role podle use-case</li>
                             <li>Kontrolované volání nástrojů</li>
                         </ul>
-                        <div class="feature-tags">
-                            <span class="tag">main</span>
-                            <span class="tag">web</span>
-                            <span class="tag">spec</span>
-                            <span class="tag">fast</span>
+                        <div class="ai-chip-group" aria-label="Role AI vrstvy">
+                            <div class="feature-tags">
+                                <span class="tag">main</span>
+                                <span class="tag">web</span>
+                                <span class="tag">spec</span>
+                                <span class="tag">fast</span>
+                            </div>
                             <span class="tag tag-outline">tool policy</span>
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="glass-card interactive-card" data-aos="fade-left" data-aos-delay="500">
+                    <section class="glass-card interactive-card architecture-layer-card integration-layer" data-aos="fade-left" data-aos-delay="500">
                         <div class="card-glow"></div>
-                        <div class="card-number">03</div>
                         <div class="card-icon">
                             <i class="fa-solid fa-plug"></i>
                         </div>
@@ -265,7 +241,7 @@
                             <li>Výměna adaptéru bez přepisu orchestrace</li>
                             <li>Vendor-neutral integrace</li>
                         </ul>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="glass-card flow-example" id="flow-example" data-aos="fade-up" data-aos-delay="550">
@@ -286,42 +262,46 @@
                         <span>results + audit</span>
                     </div>
                     <div class="flow-timeline" id="flowTimeline" role="tabpanel">
-                        <article class="flow-step-card is-active">
+                        <div class="flow-sequence active" data-usecase="email">
+                            <article class="flow-step-card is-active">
                             <span class="flow-step-icon"><i class="fas fa-inbox"></i></span>
                             <span class="flow-step-tag">Inbound</span>
                             <h4>Inbound (Email/Chat)</h4>
                             <p>Příchozí zpráva nebo chat vytvoří nový ticket a přidá kontext zákazníka.</p>
-                        </article>
-                        <article class="flow-step-card">
+                            </article>
+                            <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-diagram-project"></i></span>
                             <span class="flow-step-tag">n8n</span>
                             <h4>n8n orchestruje</h4>
-                            <p>Workflow řeší routing, approvals, retries a policy kontroly před AI krokem.</p>
-                        </article>
-                        <article class="flow-step-card">
+                            <p>Workflow řeší routing, schválení, retries a policy kontroly před AI krokem.</p>
+                            </article>
+                            <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-brain"></i></span>
                             <span class="flow-step-tag">OpenClaw</span>
                             <h4>OpenClaw reasoning</h4>
                             <p>AI klasifikuje intent, připraví draft odpovědi a navrhne další akce.</p>
-                        </article>
-                        <article class="flow-step-card">
+                            </article>
+                            <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-plug"></i></span>
                             <span class="flow-step-tag">Adapter</span>
                             <h4>Tools/Adapters</h4>
                             <p>Pluginy volají SMTP/IMAP, databázi a interní API nad auditovatelnými daty.</p>
-                        </article>
-                        <article class="flow-step-card">
+                            </article>
+                            <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-user-check"></i></span>
-                            <span class="flow-step-tag">HITL</span>
-                            <h4>Human approval</h4>
-                            <p>Volitelná schvalovací brána umožní revizi před finálním odesláním.</p>
-                        </article>
-                        <article class="flow-step-card">
+                            <span class="flow-step-tag">Review</span>
+                            <h4>Human review</h4>
+                            <p>Volitelná schvalovací brána umožní review před finálním odesláním.</p>
+                            </article>
+                            <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-clipboard-check"></i></span>
                             <span class="flow-step-tag">Audit</span>
-                            <h4>Action + Audit log</h4>
+                            <h4>Action + review log</h4>
                             <p>Systém provede akci, uloží výsledek a uzavře loop s kompletní stopou.</p>
-                        </article>
+                            </article>
+                        </div>
+                        <div class="flow-sequence" data-usecase="research"></div>
+                        <div class="flow-sequence" data-usecase="erp"></div>
                     </div>
                 </div>
             </div>
@@ -432,12 +412,9 @@
 
                 <div class="workflow-steps">
                     <div class="workflow-step" data-aos="fade-up" data-aos-delay="100">
-                        <div class="step-number">
-                            <span>01</span>
-                            <div class="number-glow"></div>
-                        </div>
                         <div class="step-content glass-card">
                             <div class="card-glow"></div>
+                            <div class="step-number">01</div>
                             <div class="step-icon">
                                 <i class="fa-solid fa-bullseye"></i>
                             </div>
@@ -448,12 +425,9 @@
                     </div>
 
                     <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
-                        <div class="step-number">
-                            <span>02</span>
-                            <div class="number-glow"></div>
-                        </div>
                         <div class="step-content glass-card">
                             <div class="card-glow"></div>
+                            <div class="step-number">02</div>
                             <div class="step-icon">
                                 <i class="fa-solid fa-lightbulb"></i>
                             </div>
@@ -464,12 +438,9 @@
                     </div>
 
                     <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
-                        <div class="step-number">
-                            <span>03</span>
-                            <div class="number-glow"></div>
-                        </div>
                         <div class="step-content glass-card">
                             <div class="card-glow"></div>
+                            <div class="step-number">03</div>
                             <div class="step-icon">
                                 <i class="fa-solid fa-check-circle"></i>
                             </div>
@@ -480,12 +451,9 @@
                     </div>
 
                     <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
-                        <div class="step-number">
-                            <span>04</span>
-                            <div class="number-glow"></div>
-                        </div>
                         <div class="step-content glass-card">
                             <div class="card-glow"></div>
+                            <div class="step-number">04</div>
                             <div class="step-icon">
                                 <i class="fa-solid fa-eye"></i>
                             </div>
@@ -691,7 +659,7 @@
                         <i class="fab fa-discord"></i>
                     </a>
                 </div>
-                <p class="copyright">&copy; 2026 janAGI Project. All rights reserved.</p>
+                <p class="copyright">&copy; 2025–2026 janAGI Project. All rights reserved.</p>
             </div>
         </div>
     </footer>
