@@ -1,0 +1,40 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ukázka n8n flow</title>
+  <desc id="desc">Diagram kroků trigger, policy, AI, tools a log.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="675" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1220"/>
+      <stop offset="1" stop-color="#121A2D"/>
+    </linearGradient>
+    <linearGradient id="card" x1="80" y1="120" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B2A44" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#243B5E" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="28" fill="url(#bg)"/>
+  <rect x="56" y="56" width="1088" height="563" rx="24" fill="url(#card)" stroke="#4EA1FF" stroke-opacity="0.35"/>
+  <text x="100" y="120" fill="#EAF3FF" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="700">n8n workflow běh</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="24" font-weight="600" fill="#DCEBFF">
+    <rect x="100" y="230" width="180" height="88" rx="14" fill="#2D9CDB" fill-opacity="0.25" stroke="#67C7FF"/>
+    <text x="150" y="284">Trigger</text>
+
+    <rect x="322" y="230" width="180" height="88" rx="14" fill="#56CCF2" fill-opacity="0.18" stroke="#7DDFFF"/>
+    <text x="382" y="284">Policy</text>
+
+    <rect x="544" y="230" width="180" height="88" rx="14" fill="#6FCF97" fill-opacity="0.2" stroke="#8EE0AE"/>
+    <text x="614" y="284">AI</text>
+
+    <rect x="766" y="230" width="180" height="88" rx="14" fill="#BB6BD9" fill-opacity="0.2" stroke="#D69AF0"/>
+    <text x="820" y="284">Tools</text>
+
+    <rect x="988" y="230" width="112" height="88" rx="14" fill="#F2994A" fill-opacity="0.22" stroke="#FFC288"/>
+    <text x="1025" y="284">Log</text>
+  </g>
+  <g stroke="#9AC6FF" stroke-width="4" stroke-linecap="round">
+    <path d="M280 274H322"/>
+    <path d="M502 274H544"/>
+    <path d="M724 274H766"/>
+    <path d="M946 274H988"/>
+  </g>
+  <text x="100" y="400" fill="#BFD7FF" font-family="Inter, Arial, sans-serif" font-size="26">Každý krok je auditovatelný, schvalovatelný a jednoduše laditelný.</text>
+</svg>
