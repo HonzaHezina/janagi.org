@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>janAGI – AI orchestrace pro reálné firemní workflow</title>
+    <title>janAGI – AI workflow, které vidíte a řídíte</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -36,11 +36,11 @@
             <a href="#" class="nav-logo">jan<span>AGI</span></a>
             <div class="nav-links" id="navLinks">
                 <a href="#problem" class="nav-link">Problém</a>
-                <a href="#architecture" class="nav-link">Architektura</a>
-                <a href="#roadmap" class="nav-link">Vývoj</a>
-                <a href="#workflow" class="nav-link">Use-cases</a>
-                <a href="#audience" class="nav-link">Pro koho</a>
-                <a href="#janagi" class="nav-link">Piloty &amp; partneři</a>
+                <a href="#manifesto" class="nav-link">Manifest</a>
+                <a href="#proof" class="nav-link">Důkaz</a>
+                <a href="#workflow" class="nav-link">Příklady</a>
+                <a href="#audience" class="nav-link">Pro firmy / techniky</a>
+                <a href="#janagi" class="nav-link">Pilot (2–4 týdny)</a>
             </div>
             <!-- Dark/Light Mode Toggle -->
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -68,12 +68,16 @@
             
             <div class="logo-main" data-aos="fade-up" data-aos-delay="400">jan<span>AGI</span></div>
             
-            <h1 id="typingHeadline" class="typing-headline" data-aos="fade-up" data-aos-delay="600"></h1>
+            <h1 class="typing-headline" data-aos="fade-up" data-aos-delay="600">AI workflow, které vidíte a řídíte. Ne black-box agent.</h1>
             
             <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
-                Vrstvená AI orchestrace pro reálné SME workflow.
-                Workflow Layer v n8n řídí procesy, AI Layer v OpenClaw přináší reasoning a Integration Layer přes pluginy propojuje firemní systémy.
+                janAGI dělá z AI nástrojů proces: n8n drží tok práce a audit, OpenClaw dělá rozhodování, integrace provádí akce. Modely můžete měnit bez přepsání systému.
             </p>
+            <ul class="hero-bullets" data-aos="fade-up" data-aos-delay="900">
+                <li>Měřitelný pilot na 1 proces (2–4 týdny)</li>
+                <li>Human-in-the-loop + audit trail jako standard</li>
+                <li>Vendor-neutral: modely i konektory jsou vyměnitelné</li>
+            </ul>
 
             <!-- Enhanced Email Form -->
             <form class="email-form" id="heroEmailForm" data-aos="fade-up" data-aos-delay="1000">
@@ -83,15 +87,11 @@
                 </div>
                 <div class="hero-cta-group">
                     <button type="submit" class="cta-button ripple-effect">
-                        <span>Domluvit pilot</span>
+                        <span>Domluvit 20 min call</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
-                    <a href="#architecture" class="cta-secondary" id="architectureLink">
-                        <span>Zobrazit architekturu</span>
-                        <i class="fas fa-layer-group"></i>
-                    </a>
-                    <a href="#flow-example" class="cta-secondary" id="flowExampleLink">
-                        <span>Zobrazit flow příklad</span>
+                    <a href="#proof" class="cta-secondary" id="flowExampleLink">
+                        <span>Podívat se na ukázku flow (2 min)</span>
                         <i class="fas fa-diagram-project"></i>
                     </a>
                 </div>
@@ -116,8 +116,7 @@
                     <div class="title-underline"></div>
                 </h2>
                 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-                    Současný svět AI agentů je plný nespolehlivých experimentů a uzavřených systémů. 
-                    janAGI přináší řád, transparentnost a skutečnou sílu do vašich rukou.
+                    AI slibuje automatizaci, ale ve firmě často končí jako chat okno bez odpovědnosti. Když to selže, nikdo neví proč. Když to funguje, nikdo neví co se stalo. janAGI dává workflow, audit a schvalování.
                 </p>
                 
                 <div class="features-grid">
@@ -171,6 +170,50 @@
                             Zjistit více <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="manifesto" class="section-manifesto">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Jeden velký agent není dar. Je to single point of failure.
+                    <div class="title-underline"></div>
+                </h2>
+                <div class="manifesto-grid">
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="120">
+                        <h3>Chaos a těžké ladění</h3>
+                        <p>Když všechno běží v jedné AI černé skříňce, problém je těžké najít i opravit.</p>
+                    </div>
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="180">
+                        <h3>Strach cokoliv změnit</h3>
+                        <p>Bez jasných rozhraní se každá úprava mění v riziko, které brzdí rozvoj.</p>
+                    </div>
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="240">
+                        <h3>Lock-in na jednoho providera</h3>
+                        <p>Jeden model, jeden dodavatel, jedny ceny. Migrace bolí a inovace stojí.</p>
+                    </div>
+                </div>
+                <p class="manifesto-conclusion" data-aos="fade-up" data-aos-delay="300">janAGI je nervová soustava: vrstvy + jasné rozhraní + audit.</p>
+            </div>
+        </section>
+
+        <section id="proof" class="section-proof">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Důkaz procesu: ne slib, ale viditelný běh
+                    <div class="title-underline"></div>
+                </h2>
+                <div class="proof-grid">
+                    <figure class="glass-card" data-aos="fade-right" data-aos-delay="120">
+                        <img src="placeholder_light_gray_block.png" alt="Ukázka n8n flow trigger to policy to AI to tools to log">
+                        <figcaption>n8n flow: trigger → policy → AI → tools → log</figcaption>
+                    </figure>
+                    <figure class="glass-card" data-aos="fade-left" data-aos-delay="180">
+                        <img src="placeholder_light_gray_block.png" alt="Ukázka audit logu a výstupu běhu">
+                        <figcaption>Audit log / run output: kdo schválil, co se provedlo a s jakým výsledkem.</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
@@ -328,7 +371,7 @@
         <section id="roadmap" class="section-roadmap">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Vývoj janAGI: NOW / NEXT / LATER
+                    Roadmapa janAGI v kostce
                     <div class="title-underline"></div>
                 </h2>
                 
@@ -436,7 +479,9 @@
                                 <i class="fa-solid fa-bullseye"></i>
                             </div>
                             <h3>AI Email Assistant pro SME</h3>
-                            <p>Třídění e-mailů, návrhy odpovědí přes AI a možnost schválení člověkem před odesláním.</p>
+                            <p><strong>Before:</strong> ruční třídění 50+ e-mailů denně.</p>
+                            <p><strong>After:</strong> AI navrhne odpověď, člověk schválí a odešle.</p>
+                            <p><strong>Metrika:</strong> typicky 3–8 h týdně zpět + lepší SLA odpovědí.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -449,7 +494,9 @@
                                 <i class="fa-solid fa-lightbulb"></i>
                             </div>
                             <h3>Web research a shrnutí</h3>
-                            <p>Automatizované dohledání informací na webu, sumarizace a předání výstupu do CRM, reportu nebo interního procesu.</p>
+                            <p><strong>Before:</strong> analytik ručně sbírá podklady z desítek zdrojů.</p>
+                            <p><strong>After:</strong> AI připraví shrnutí a člověk jen schválí závěr.</p>
+                            <p><strong>Metrika:</strong> rychlejší příprava podkladů o 30–50 %.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -462,7 +509,9 @@
                                 <i class="fa-solid fa-check-circle"></i>
                             </div>
                             <h3>Interní procesy a ERP/CRM</h3>
-                            <p>AI vrstva nad vašimi daty a procesy bez nutnosti přepisovat existující infrastrukturu.</p>
+                            <p><strong>Before:</strong> ruční přepis dat mezi systémy a časté chyby.</p>
+                            <p><strong>After:</strong> AI navrhne update, odpovědná osoba schválí.</p>
+                            <p><strong>Metrika:</strong> méně chyb a kratší doba zpracování požadavků.</p>
                         </div>
                         <div class="step-connector"></div>
                     </div>
@@ -475,7 +524,9 @@
                                 <i class="fa-solid fa-eye"></i>
                             </div>
                             <h3>Řízená spolupráce člověk + AI</h3>
-                            <p>Záměr, schválení i kontrola zůstávají u lidí. AI urychluje execution, ale nevytváří black box.</p>
+                            <p><strong>Before:</strong> AI běží bez odpovědnosti a bez jasného vlastníka.</p>
+                            <p><strong>After:</strong> schvalování, audit trail a role jsou součást workflow.</p>
+                            <p><strong>Metrika:</strong> vyšší důvěra týmu a méně eskalací při chybě.</p>
                         </div>
                     </div>
                 </div>
@@ -490,8 +541,14 @@
                     <div class="title-underline"></div>
                 </h2>
 
+                <div class="audience-toggle" data-aos="fade-up" data-aos-delay="80">
+                    <button class="audience-toggle-btn active" data-audience-filter="biz">Pro firmy</button>
+                    <button class="audience-toggle-btn" data-audience-filter="tech">Pro techniky</button>
+                    <button class="audience-toggle-btn" data-audience-filter="all">Zobrazit vše</button>
+                </div>
+
                 <div class="audience-grid">
-                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="100">
+                    <div class="audience-card glass-card" data-audience="biz" data-aos="flip-left" data-aos-delay="100">
                         <div class="card-glow"></div>
                         <div class="audience-icon">
                             <i class="fa-solid fa-code"></i>
@@ -505,7 +562,7 @@
                         </ul>
                     </div>
 
-                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="200">
+                    <div class="audience-card glass-card" data-audience="tech" data-aos="flip-left" data-aos-delay="200">
                         <div class="card-glow"></div>
                         <div class="audience-icon">
                             <i class="fa-solid fa-chart-line"></i>
@@ -519,7 +576,7 @@
                         </ul>
                     </div>
 
-                    <div class="audience-card glass-card" data-aos="flip-left" data-aos-delay="300">
+                    <div class="audience-card glass-card" data-audience="tech" data-aos="flip-left" data-aos-delay="300">
                         <div class="card-glow"></div>
                         <div class="audience-icon">
                             <i class="fa-solid fa-rocket"></i>
@@ -544,13 +601,22 @@
         <section id="janagi" class="section-investors">
             <div class="container">
                 <h2 class="section-title" data-aos="fade-up">
-                    Spolupráce: piloty, partnerství, investoři
+                    Pilot janAGI (2–4 týdny): co přesně dostanete
                     <div class="title-underline"></div>
                 </h2>
                 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-                    Chcete AI workflow, které je vidět, řídit a rozšiřovat? Začněme pilotním procesem. 
-                    Pokud jste investor nebo strategický partner, rádi představíme i roadmapu rozvoje janAGI.
+                    Vybereme jeden proces, nastavíme metriku přínosu, nasadíme workflow s governance a po 2–4 týdnech předáme vyhodnocení i další kroky. Od vás potřebujeme přístupy, jednoho ownera a 60min workshop.
                 </p>
+
+                <div class="pilot-scope glass-card" data-aos="fade-up" data-aos-delay="140">
+                    <h3>Pilot (2–4 týdny)</h3>
+                    <ul>
+                        <li>Vybereme 1 proces + metrika přínosu (čas, SLA, kvalita).</li>
+                        <li>Postavíme workflow v n8n + governance a schvalování.</li>
+                        <li>Nasadíme, změříme dopad a předáme dokumentaci + NEXT kroky.</li>
+                        <li>Co potřebujeme od vás: přístupy, 1 owner, 60 min workshop.</li>
+                    </ul>
+                </div>
 
                 <div class="investor-forms">
                     <!-- Investor Form -->
