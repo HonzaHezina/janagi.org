@@ -181,6 +181,37 @@
                 
                 <div class="section-subtitle architecture-subtitle" data-aos="fade-up" data-aos-delay="100">
                     Každá vrstva má jasnou odpovědnost → vyměnitelné, auditovatelné, škálovatelné.
+                    <a class="architecture-inline-link" href="#flow-example">Prohlédnout si příklad flow</a>
+                </div>
+
+                <div class="architecture-boundary-diagram glass-card" data-aos="fade-up" data-aos-delay="180" aria-label="Diagram hranic vrstev janAGI">
+                    <div class="boundary-node">
+                        <span class="boundary-node-label">Inbound</span>
+                        <p>Email / Chat / API trigger</p>
+                    </div>
+                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
+                    <div class="boundary-node layer-node">
+                        <span class="boundary-node-label">Workflow Layer (n8n)</span>
+                        <p><strong>Owner:</strong> proces workflow</p>
+                        <p><strong>Vyměnitelné:</strong> workflow templates</p>
+                    </div>
+                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
+                    <div class="boundary-node layer-node">
+                        <span class="boundary-node-label">AI Layer (OpenClaw)</span>
+                        <p><strong>Owner:</strong> AI reasoning</p>
+                        <p><strong>Vyměnitelné:</strong> LLM modely a role</p>
+                    </div>
+                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
+                    <div class="boundary-node layer-node">
+                        <span class="boundary-node-label">Integration Layer (Plugins &amp; Adapters)</span>
+                        <p><strong>Owner:</strong> integrace</p>
+                        <p><strong>Vyměnitelné:</strong> SMTP/IMAP, DB, ERP/CRM konektory</p>
+                    </div>
+                    <i class="fas fa-arrow-right boundary-arrow" aria-hidden="true"></i>
+                    <div class="boundary-node">
+                        <span class="boundary-node-label">Systems</span>
+                        <p>Akce, update, uzavření smyčky</p>
+                    </div>
                 </div>
 
                 <div class="architecture-grid">
@@ -241,11 +272,57 @@
                     <div class="card-glow"></div>
                     <h3>Flow Example: jak vrstvy spolupracují v praxi</h3>
                     <div class="flow-usecase-switch" role="tablist" aria-label="Flow use-case switcher">
-                        <button class="flow-switch-btn active" data-usecase="email">Email Assistant</button>
-                        <button class="flow-switch-btn" data-usecase="research">Web Research</button>
-                        <button class="flow-switch-btn" data-usecase="erp">ERP/CRM</button>
+                        <button class="flow-switch-btn active" data-usecase="email" role="tab" aria-selected="true" aria-controls="flowTimeline">Email Assistant</button>
+                        <button class="flow-switch-btn" data-usecase="research" role="tab" aria-selected="false" aria-controls="flowTimeline">Web Research</button>
+                        <button class="flow-switch-btn" data-usecase="erp" role="tab" aria-selected="false" aria-controls="flowTimeline">ERP/CRM</button>
                     </div>
-                    <div class="flow-timeline" id="flowTimeline"></div>
+                    <div class="flow-legend" aria-hidden="true">
+                        <span>data/intent</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>plan</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>tool calls</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>results + audit</span>
+                    </div>
+                    <div class="flow-timeline" id="flowTimeline" role="tabpanel">
+                        <article class="flow-step-card is-active">
+                            <span class="flow-step-icon"><i class="fas fa-inbox"></i></span>
+                            <span class="flow-step-tag">Inbound</span>
+                            <h4>Inbound (Email/Chat)</h4>
+                            <p>Příchozí zpráva nebo chat vytvoří nový ticket a přidá kontext zákazníka.</p>
+                        </article>
+                        <article class="flow-step-card">
+                            <span class="flow-step-icon"><i class="fas fa-diagram-project"></i></span>
+                            <span class="flow-step-tag">n8n</span>
+                            <h4>n8n orchestruje</h4>
+                            <p>Workflow řeší routing, approvals, retries a policy kontroly před AI krokem.</p>
+                        </article>
+                        <article class="flow-step-card">
+                            <span class="flow-step-icon"><i class="fas fa-brain"></i></span>
+                            <span class="flow-step-tag">OpenClaw</span>
+                            <h4>OpenClaw reasoning</h4>
+                            <p>AI klasifikuje intent, připraví draft odpovědi a navrhne další akce.</p>
+                        </article>
+                        <article class="flow-step-card">
+                            <span class="flow-step-icon"><i class="fas fa-plug"></i></span>
+                            <span class="flow-step-tag">Adapter</span>
+                            <h4>Tools/Adapters</h4>
+                            <p>Pluginy volají SMTP/IMAP, databázi a interní API nad auditovatelnými daty.</p>
+                        </article>
+                        <article class="flow-step-card">
+                            <span class="flow-step-icon"><i class="fas fa-user-check"></i></span>
+                            <span class="flow-step-tag">HITL</span>
+                            <h4>Human approval</h4>
+                            <p>Volitelná schvalovací brána umožní revizi před finálním odesláním.</p>
+                        </article>
+                        <article class="flow-step-card">
+                            <span class="flow-step-icon"><i class="fas fa-clipboard-check"></i></span>
+                            <span class="flow-step-tag">Audit</span>
+                            <h4>Action + Audit log</h4>
+                            <p>Systém provede akci, uloží výsledek a uzavře loop s kompletní stopou.</p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>

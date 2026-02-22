@@ -798,6 +798,55 @@ section {
     color: var(--text-muted);
 }
 
+.architecture-inline-link {
+    margin-left: 12px;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(0, 169, 165, 0.6);
+}
+
+.architecture-boundary-diagram {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 18px;
+}
+
+.boundary-node {
+    min-width: 170px;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.layer-node {
+    min-width: 220px;
+}
+
+.boundary-node-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 6px;
+}
+
+.boundary-node p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.boundary-arrow {
+    align-self: center;
+    color: var(--secondary-color);
+    opacity: 0.75;
+}
+
 .architecture-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -857,16 +906,21 @@ section {
 .flow-usecase-switch {
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin: 18px 0 22px;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    width: fit-content;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .flow-switch-btn {
-    border: 1px solid var(--glass-border);
+    border: 1px solid transparent;
     background: transparent;
     color: var(--text-color);
     border-radius: 999px;
-    padding: 8px 14px;
+    padding: 8px 16px;
     cursor: pointer;
     transition: var(--transition);
 }
@@ -876,6 +930,16 @@ section {
     border-color: var(--primary-color);
     background: rgba(0, 169, 165, 0.15);
     color: var(--primary-color);
+}
+
+.flow-legend {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 14px;
 }
 
 .flow-timeline {
@@ -890,11 +954,38 @@ section {
     padding: 14px;
     background: rgba(255, 255, 255, 0.02);
     transition: var(--transition);
+    min-height: 168px;
 }
 
 .flow-step-card:hover {
     border-color: var(--primary-color);
     transform: translateY(-2px);
+}
+
+.flow-step-card.is-active {
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 24px rgba(0, 169, 165, 0.2);
+}
+
+.flow-step-icon {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(0, 169, 165, 0.18);
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.flow-step-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--secondary-color);
+    margin-bottom: 8px;
 }
 
 .flow-step-card h4 {
@@ -919,6 +1010,18 @@ section {
 @media (max-width: 900px) {
     .flow-timeline {
         grid-template-columns: 1fr;
+    }
+
+    .flow-usecase-switch {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .flow-switch-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 0.85rem;
     }
 }
 

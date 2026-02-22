@@ -293,41 +293,52 @@ function initFlowExample() {
 
     const flowData = {
         email: [
-            ['Inbound (Email/Chat)', 'Příchozí zpráva spustí workflow trigger.'],
-            ['n8n orchestruje', 'Routing, validace kontextu a pravidla procesu.'],
-            ['OpenClaw reasoning', 'AI navrhne odpověď a další akce dle policy.'],
-            ['Mail plugin (SMTP/IMAP)', 'Adaptér načte vlákno a připraví draft reply.'],
-            ['Human approval', 'Uživatel schválí, upraví nebo vrátí krok zpět.'],
-            ['Send + Audit log', 'Odeslání zprávy a záznam kompletního průběhu.']
+            ['fa-inbox', 'Inbound', 'Inbound (Email/Chat)', 'Příchozí zpráva nebo chat vytvoří ticket a přidá historii komunikace.'],
+            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow řeší routing, approvals, retries a governance pravidla.'],
+            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI klasifikuje intent, připraví draft a navrhne další bezpečné kroky.'],
+            ['fa-plug', 'Adapter', 'Tools/Adapters', 'Pluginy propojí SMTP/IMAP, DB nebo webové API s workflow kontextem.'],
+            ['fa-user-check', 'HITL', 'Human approval', 'Volitelná schvalovací brána dovolí revizi před finálním provedením.'],
+            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Systém odešle akci, uloží výsledek a uzavře loop s audit trail.']
         ],
         research: [
-            ['Inbound (Email/Chat)', 'Zadání: najdi data o konkurenci a shrň je.'],
-            ['n8n orchestruje', 'Spustí výzkumný workflow a sběr zdrojů.'],
-            ['OpenClaw reasoning', 'Vyhodnotí relevanci zdrojů a vytvoří sumarizaci.'],
-            ['Web plugin', 'Provede search/read nad definovanými doménami.'],
-            ['Human approval', 'Kontrola závěrů před publikací reportu.'],
-            ['Send + Audit log', 'Výstup do CRM/reportu + audit trail.']
+            ['fa-magnifying-glass', 'Inbound', 'Inbound (Email/Chat)', 'Přijde požadavek na výzkum trhu nebo monitoring konkurence.'],
+            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow spustí sběr zdrojů, ohlídá priority a retry při chybách.'],
+            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI hodnotí relevanci zdrojů, extrahuje fakta a připraví shrnutí.'],
+            ['fa-globe', 'Adapter', 'Tools/Adapters', 'Web adapter volá search/read nástroje a zapisuje citace do reportu.'],
+            ['fa-user-check', 'HITL', 'Human approval', 'Analytik schválí závěry a doplní obchodní doporučení.'],
+            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Report se odešle týmu/CRM a uloží se transparentní stopa kroků.']
         ],
         erp: [
-            ['Inbound (Email/Chat)', 'Požadavek: aktualizace objednávky v ERP/CRM.'],
-            ['n8n orchestruje', 'Kontroly pravidel a mapování datových polí.'],
-            ['OpenClaw reasoning', 'AI zpracuje intent a navrhne změnu záznamu.'],
-            ['ERP/CRM adapter', 'Plugin zapíše změny přes API bezpečně a sledovatelně.'],
-            ['Human approval', 'Schválení kroku pro citlivé operace.'],
-            ['Send + Audit log', 'Potvrzení zákazníkovi a log do observability vrstvy.']
+            ['fa-file-import', 'Inbound', 'Inbound (Email/Chat)', 'Požadavek na změnu objednávky nebo zákaznického záznamu v ERP/CRM.'],
+            ['fa-diagram-project', 'n8n', 'n8n orchestruje', 'Workflow mapuje pole, kontroluje pravidla a řídí schvalovací větve.'],
+            ['fa-brain', 'OpenClaw', 'OpenClaw reasoning', 'AI vyhodnotí intent, navrhne validní update a ohlídá policy limit.'],
+            ['fa-database', 'Adapter', 'Tools/Adapters', 'ERP/CRM adapter provede zápis přes API a vrátí stav operace.'],
+            ['fa-user-check', 'HITL', 'Human approval', 'Citlivé změny čekají na schválení odpovědnou osobou.'],
+            ['fa-clipboard-check', 'Audit', 'Action + Audit log', 'Potvrzení odejde zpět do kanálu a audit log uzavře celý proces.']
         ]
     };
 
     function renderFlow(usecase) {
         timeline.innerHTML = flowData[usecase]
-            .map(([title, text]) => `<article class="flow-step-card"><h4>${title}</h4><p>${text}</p></article>`)
+            .map(([icon, tag, title, text], index) => `
+                <article class="flow-step-card${index === 0 ? ' is-active' : ''}">
+                    <span class="flow-step-icon"><i class="fas ${icon}"></i></span>
+                    <span class="flow-step-tag">${tag}</span>
+                    <h4>${title}</h4>
+                    <p>${text}</p>
+                </article>
+            `)
             .join('');
     }
 
     switchButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            switchButtons.forEach(item => item.classList.remove('active'));
+            switchButtons.forEach(item => {
+                item.classList.remove('active');
+                item.setAttribute('aria-selected', 'false');
+            });
             btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
             renderFlow(btn.dataset.usecase);
         });
     });
