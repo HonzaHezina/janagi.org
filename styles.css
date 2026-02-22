@@ -1895,3 +1895,128 @@ button:disabled {
         color: black;
     }
 }
+
+/* === 2026-architecture-flow polish === */
+.architecture-subtitle,
+.cta-section p,
+.timeline-content p,
+.timeline-details li,
+.step-content p,
+.flow-step-card p {
+    color: #b0e0e6;
+}
+
+.architecture-subtitle {
+    background: rgba(6, 24, 40, 0.55);
+    border: 1px solid rgba(176, 224, 230, 0.25);
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.timeline-content,
+.step-content,
+.flow-step-card {
+    background: rgba(10, 20, 35, 0.58);
+}
+
+.flow-switch-btn {
+    font-weight: 700;
+    color: #cbe9f0;
+}
+
+.flow-switch-btn.active {
+    box-shadow: 0 0 0 1px rgba(0, 169, 165, 0.4), 0 10px 22px rgba(0, 169, 165, 0.25);
+    transform: translateY(-1px);
+}
+
+.flow-deepdive-btn {
+    border: 1px solid rgba(0, 169, 165, 0.45);
+    background: rgba(0, 169, 165, 0.12);
+    color: #d8f7fa;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.flow-step-card {
+    overflow: visible;
+}
+
+.flow-step-arrow {
+    position: absolute;
+    left: -16px;
+    top: 44%;
+    color: #7ec8d5;
+    font-size: 0.9rem;
+    opacity: 0;
+}
+
+.flow-step-card.arrow-step .flow-step-arrow {
+    opacity: 1;
+}
+
+.flow-step-card::after {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(126, 200, 213, 0.85), rgba(126, 200, 213, 0));
+}
+
+.flow-step-card:first-child::after {
+    display: none;
+}
+
+.flow-step-detail {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: -10px;
+    transform: translateY(100%);
+    background: rgba(7, 16, 28, 0.95);
+    border: 1px solid rgba(126, 200, 213, 0.35);
+    color: #d1ecf2;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    padding: 9px 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    z-index: 5;
+}
+
+.flow-step-card:hover .flow-step-detail,
+.flow-step-card:focus-within .flow-step-detail,
+.flow-step-card:focus .flow-step-detail {
+    opacity: 1;
+    transform: translateY(calc(100% + 6px));
+}
+
+.audience-notice {
+    margin-top: 34px;
+    border-radius: 14px;
+    border: 1px solid rgba(176, 224, 230, 0.25);
+    background: rgba(12, 27, 44, 0.45);
+    padding: 18px 20px;
+    text-align: center;
+}
+
+.audience-notice p {
+    margin: 0;
+    color: #b0e0e6;
+}
+
+@media (max-width: 900px) {
+    .flow-step-arrow,
+    .flow-step-card::after {
+        display: none;
+    }
+}
+
+.arrow-step::before { display: none; }
+
