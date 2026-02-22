@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initStatCounters();
     initFormHandling();
     initModalSystem();
+    initFlowExample();
+    initAnchorHighlights();
     initSVGTooltips();
 });
 
@@ -249,22 +251,88 @@ function initNavigation() {
         });
     }
     
-    // Smooth scroll for anchor links
-    navLinkItems.forEach(link => {
+}
+
+
+function smoothScrollTo(targetId) {
+    const targetSection = document.querySelector(targetId);
+    if (!targetSection) return;
+
+    const offsetTop = targetSection.offsetTop - 80;
+    window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+    });
+}
+
+function initAnchorHighlights() {
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+    anchorLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
+            if (!targetId || targetId === '#') return;
+
+            const target = document.querySelector(targetId);
+            if (!target) return;
+
+            e.preventDefault();
+            smoothScrollTo(targetId);
+            setTimeout(() => {
+                target.classList.add('section-highlight');
+                setTimeout(() => target.classList.remove('section-highlight'), 1300);
+            }, 450);
         });
     });
+}
+
+function initFlowExample() {
+    const timeline = document.getElementById('flowTimeline');
+    const switchButtons = document.querySelectorAll('.flow-switch-btn');
+    if (!timeline || switchButtons.length === 0) return;
+
+    const flowData = {
+        email: [
+            ['Inbound (Email/Chat)', 'Příchozí zpráva spustí workflow trigger.'],
+            ['n8n orchestruje', 'Routing, validace kontextu a pravidla procesu.'],
+            ['OpenClaw reasoning', 'AI navrhne odpověď a další akce dle policy.'],
+            ['Mail plugin (SMTP/IMAP)', 'Adaptér načte vlákno a připraví draft reply.'],
+            ['Human approval', 'Uživatel schválí, upraví nebo vrátí krok zpět.'],
+            ['Send + Audit log', 'Odeslání zprávy a záznam kompletního průběhu.']
+        ],
+        research: [
+            ['Inbound (Email/Chat)', 'Zadání: najdi data o konkurenci a shrň je.'],
+            ['n8n orchestruje', 'Spustí výzkumný workflow a sběr zdrojů.'],
+            ['OpenClaw reasoning', 'Vyhodnotí relevanci zdrojů a vytvoří sumarizaci.'],
+            ['Web plugin', 'Provede search/read nad definovanými doménami.'],
+            ['Human approval', 'Kontrola závěrů před publikací reportu.'],
+            ['Send + Audit log', 'Výstup do CRM/reportu + audit trail.']
+        ],
+        erp: [
+            ['Inbound (Email/Chat)', 'Požadavek: aktualizace objednávky v ERP/CRM.'],
+            ['n8n orchestruje', 'Kontroly pravidel a mapování datových polí.'],
+            ['OpenClaw reasoning', 'AI zpracuje intent a navrhne změnu záznamu.'],
+            ['ERP/CRM adapter', 'Plugin zapíše změny přes API bezpečně a sledovatelně.'],
+            ['Human approval', 'Schválení kroku pro citlivé operace.'],
+            ['Send + Audit log', 'Potvrzení zákazníkovi a log do observability vrstvy.']
+        ]
+    };
+
+    function renderFlow(usecase) {
+        timeline.innerHTML = flowData[usecase]
+            .map(([title, text]) => `<article class="flow-step-card"><h4>${title}</h4><p>${text}</p></article>`)
+            .join('');
+    }
+
+    switchButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchButtons.forEach(item => item.classList.remove('active'));
+            btn.classList.add('active');
+            renderFlow(btn.dataset.usecase);
+        });
+    });
+
+    renderFlow('email');
 }
 
 // ========================================
