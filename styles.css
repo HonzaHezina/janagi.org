@@ -2020,3 +2020,73 @@ button:disabled {
 
 .arrow-step::before { display: none; }
 
+
+/* === level-2 clarity iteration === */
+.architecture-practical-note {
+    margin: -4px 0 24px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.integration-examples {
+    margin-top: 14px;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    border-top: 1px dashed var(--glass-border);
+    padding-top: 10px;
+}
+
+.flow-sequence {
+    column-gap: 22px;
+}
+
+.flow-step-card {
+    overflow: visible;
+}
+
+.flow-step-card:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid rgba(126, 200, 213, 0.85);
+    border-right: 2px solid rgba(126, 200, 213, 0.85);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.flow-step-card:not(:first-child)::after {
+    content: '';
+    position: absolute;
+    left: -22px;
+    right: calc(100% + 2px);
+    top: 50%;
+    border-top: 1px solid rgba(126, 200, 213, 0.45);
+}
+
+@media (max-width: 900px) {
+    .flow-sequence {
+        row-gap: 16px;
+    }
+
+    .flow-step-card {
+        margin-left: 16px;
+    }
+
+    .flow-step-card:not(:first-child)::before {
+        left: -15px;
+        top: -11px;
+        transform: rotate(135deg);
+    }
+
+    .flow-step-card:not(:first-child)::after {
+        left: -16px;
+        right: auto;
+        top: -16px;
+        width: 1px;
+        height: 18px;
+        border-top: 0;
+        border-left: 1px solid rgba(126, 200, 213, 0.5);
+    }
+}
