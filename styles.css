@@ -943,16 +943,35 @@ section {
     background: transparent;
     color: var(--text-color);
     border-radius: 999px;
-    padding: 8px 16px;
+    padding: 8px 16px 10px;
     cursor: pointer;
     transition: var(--transition);
+    position: relative;
+}
+
+.flow-switch-btn::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 5px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 150ms ease;
 }
 
 .flow-switch-btn:hover,
 .flow-switch-btn.active {
-    border-color: var(--primary-color);
-    background: rgba(0, 169, 165, 0.15);
-    color: var(--primary-color);
+    border-color: rgba(0, 169, 165, 0.75);
+    background: rgba(0, 169, 165, 0.22);
+    color: #e8fbff;
+}
+
+.flow-switch-btn.active::after {
+    transform: scaleX(1);
 }
 
 .flow-legend {
@@ -963,6 +982,12 @@ section {
     color: var(--text-muted);
     font-size: 0.8rem;
     margin-bottom: 14px;
+}
+
+.flow-tab-caption {
+    margin: -8px 0 14px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
 }
 
 .flow-timeline {
@@ -977,6 +1002,21 @@ section {
 
 .flow-sequence.active {
     display: grid;
+}
+
+.flow-timeline.is-switching .flow-sequence.active {
+    animation: flowSwitchIn 150ms ease;
+}
+
+@keyframes flowSwitchIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .flow-step-card {
@@ -1925,7 +1965,7 @@ button:disabled {
 }
 
 .flow-switch-btn.active {
-    box-shadow: 0 0 0 1px rgba(0, 169, 165, 0.4), 0 10px 22px rgba(0, 169, 165, 0.25);
+    box-shadow: 0 0 0 1px rgba(0, 169, 165, 0.55), 0 10px 22px rgba(0, 169, 165, 0.3);
     transform: translateY(-1px);
 }
 

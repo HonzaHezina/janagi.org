@@ -196,7 +196,7 @@
                 </div>
 
                 <p class="architecture-practical-note" data-aos="fade-up" data-aos-delay="170">
-                    n8n řídí proces a stav, OpenClaw dělá rozhodování a návrhy, pluginy provádí akce v systémech.
+                    n8n drží stav procesu (kroky, retry, schválení, audit), OpenClaw drží AI rozhodování (klasifikace, návrhy) a integrace provádí akce (mail/DB/API).
                 </p>
 
                 <div class="architecture-grid">
@@ -261,6 +261,7 @@
                         <button class="flow-switch-btn" data-usecase="research" role="tab" aria-selected="false" aria-controls="flowTimeline">Web Research</button>
                         <button class="flow-switch-btn" data-usecase="erp" role="tab" aria-selected="false" aria-controls="flowTimeline">ERP/CRM</button>
                     </div>
+                    <p class="flow-tab-caption" id="flowTabCaption">Ukázka třídění příchozí komunikace a návrhu odpovědi s kontrolovaným schválením.</p>
                     <div class="flow-legend" aria-hidden="true">
                         <span>Záměr</span>
                         <i class="fas fa-arrow-right"></i>
@@ -301,7 +302,7 @@
                             <span class="flow-step-icon"><i class="fas fa-plug"></i></span>
                             <span class="flow-step-tag">Adapter</span>
                             <h4>Tools/Adapters</h4>
-                            <p>Pluginy volají SMTP/IMAP, databázi a interní API nad auditovatelnými daty.</p>
+                            <p>Adapter provede akci v cílovém systému (SMTP/IMAP, REST API, DB).</p>
                             </article>
                             <article class="flow-step-card arrow-step">
                             <span class="flow-step-icon"><i class="fas fa-user-check"></i></span>
