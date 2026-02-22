@@ -337,14 +337,16 @@ window.toggleTimelineItem = function(element) {
 // Animated Stat Counters
 // ========================================
 function initStatCounters() {
-    const statNumbers = document.querySelectorAll('.stat-number');
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
     let animated = false;
     
     function animateCounters() {
-        if (animated) return;
+        if (animated || statNumbers.length === 0) return;
         
         statNumbers.forEach(stat => {
-            const target = parseInt(stat.getAttribute('data-target'));
+            const target = parseInt(stat.getAttribute('data-target'), 10);
+            if (Number.isNaN(target)) return;
+
             const duration = 2000;
             const increment = target / (duration / 16);
             let current = 0;
