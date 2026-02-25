@@ -528,44 +528,50 @@ function initStatCounters() {
 // Form Handling with Validation & Confetti
 // ========================================
 function initFormHandling() {
-    const forms = document.querySelectorAll('.enhanced-form, .email-form');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', async (e) => {
+    const heroForm = document.getElementById('heroEmailForm');
+    const heroEmail = document.getElementById('heroEmail');
+
+    if (heroEmail) {
+        heroEmail.addEventListener('blur', () => validateInput(heroEmail));
+    }
+
+    if (heroForm) {
+        heroForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
+            const emailValue = heroEmail ? heroEmail.value.trim() : '';
+            if (heroEmail) validateInput(heroEmail);
+
+            const pilotSection = document.getElementById('janagi');
+            const pilotEmail = document.getElementById('investorEmail');
+            const pilotMessage = document.getElementById('investorMessage');
+
+            if (pilotSection) {
+                pilotSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            if (emailValue && pilotEmail && !pilotEmail.value) {
+                pilotEmail.value = emailValue;
+                validateInput(pilotEmail);
+            }
+
+            setTimeout(() => {
+                if (pilotMessage) pilotMessage.focus();
+            }, 550);
+        });
+    }
+
+    document.querySelectorAll('.enhanced-form').forEach(form => {
+        form.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('blur', () => validateInput(input));
+        });
+
+        form.addEventListener('submit', () => {
             const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Disable button and show loading
+            if (!submitBtn) return;
+
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Odesílání...';
-            
-            // Simulate form submission
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Show success
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> Odesláno!';
-            submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-            
-            // Trigger confetti
-            triggerConfetti();
-            
-            // Reset form and button
-            setTimeout(() => {
-                form.reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                submitBtn.style.background = '';
-            }, 3000);
-        });
-        
-        // Real-time validation
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('blur', () => {
-                validateInput(input);
-            });
         });
     });
 }

@@ -2200,3 +2200,57 @@ button:disabled {
 .pilot-scope ul {
     margin-left: 1.1rem;
 }
+
+
+.section-reality {
+    padding: var(--section-padding) 0 40px;
+}
+
+.reality-grid,
+.reality-notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.reality-list {
+    margin: .8rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--text-color);
+}
+
+.reality-callout {
+    margin-top: 1.2rem;
+    font-weight: 600;
+}
+
+.reality-quote {
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-color);
+    background: rgba(0, 169, 165, .12);
+    border: 1px solid rgba(0, 169, 165, .35);
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+
+.proof-link {
+    display: block;
+}
+
+.proof-link img {
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.proof-link:hover img {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .35);
+}
+
+.proof-points {
+    margin-top: .8rem;
+    padding-left: 1.1rem;
+    color: var(--text-color-muted);
+}
