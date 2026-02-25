@@ -2254,3 +2254,101 @@ button:disabled {
     padding-left: 1.1rem;
     color: var(--text-color-muted);
 }
+
+/* Reality + positioning additions */
+.section-reality {
+    padding: var(--section-padding) 0 40px;
+}
+
+.reality-lead {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.reality-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.reality-accordion {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1rem;
+}
+
+.reality-accordion details {
+    padding: 1rem 1.1rem;
+}
+
+.reality-accordion summary {
+    list-style: none;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.reality-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.reality-accordion details p {
+    margin-top: 0.8rem;
+    color: var(--text-color-muted);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 999px;
+    background: rgba(0, 169, 165, .2);
+    border: 1px solid rgba(0, 169, 165, .4);
+}
+
+.reality-takeaway {
+    margin-top: 1rem;
+    padding: 1.2rem;
+}
+
+.reality-quote {
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-color);
+    background: rgba(0, 169, 165, .12);
+    border: 1px solid rgba(0, 169, 165, .35);
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+
+.hero-tagline {
+    margin-top: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.paths-grid {
+    margin-top: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.paths-grid .glass-card {
+    padding: 1.1rem;
+}
+
+@media (max-width: 900px) {
+    .reality-grid,
+    .paths-grid {
+        grid-template-columns: 1fr;
+    }
+}
