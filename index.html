@@ -36,6 +36,7 @@
             <a href="#" class="nav-logo">jan<span>AGI</span></a>
             <div class="nav-links" id="navLinks">
                 <a href="#problem" class="nav-link">Problém</a>
+                <a href="#reality" class="nav-link">Magie vs provoz</a>
                 <a href="#manifesto" class="nav-link">Manifest</a>
                 <a href="#proof" class="nav-link">Důkaz</a>
                 <a href="#workflow" class="nav-link">Příklady</a>
@@ -174,6 +175,49 @@
             </div>
         </section>
 
+        <section id="reality" class="section-reality">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    Magie je skvělá… do první chyby.
+                    <div class="title-underline"></div>
+                </h2>
+
+                <p class="section-subtitle" data-aos="fade-up" data-aos-delay="80">
+                    V demu vyhrává rychlé „kouzlo“. V provozu vyhrává systém: dohledatelnost, kontrola a bezpečnost.
+                    Kouzelná AI často jen přesune náklady na budoucí „tebe“: noční debugging, incidenty, změny API a data drift.
+                </p>
+
+                <div class="reality-grid">
+                    <article class="glass-card" data-aos="fade-up" data-aos-delay="120">
+                        <h3>V demu vyhrává</h3>
+                        <ul class="reality-list">
+                            <li>méně klikání</li>
+                            <li>míň „infrastruktury“</li>
+                            <li>rychlý výsledek</li>
+                        </ul>
+                    </article>
+
+                    <article class="glass-card" data-aos="fade-up" data-aos-delay="180">
+                        <h3>V provozu vyhrává</h3>
+                        <ul class="reality-list">
+                            <li>dohledatelnost</li>
+                            <li>kontrola</li>
+                            <li>reprodukovatelnost</li>
+                            <li>bezpečnost</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <p class="reality-callout" data-aos="fade-up" data-aos-delay="240">
+                    janAGI nestaví „abrakadabra“. Staví systém, který funguje i když přijde chyba.
+                </p>
+
+                <p class="reality-quote" data-aos="fade-up" data-aos-delay="260">
+                    „Magie je skvělá do první chyby. My stavíme řešení, které přežije i tu druhou.“
+                </p>
+            </div>
+        </section>
+
 
         <section id="manifesto" class="section-manifesto">
             <div class="container">
@@ -207,12 +251,26 @@
                 </h2>
                 <div class="proof-grid">
                     <figure class="glass-card" data-aos="fade-right" data-aos-delay="120">
-                        <img src="assets/images/proof-flow.svg?v=20260222" alt="Ukázka n8n flow trigger to policy to AI to tools to log" loading="lazy">
+                        <a class="proof-link" href="/assets/images/proof-flow.svg" target="_blank" rel="noopener">
+                            <img src="/assets/images/proof-flow.svg" alt="Ukázka n8n flow trigger to policy to AI to tools to log" loading="lazy">
+                        </a>
                         <figcaption>n8n flow: trigger → policy → AI → tools → log</figcaption>
+                        <ul class="proof-points">
+                            <li>Jasné pořadí kroků od triggeru po log</li>
+                            <li>Kontrola pravidel před akcí</li>
+                            <li>Viditelný průchod workflow</li>
+                        </ul>
                     </figure>
                     <figure class="glass-card" data-aos="fade-left" data-aos-delay="180">
-                        <img src="assets/images/proof-audit.svg?v=20260222" alt="Ukázka audit logu a výstupu běhu" loading="lazy">
+                        <a class="proof-link" href="/assets/images/proof-audit.svg" target="_blank" rel="noopener">
+                            <img src="/assets/images/proof-audit.svg" alt="Ukázka audit logu a výstupu běhu" loading="lazy">
+                        </a>
                         <figcaption>Audit log / run output: kdo schválil, co se provedlo a s jakým výsledkem.</figcaption>
+                        <ul class="proof-points">
+                            <li>Kdo schválil kritický krok</li>
+                            <li>Co bylo provedeno v externím systému</li>
+                            <li>Jaký byl výsledek běhu</li>
+                        </ul>
                     </figure>
                 </div>
             </div>
@@ -385,17 +443,6 @@
                             <div class="timeline-badge">NOW · 2026</div>
                             <h3>Co už běží</h3>
                             <p>Modulární orchestrace workflow v reálném provozu a pilotní use-cases pro SME.</p>
-                            <div class="timeline-details">
-                                <ul>
-                                    <li><i class="fas fa-check"></i> n8n orchestrace a business logika</li>
-                                    <li><i class="fas fa-check"></i> OpenClaw LLM/tool vrstva</li>
-                                    <li><i class="fas fa-check"></i> Piloty: e-mail, web research, interní automatizace</li>
-                                    <li><i class="fas fa-check"></i> Klientské integrace přes API a pluginy</li>
-                                </ul>
-                            </div>
-                            <button class="expand-btn">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                         </div>
                     </div>
 
@@ -408,17 +455,6 @@
                             <div class="timeline-badge">NEXT · 2026+</div>
                             <h3>Co právě ladíme</h3>
                             <p>Standardizace opakovatelných šablon workflow a lepší monitoring pro bezpečné škálování.</p>
-                            <div class="timeline-details">
-                                <ul>
-                                    <li><i class="fas fa-hourglass-half"></i> Reusable workflow templates</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Rozšíření konektorů a pluginů</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Monitoring, audit a governance</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Jednodušší nasazení pro SME</li>
-                                </ul>
-                            </div>
-                            <button class="expand-btn">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                         </div>
                     </div>
 
@@ -431,17 +467,6 @@
                             <div class="timeline-badge">LATER · 2027+</div>
                             <h3>Dlouhodobý směr</h3>
                             <p>Širší ekosystém agentů a partnerství, které zrychlí adopci řízené AI orchestrace.</p>
-                            <div class="timeline-details">
-                                <ul>
-                                    <li><i class="fas fa-hourglass-half"></i> Komunitní rozšíření agentů a pluginů</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Segmentové balíčky pro enterprise</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Silnější partner network</li>
-                                    <li><i class="fas fa-hourglass-half"></i> Open-source marketplace</li>
-                                </ul>
-                            </div>
-                            <button class="expand-btn">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                         </div>
                     </div>
 
@@ -451,7 +476,7 @@
                     <h3>Open-source základ. Praktická implementace.</h3>
                     <p>Každá vrstva má jasnou odpovědnost, takže můžete měnit model, workflow i konektory bez přepisování celého systému.</p>
                     <div class="cta-buttons">
-                        <a href="#" class="btn-primary ripple-effect">
+                        <a href="https://github.com/HonzaHezina/janAGI.org" class="btn-primary ripple-effect" target="_blank" rel="noopener">
                             <i class="fab fa-github"></i> GitHub Repozitář
                         </a>
                         <a href="#janagi" class="btn-secondary ripple-effect">
@@ -713,7 +738,7 @@
                 <div class="footer-logo">jan<span>AGI</span></div>
                 <p class="footer-tagline">Připravujeme budoucnost inteligentní automatizace.</p>
                 <div class="footer-social">
-                    <a href="#" class="social-link" aria-label="GitHub">
+                    <a href="https://github.com/HonzaHezina/janAGI.org" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
                         <i class="fab fa-github"></i>
                     </a>
                     <a href="#" class="social-link" aria-label="Twitter">
