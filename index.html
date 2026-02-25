@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>janAGI – AI workflow, které vidíte a řídíte</title>
-    <link rel="stylesheet" href="/styles.css?v=20260222">
+    <link rel="stylesheet" href="/styles.css?v=20260225">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- AOS Animation Library -->
@@ -74,6 +74,7 @@
             <p class="hero-description" data-aos="fade-up" data-aos-delay="800">
                 janAGI dělá z AI nástrojů proces: n8n drží tok práce a audit, OpenClaw dělá rozhodování, integrace provádí akce. Modely můžete měnit bez přepsání systému.
             </p>
+            <p class="hero-tagline" data-aos="fade-up" data-aos-delay="860">AI bez magie. S kontrolou.</p>
             <ul class="hero-bullets" data-aos="fade-up" data-aos-delay="900">
                 <li>Měřitelný pilot na 1 proces (2–4 týdny)</li>
                 <li>Human-in-the-loop + audit trail jako standard</li>
@@ -183,38 +184,67 @@
                 </h2>
 
                 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="80">
-                    V demu vyhrává rychlé „kouzlo“. V provozu vyhrává systém: dohledatelnost, kontrola a bezpečnost.
-                    Kouzelná AI často jen přesune náklady na budoucí „tebe“: noční debugging, incidenty, změny API a data drift.
+                    Tohle je běžný jev — a není to tím, že by byli lidi hloupí. Většina lidí nekupuje technologii. Kupuje
+                    <strong>pocit a rychlé vítězství</strong>. Dokud to funguje, „kouzlo“ je nejrychlejší cesta k dopaminu.
+                    Až když to spadne, začnou dávat smysl věci jako <strong>logy, dohledatelnost, kontrola, fallbacky a odpovědnost</strong>.
+                </p>
+
+                <p class="reality-lead" data-aos="fade-up" data-aos-delay="110">
+                    <strong>Tohle je důvod, proč stavíme systém, ne kouzlo</strong> — a proč to dává smysl jak pro SaaS, tak pro open-source větev.
                 </p>
 
                 <div class="reality-grid">
-                    <article class="glass-card" data-aos="fade-up" data-aos-delay="120">
-                        <h3>V demu vyhrává</h3>
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="120">
+                        <div class="card-glow"></div>
+                        <h3>V demu vítězí</h3>
                         <ul class="reality-list">
                             <li>méně klikání</li>
-                            <li>míň „infrastruktury“</li>
+                            <li>méně infrastruktury</li>
                             <li>rychlý výsledek</li>
                         </ul>
-                    </article>
+                    </div>
 
-                    <article class="glass-card" data-aos="fade-up" data-aos-delay="180">
-                        <h3>V provozu vyhrává</h3>
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="160">
+                        <div class="card-glow"></div>
+                        <h3>V provozu vítězí</h3>
                         <ul class="reality-list">
                             <li>dohledatelnost</li>
                             <li>kontrola</li>
                             <li>reprodukovatelnost</li>
                             <li>bezpečnost</li>
                         </ul>
-                    </article>
+                    </div>
                 </div>
 
-                <p class="reality-callout" data-aos="fade-up" data-aos-delay="240">
-                    janAGI nestaví „abrakadabra“. Staví systém, který funguje i když přijde chyba.
-                </p>
+                <div class="reality-accordion" data-aos="fade-up" data-aos-delay="200">
+                    <details class="glass-card">
+                        <summary><span class="badge">2️⃣</span> „Magie“ maskuje náklady</summary>
+                        <p>Kouzelná AI často přenese náklady na budoucí „tebe“: debugging v noci, incidenty, data drift, změny API a nakonec otázku „kdo za to může?“</p>
+                        <p>Když máš explicitní workflow, náklad zaplatíš teď (design), ale ušetříš ho později (provoz).</p>
+                    </details>
 
-                <p class="reality-quote" data-aos="fade-up" data-aos-delay="260">
-                    „Magie je skvělá do první chyby. My stavíme řešení, které přežije i tu druhou.“
-                </p>
+                    <details class="glass-card">
+                        <summary><span class="badge">3️⃣</span> Výběr nástroje je často sociální, ne technický</summary>
+                        <p>„AI to udělá sama“ se prodává líp než „tady je robustní orchestrace s telemetry“.</p>
+                        <p>Je to stejné jako: „no-code bez údržby“, „low-code bez DevOps“, „AI bez procesů“ — všichni chtějí věřit, že to jde bez systému.</p>
+                    </details>
+
+                    <details class="glass-card">
+                        <summary><span class="badge">4️⃣</span> Audit a odpovědnost bolí… až když jsou potřeba</summary>
+                        <p>Jakmile máš byznys dopad, klienta, ERP/finance/data, musí to umět někdo vysvětlit. V takovém světě se „abrakadabra“ rychle stává neakceptovatelným.</p>
+                    </details>
+                </div>
+
+                <div class="reality-takeaway glass-card" data-aos="fade-up" data-aos-delay="240">
+                    <div class="card-glow"></div>
+                    <h3>Co z toho plyne pro janAGI</h3>
+                    <p>Tohle není slabina tvého přístupu. To je tvoje pozice na trhu:</p>
+                    <ul class="reality-list">
+                        <li><strong>Pro hobby a quick wins</strong> → kouzlo</li>
+                        <li><strong>Pro firmy a provoz</strong> → systém</li>
+                    </ul>
+                    <p class="reality-quote">„Magie je skvělá do první chyby. My stavíme řešení, které přežije i tu druhou.“</p>
+                </div>
             </div>
         </section>
 
@@ -616,8 +646,28 @@
                     </div>
                 </div>
 
-                <div class="audience-notice" data-aos="fade-up">
-                    <p>Hledáte pilot-ready AI orchestraci, kde je jasná odpovědnost workflow layeru, AI layeru i integration layeru? janAGI je navržený pro transparentní provoz i rozšiřování bez vendor lock-inu.</p>
+                <div class="paths-grid" data-aos="fade-up" data-aos-delay="360">
+                    <article class="glass-card">
+                        <div class="card-glow"></div>
+                        <h3>SaaS cesta (pro firmy)</h3>
+                        <p>Chcete rychlý výsledek s minimem interní režie? Dodáme pilot-ready orchestraci s jasnou odpovědností, SLA a měřitelným dopadem.</p>
+                        <ul class="reality-list">
+                            <li>rychlý start bez stavby interní platformy</li>
+                            <li>governance, audit trail a kontrola změn</li>
+                            <li>partnerství od pilotu po škálování</li>
+                        </ul>
+                    </article>
+
+                    <article class="glass-card">
+                        <div class="card-glow"></div>
+                        <h3>Open Source cesta (pro techniky)</h3>
+                        <p>Chcete maximální kontrolu a vlastní vývoj? Vezměte otevřený stack, rozšiřujte workflow a publikujte vlastní konektory i agenty.</p>
+                        <ul class="reality-list">
+                            <li>vendor-neutral architektura bez lock-inu</li>
+                            <li>GitHub-first spolupráce a transparentní roadmapa</li>
+                            <li>modulární rozšiřování nad reálnými use-cases</li>
+                        </ul>
+                    </article>
                 </div>
             </div>
         </section>
