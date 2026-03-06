@@ -566,14 +566,75 @@ function initFormHandling() {
             input.addEventListener('blur', () => validateInput(input));
         });
 
-        form.addEventListener('submit', () => {
-            const submitBtn = form.querySelector('button[type="submit"]');
-            if (!submitBtn) return;
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Odesílání...';
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const defaultLabel = submitBtn ? submitBtn.innerHTML : '';
+            const statusEl = ensureFormStatus(form);
+            if (statusEl) statusEl.textContent = '';
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Odesílání...';
+            }
+
+            try {
+                const fd = new FormData(form);
+
+                if (String(fd.get('website') || '').trim()) {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = defaultLabel;
+                    }
+                    return;
+                }
+
+                const endpoint = form.getAttribute('action') || 'https://n8n.janagi.org/webhook/contact';
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: fd
+                });
+
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                form.reset();
+                const siteInput = form.querySelector('input[name="site_id"]');
+                if (siteInput && !siteInput.value) siteInput.value = 'janagi.org';
+
+                if (statusEl) {
+                    statusEl.textContent = 'Díky! Zpráva byla odeslána.';
+                    statusEl.classList.remove('error');
+                }
+            } catch (error) {
+                if (statusEl) {
+                    statusEl.textContent = 'Odeslání se nepovedlo. Zkuste to prosím znovu.';
+                    statusEl.classList.add('error');
+                }
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = defaultLabel;
+                }
+            }
         });
     });
+}
+
+function ensureFormStatus(form) {
+    let statusEl = form.querySelector('.form-status');
+
+    if (!statusEl) {
+        statusEl = document.createElement('p');
+        statusEl.className = 'form-status';
+        statusEl.setAttribute('role', 'status');
+        statusEl.setAttribute('aria-live', 'polite');
+        form.appendChild(statusEl);
+    }
+
+    return statusEl;
 }
 
 function validateInput(input) {

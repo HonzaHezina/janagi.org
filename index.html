@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>janAGI – AI workflow, které vidíte a řídíte</title>
-    <link rel="stylesheet" href="/styles.css?v=20260225">
+    <link rel="stylesheet" href="/styles.css?v=20260306">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- AOS Animation Library -->
@@ -704,7 +704,8 @@
                             <h3>Pilot / partnerství</h3>
                             <p>Popište proces, který chcete automatizovat, a navrhneme pilot s jasným cílem a metrikou.</p>
                         </div>
-                        <form action="contact.php" method="POST" class="enhanced-form" id="investorForm">
+                        <form action="https://n8n.janagi.org/webhook/contact" method="POST" class="enhanced-form" id="investorForm">
+                            <input type="hidden" name="site_id" value="janagi.org">
                             <input type="hidden" name="subject" value="Zájem o pilot / partnerství">
                             <input type="hidden" name="website">
                             
@@ -749,7 +750,8 @@
                             <h3>Investor / aktuality</h3>
                             <p>Nechte nám kontakt, pokud chcete pravidelné update o roadmapě, partnerství nebo investičních milnících.</p>
                         </div>
-                        <form action="contact.php" method="POST" class="enhanced-form" id="newsletterForm">
+                        <form action="https://n8n.janagi.org/webhook/contact" method="POST" class="enhanced-form" id="newsletterForm">
+                            <input type="hidden" name="site_id" value="janagi.org">
                             <input type="hidden" name="subject" value="Přihlášení k novinkám">
                             <input type="hidden" name="message" value="Žádost o zasílání novinek o janAGI">
                             <input type="hidden" name="website">
@@ -823,6 +825,6 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="/script.js?v=20260222"></script>
+    <script src="/script.js?v=20260306"></script>
 </body>
 </html>
