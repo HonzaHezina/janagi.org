@@ -1667,6 +1667,16 @@ section {
     box-shadow: var(--shadow-lg);
 }
 
+.form-status {
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+}
+
+.form-status.error {
+    color: var(--accent-color);
+}
+
 /* ===================================
    Footer
    =================================== */
