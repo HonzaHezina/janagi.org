@@ -16,6 +16,100 @@
     "heroVariant": "terminal",
     "lang": "cs"
   }/*EDITMODE-END*/;
+
+  window.__janagiContactPendingForm = null;
+  window.__janagiContactCopy = {
+    cs: {
+      sending: 'Odesilam...',
+      ok: 'Diky. Zprava byla odeslana.',
+      err: 'Odeslani se nepovedlo. Zkuste to prosim znovu.'
+    },
+    en: {
+      sending: 'Sending...',
+      ok: 'Thanks. Your message was sent.',
+      err: 'Sending failed. Please try again.'
+    }
+  };
+
+  window.__janagiContactLang = function () {
+    const lang = document.documentElement.getAttribute('lang') || window.__TWEAKS__.lang || 'cs';
+    return lang === 'en' ? 'en' : 'cs';
+  };
+
+  window.__janagiContactSetStatus = function (form, key, isError) {
+    const status = form ? form.querySelector('.form-status') : null;
+    if (!status) return;
+    status.textContent = window.__janagiContactCopy[window.__janagiContactLang()][key] || '';
+    status.classList.toggle('error', !!isError);
+  };
+
+  window.__janagiContactResetButton = function (form) {
+    const button = form ? form.querySelector('button[type="submit"]') : null;
+    if (!button) return;
+    if (button.dataset.defaultLabel) button.innerHTML = button.dataset.defaultLabel;
+    button.disabled = false;
+  };
+
+  window.__janagiContactSetPending = function (form) {
+    if (!form) return;
+    const button = form.querySelector('button[type="submit"]');
+    if (button) {
+      if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.innerHTML;
+      button.disabled = true;
+      button.textContent = window.__janagiContactCopy[window.__janagiContactLang()].sending;
+    }
+    window.__janagiContactSetStatus(form, 'sending', false);
+    window.__janagiContactPendingForm = form;
+  };
+
+  window.__janagiContactSubmit = function (form) {
+    if (!form || form.dataset.submitting === '1') return false;
+
+    const fd = new FormData(form);
+    if (String(fd.get('website') || '').trim()) {
+      return false;
+    }
+
+    form.dataset.submitting = '1';
+    window.__janagiContactSetPending(form);
+
+    if (!window.fetch || window.location.protocol === 'file:') {
+      form.dataset.submitMode = 'native';
+      return true;
+    }
+
+    form.dataset.submitMode = 'fetch';
+    fetch(form.action, {
+      method: form.method || 'POST',
+      body: fd
+    }).then((response) => {
+      if (!response.ok) throw new Error('Request failed');
+      form.reset();
+      window.__janagiContactSetStatus(form, 'ok', false);
+      window.__janagiContactPendingForm = null;
+    }).catch(() => {
+      window.__janagiContactSetStatus(form, 'err', true);
+      window.__janagiContactPendingForm = null;
+    }).finally(() => {
+      delete form.dataset.submitting;
+      delete form.dataset.submitMode;
+      window.__janagiContactResetButton(form);
+    });
+
+    return false;
+  };
+
+  window.__janagiContactFrameLoaded = function () {
+    const form = window.__janagiContactPendingForm;
+    if (!form || form.dataset.submitMode !== 'native') return;
+
+    form.reset();
+    window.__janagiContactSetStatus(form, 'ok', false);
+    delete form.dataset.submitting;
+    delete form.dataset.submitMode;
+    window.__janagiContactPendingForm = null;
+    window.__janagiContactResetButton(form);
+  };
 </script>
 
 <style>
@@ -1020,6 +1114,17 @@
     color: var(--ok);
   }
   .form-status.error { color: #f87171; }
+  .contact-submit-frame {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
 
   /* ───── Footer ───── */
   footer {
@@ -1864,7 +1969,7 @@ docker compose up -d
             <span data-i18n-en>Describe the process you want to automate. The form submits the same fields as the old site.</span>
           </p>
 
-          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST">
+          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST" target="contact-submit-frame" onsubmit="return window.__janagiContactSubmit ? window.__janagiContactSubmit(this) : true;">
             <input type="hidden" name="site_id" value="janagi.org">
             <input type="hidden" name="subject" value="Z&#225;jem o pilot / partnerstv&#237;">
             <div class="honeypot" aria-hidden="true">
@@ -1910,7 +2015,7 @@ docker compose up -d
             <span data-i18n-en>Contact for roadmap, partnerships, and recurring updates. Same endpoint and hidden fields as on the older version.</span>
           </p>
 
-          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST">
+          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST" target="contact-submit-frame" onsubmit="return window.__janagiContactSubmit ? window.__janagiContactSubmit(this) : true;">
             <input type="hidden" name="site_id" value="janagi.org">
             <input type="hidden" name="subject" value="P&#345;ihl&#225;&#353;en&#237; k novink&#225;m">
             <input type="hidden" name="message" value="&#381;&#225;dost o zas&#237;l&#225;n&#237; novinek o janAGI">
@@ -1944,6 +2049,15 @@ docker compose up -d
     </div>
   </div>
 </section>
+
+<iframe
+  name="contact-submit-frame"
+  id="contactSubmitFrame"
+  class="contact-submit-frame"
+  title="Contact submit target"
+  tabindex="-1"
+  aria-hidden="true"
+  onload="window.__janagiContactFrameLoaded && window.__janagiContactFrameLoaded()"></iframe>
 
 <!-- ═══════════════════ FOOTER ═══════════════════ -->
 <footer>
@@ -2191,78 +2305,6 @@ docker compose up -d
     });
 
     syncLabels();
-  })();
-
-  // ───── Contact forms ─────
-  (function () {
-    if (window.location.protocol === 'file:') return;
-
-    const forms = document.querySelectorAll('.contact-form');
-    if (!forms.length) return;
-
-    const copy = {
-      cs: {
-        sending: 'odes\u00edl\u00e1m...',
-        ok: 'D\u00edky. Zpr\u00e1va byla odesl\u00e1na.',
-        err: 'Odesl\u00e1n\u00ed se nepovedlo. Zkuste to pros\u00edm znovu.'
-      },
-      en: {
-        sending: 'sending...',
-        ok: 'Thanks. Your message was sent.',
-        err: 'Sending failed. Please try again.'
-      }
-    };
-
-    function lang() {
-      return (document.documentElement.getAttribute('lang') || 'cs') === 'en' ? 'en' : 'cs';
-    }
-
-    forms.forEach((form) => {
-      const button = form.querySelector('button[type="submit"]');
-      const status = form.querySelector('.form-status');
-      const defaultLabel = button ? button.innerHTML : '';
-
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        if (status) {
-          status.textContent = '';
-          status.classList.remove('error');
-        }
-
-        const fd = new FormData(form);
-        if (String(fd.get('website') || '').trim()) return;
-
-        if (button) {
-          button.disabled = true;
-          button.textContent = copy[lang()].sending;
-        }
-
-        try {
-          const response = await fetch(form.action, {
-            method: form.method || 'POST',
-            body: fd
-          });
-
-          if (!response.ok) {
-            throw new Error('Request failed');
-          }
-
-          form.reset();
-          if (status) status.textContent = copy[lang()].ok;
-        } catch (error) {
-          if (status) {
-            status.textContent = copy[lang()].err;
-            status.classList.add('error');
-          }
-        } finally {
-          if (button) {
-            button.disabled = false;
-            button.innerHTML = defaultLabel;
-          }
-        }
-      });
-    });
   })();
 
   // ───── Apply persisted tweaks on load ─────
