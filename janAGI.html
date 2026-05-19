@@ -887,6 +887,140 @@
   .banner h3 { font-size: 22px; color: var(--fg); margin-bottom: 6px; letter-spacing: -0.01em; }
   .banner p { font-size: 14.5px; color: var(--fg-2); max-width: 60ch; margin: 0; }
 
+  /* ───── Contact ───── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 32px;
+  }
+  @media (max-width: 920px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  .contact-meta,
+  .contact-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-1);
+  }
+
+  .contact-meta {
+    padding: 28px;
+  }
+  .contact-meta .label,
+  .contact-card .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .contact-meta h3,
+  .contact-card h3 {
+    font-size: 22px;
+    color: var(--fg);
+    margin-bottom: 8px;
+  }
+  .contact-meta p,
+  .contact-card p {
+    font-size: 14px;
+    color: var(--fg-2);
+    margin: 0;
+  }
+
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+    border-top: 1px solid var(--line);
+  }
+  .contact-list li {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+  }
+  .contact-list .k {
+    font-family: var(--mono);
+    color: var(--fg-3);
+    font-size: 12px;
+  }
+  .contact-list .v,
+  .contact-list .v a {
+    color: var(--fg);
+  }
+
+  .contact-panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 920px) { .contact-panels { grid-template-columns: 1fr; } }
+
+  .contact-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 12px;
+  }
+  .contact-field {
+    display: grid;
+    gap: 6px;
+  }
+  .contact-field span {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: 0.04em;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--fg);
+    padding: 11px 12px;
+    font: inherit;
+  }
+  .contact-form textarea {
+    min-height: 132px;
+    resize: vertical;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.12);
+  }
+  .contact-form .btn {
+    justify-content: center;
+  }
+  .contact-note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-3);
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .form-status {
+    min-height: 18px;
+    margin: 0;
+    font-size: 13px;
+    color: var(--ok);
+  }
+  .form-status.error { color: #f87171; }
+
   /* ───── Footer ───── */
   footer {
     padding: 48px 0 64px;
@@ -936,6 +1070,7 @@
       <a href="#agents"><span data-i18n-cs>Agenti</span><span data-i18n-en>Agents</span></a>
       <a href="#audit">Audit</a>
       <a href="#contribute"><span data-i18n-cs>P&#345;isp&#283;j</span><span data-i18n-en>Contribute</span></a>
+      <a href="#contact"><span data-i18n-cs>Kontakt</span><span data-i18n-en>Contact</span></a>
     </div>
 
     <div class="nav-right">
@@ -1653,10 +1788,158 @@ docker compose up -d
         </p>
       </div>
       <div>
-        <a class="btn primary" href="https://hezina.cz">
-          <span>hezina.cz</span>
-          <span class="arrow">↗</span>
-        </a>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <a class="btn primary" href="https://hezina.cz">
+            <span>hezina.cz</span>
+            <span class="arrow">↗</span>
+          </a>
+          <a class="btn" href="#contact">
+            <span data-i18n-cs>Kontakt</span>
+            <span data-i18n-en>Contact</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section id="contact" data-screen-label="12 Contact">
+  <div class="container">
+    <p class="section-label">11 · <span data-i18n-cs>Kontakt</span><span data-i18n-en>Contact</span></p>
+
+    <div class="sec-head">
+      <h2>
+        <span data-i18n-cs>P&#345;&#237;m&#253; kontakt pro pilot i novinky.</span>
+        <span data-i18n-en>Direct contact for pilots and updates.</span>
+      </h2>
+      <div class="meta">
+        <span data-i18n-cs>n8n webhook + ru&#269;n&#237; follow-up</span>
+        <span data-i18n-en>n8n webhook + manual follow-up</span>
+      </div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-meta">
+        <div class="label"><span data-i18n-cs>KONTAKTN&#205; KAN&#193;LY</span><span data-i18n-en>CONTACT CHANNELS</span></div>
+        <h3>
+          <span data-i18n-cs>Stejn&#233; vstupy jako na p&#367;vodn&#237;m webu.</span>
+          <span data-i18n-en>The same entry points as on the original site.</span>
+        </h3>
+        <p>
+          <span data-i18n-cs>Ve&#345;ejn&#233; kontakty z&#367;st&#225;vaj&#237; jednoduch&#233;: partnerstv&#237; a novinky jdou do n8n kontakt webhooku, open-source sm&#283;r na GitHub a komer&#269;n&#237; nasazen&#237; p&#345;es hezina.cz.</span>
+          <span data-i18n-en>Public contact stays simple: partnerships and updates go into the n8n contact webhook, open-source traffic goes to GitHub, and commercial deployment goes through hezina.cz.</span>
+        </p>
+
+        <ul class="contact-list">
+          <li>
+            <span class="k">pilot</span>
+            <span class="v"><span data-i18n-cs>scope, proces, workshop, partnerstv&#237;</span><span data-i18n-en>scope, process, workshop, partnership</span></span>
+          </li>
+          <li>
+            <span class="k"><span data-i18n-cs>novinky</span><span data-i18n-en>updates</span></span>
+            <span class="v"><span data-i18n-cs>roadmapa, miln&#237;ky, dal&#353;&#237; kroky</span><span data-i18n-en>roadmap, milestones, next steps</span></span>
+          </li>
+          <li>
+            <span class="k">GitHub</span>
+            <span class="v"><a href="https://github.com/HonzaHezina/janAGI">HonzaHezina/janAGI</a></span>
+          </li>
+          <li>
+            <span class="k">deploy</span>
+            <span class="v"><a href="https://hezina.cz">hezina.cz</a></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-panels">
+        <div class="contact-card">
+          <div class="label">WEBHOOK · PILOT</div>
+          <h3>
+            <span data-i18n-cs>Pilot / partnerstv&#237;</span>
+            <span data-i18n-en>Pilot / partnership</span>
+          </h3>
+          <p>
+            <span data-i18n-cs>Popi&#353; proces, kter&#253; chce&#353; automatizovat. Formul&#225;&#345; pos&#237;l&#225; stejn&#225; pole jako star&#253; web.</span>
+            <span data-i18n-en>Describe the process you want to automate. The form submits the same fields as the old site.</span>
+          </p>
+
+          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST">
+            <input type="hidden" name="site_id" value="janagi.org">
+            <input type="hidden" name="subject" value="Z&#225;jem o pilot / partnerstv&#237;">
+            <div class="honeypot" aria-hidden="true">
+              <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <label class="contact-field">
+              <span><span data-i18n-cs>JM&#201;NO *</span><span data-i18n-en>NAME *</span></span>
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+
+            <label class="contact-field">
+              <span><span data-i18n-cs>E-MAIL *</span><span data-i18n-en>EMAIL *</span></span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+
+            <label class="contact-field">
+              <span><span data-i18n-cs>ZPR&#193;VA *</span><span data-i18n-en>MESSAGE *</span></span>
+              <textarea name="message" required></textarea>
+            </label>
+
+            <button type="submit" class="btn primary">
+              <span data-i18n-cs>Odeslat kontakt</span>
+              <span data-i18n-en>Send contact</span>
+              <span class="arrow">→</span>
+            </button>
+            <p class="contact-note">
+              <span data-i18n-cs>Workflow: n8n kontakt webhook → ru&#269;n&#237; follow-up.</span>
+              <span data-i18n-en>Workflow: n8n contact webhook → manual follow-up.</span>
+            </p>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="contact-card">
+          <div class="label">WEBHOOK · UPDATES</div>
+          <h3>
+            <span data-i18n-cs>Investor / aktuality</span>
+            <span data-i18n-en>Investor / updates</span>
+          </h3>
+          <p>
+            <span data-i18n-cs>Kontakt pro roadmapu, partnerstv&#237; a pravideln&#233; novinky. Stejn&#253; endpoint a hidden fields jako na star&#233; verzi.</span>
+            <span data-i18n-en>Contact for roadmap, partnerships, and recurring updates. Same endpoint and hidden fields as on the older version.</span>
+          </p>
+
+          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST">
+            <input type="hidden" name="site_id" value="janagi.org">
+            <input type="hidden" name="subject" value="P&#345;ihl&#225;&#353;en&#237; k novink&#225;m">
+            <input type="hidden" name="message" value="&#381;&#225;dost o zas&#237;l&#225;n&#237; novinek o janAGI">
+            <div class="honeypot" aria-hidden="true">
+              <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <label class="contact-field">
+              <span><span data-i18n-cs>JM&#201;NO *</span><span data-i18n-en>NAME *</span></span>
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+
+            <label class="contact-field">
+              <span><span data-i18n-cs>E-MAIL *</span><span data-i18n-en>EMAIL *</span></span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+
+            <button type="submit" class="btn primary">
+              <span data-i18n-cs>P&#345;ihl&#225;sit se</span>
+              <span data-i18n-en>Subscribe</span>
+              <span class="arrow">→</span>
+            </button>
+            <p class="contact-note">
+              <span data-i18n-cs>Roadmapa, partnerstv&#237;, update o dal&#353;&#237;ch kroc&#237;ch.</span>
+              <span data-i18n-en>Roadmap, partnerships, and updates on next steps.</span>
+            </p>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -1672,6 +1955,7 @@ docker compose up -d
       </div>
       <div class="links">
         <a href="https://github.com/HonzaHezina/janAGI">GitHub</a>
+        <a href="#contact"><span data-i18n-cs>Kontakt</span><span data-i18n-en>Contact</span></a>
         <span><span data-i18n-cs>Dokumentace · rozpracov&#225;no</span><span data-i18n-en>Docs · WIP</span></span>
         <span><span data-i18n-cs>Diskuse · soukrom&#225; beta</span><span data-i18n-en>Discussions · Private beta</span></span>
         <span><span data-i18n-cs>Changelog · rozpracov&#225;no</span><span data-i18n-en>Changelog · WIP</span></span>
@@ -1907,6 +2191,78 @@ docker compose up -d
     });
 
     syncLabels();
+  })();
+
+  // ───── Contact forms ─────
+  (function () {
+    if (window.location.protocol === 'file:') return;
+
+    const forms = document.querySelectorAll('.contact-form');
+    if (!forms.length) return;
+
+    const copy = {
+      cs: {
+        sending: 'odes\u00edl\u00e1m...',
+        ok: 'D\u00edky. Zpr\u00e1va byla odesl\u00e1na.',
+        err: 'Odesl\u00e1n\u00ed se nepovedlo. Zkuste to pros\u00edm znovu.'
+      },
+      en: {
+        sending: 'sending...',
+        ok: 'Thanks. Your message was sent.',
+        err: 'Sending failed. Please try again.'
+      }
+    };
+
+    function lang() {
+      return (document.documentElement.getAttribute('lang') || 'cs') === 'en' ? 'en' : 'cs';
+    }
+
+    forms.forEach((form) => {
+      const button = form.querySelector('button[type="submit"]');
+      const status = form.querySelector('.form-status');
+      const defaultLabel = button ? button.innerHTML : '';
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (status) {
+          status.textContent = '';
+          status.classList.remove('error');
+        }
+
+        const fd = new FormData(form);
+        if (String(fd.get('website') || '').trim()) return;
+
+        if (button) {
+          button.disabled = true;
+          button.textContent = copy[lang()].sending;
+        }
+
+        try {
+          const response = await fetch(form.action, {
+            method: form.method || 'POST',
+            body: fd
+          });
+
+          if (!response.ok) {
+            throw new Error('Request failed');
+          }
+
+          form.reset();
+          if (status) status.textContent = copy[lang()].ok;
+        } catch (error) {
+          if (status) {
+            status.textContent = copy[lang()].err;
+            status.classList.add('error');
+          }
+        } finally {
+          if (button) {
+            button.disabled = false;
+            button.innerHTML = defaultLabel;
+          }
+        }
+      });
+    });
   })();
 
   // ───── Apply persisted tweaks on load ─────
