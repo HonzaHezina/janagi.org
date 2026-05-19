@@ -1226,10 +1226,9 @@
 
   .contact-panels {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 16px;
   }
-  @media (max-width: 920px) { .contact-panels { grid-template-columns: 1fr; } }
 
   .contact-card {
     padding: 24px;
@@ -2174,42 +2173,38 @@ docker compose up -d
 
     <div class="sec-head">
       <h2>
-        <span data-i18n-cs>P&#345;&#237;m&#253; kontakt pro pilot i novinky.</span>
-        <span data-i18n-en>Direct contact for pilots and updates.</span>
+        <span data-i18n-cs>Jedna cesta pro dotazy. GitHub pro contribuce.</span>
+        <span data-i18n-en>One path for questions. GitHub for contributions.</span>
       </h2>
       <div class="meta">
-        <span data-i18n-cs>n8n webhook + ru&#269;n&#237; follow-up</span>
-        <span data-i18n-en>n8n webhook + manual follow-up</span>
+        <span data-i18n-cs>1 formul&#225;&#345; · GitHub · hezina.cz</span>
+        <span data-i18n-en>1 form · GitHub · hezina.cz</span>
       </div>
     </div>
 
     <div class="contact-grid">
       <div class="contact-meta">
-        <div class="label"><span data-i18n-cs>KONTAKTN&#205; KAN&#193;LY</span><span data-i18n-en>CONTACT CHANNELS</span></div>
+        <div class="label"><span data-i18n-cs>KAM D&#193;L</span><span data-i18n-en>WHERE NEXT</span></div>
         <h3>
-          <span data-i18n-cs>Stejn&#233; vstupy jako na p&#367;vodn&#237;m webu.</span>
-          <span data-i18n-en>The same entry points as on the original site.</span>
+          <span data-i18n-cs>P&#345;isp&#283;t, zeptat se, nebo nasadit komer&#269;n&#283;.</span>
+          <span data-i18n-en>Contribute, ask a question, or deploy commercially.</span>
         </h3>
         <p>
-          <span data-i18n-cs>Ve&#345;ejn&#233; kontakty z&#367;st&#225;vaj&#237; jednoduch&#233;: partnerstv&#237; a novinky jdou do n8n kontakt webhooku, open-source sm&#283;r na GitHub a komer&#269;n&#237; nasazen&#237; p&#345;es hezina.cz.</span>
-          <span data-i18n-en>Public contact stays simple: partnerships and updates go into the n8n contact webhook, open-source traffic goes to GitHub, and commercial deployment goes through hezina.cz.</span>
+          <span data-i18n-cs>K&#243;d, issues a pull requesty pat&#345;&#237; na GitHub. Technick&#253; dotaz, use case nebo feedback po&#353;li p&#345;es jeden formul&#225;&#345; n&#237;&#382;e. Pokud chce&#353; komer&#269;n&#237; rollout, pokra&#269;uj na hezina.cz.</span>
+          <span data-i18n-en>Code, issues, and pull requests belong on GitHub. Send technical questions, use cases, or feedback through the single form below. If you need a commercial rollout, continue to hezina.cz.</span>
         </p>
 
         <ul class="contact-list">
-          <li>
-            <span class="k">pilot</span>
-            <span class="v"><span data-i18n-cs>scope, proces, workshop, partnerstv&#237;</span><span data-i18n-en>scope, process, workshop, partnership</span></span>
-          </li>
-          <li>
-            <span class="k"><span data-i18n-cs>novinky</span><span data-i18n-en>updates</span></span>
-            <span class="v"><span data-i18n-cs>roadmapa, miln&#237;ky, dal&#353;&#237; kroky</span><span data-i18n-en>roadmap, milestones, next steps</span></span>
-          </li>
           <li>
             <span class="k">GitHub</span>
             <span class="v"><a href="https://github.com/HonzaHezina/janAGI">HonzaHezina/janAGI</a></span>
           </li>
           <li>
-            <span class="k">deploy</span>
+            <span class="k"><span data-i18n-cs>kontakt</span><span data-i18n-en>contact</span></span>
+            <span class="v"><span data-i18n-cs>technick&#253; dotaz, use case, feedback</span><span data-i18n-en>technical question, use case, feedback</span></span>
+          </li>
+          <li>
+            <span class="k">commercial</span>
             <span class="v"><a href="https://hezina.cz">hezina.cz</a></span>
           </li>
         </ul>
@@ -2217,19 +2212,19 @@ docker compose up -d
 
       <div class="contact-panels">
         <div class="contact-card">
-          <div class="label">WEBHOOK · PILOT</div>
+          <div class="label">WEBHOOK · CONTACT</div>
           <h3>
-            <span data-i18n-cs>Pilot / partnerstv&#237;</span>
-            <span data-i18n-en>Pilot / partnership</span>
+            <span data-i18n-cs>Dotaz / spolupr&#225;ce</span>
+            <span data-i18n-en>Question / collaboration</span>
           </h3>
           <p>
-            <span data-i18n-cs>Popi&#353; proces, kter&#253; chce&#353; automatizovat. Formul&#225;&#345; pos&#237;l&#225; stejn&#225; pole jako star&#253; web.</span>
-            <span data-i18n-en>Describe the process you want to automate. The form submits the same fields as the old site.</span>
+            <span data-i18n-cs>Napi&#353; technick&#253; dotaz, use case nebo n&#225;vrh spolupr&#225;ce. Jeden formul&#225;&#345;, stejn&#253; webhook, ru&#269;n&#237; follow-up.</span>
+            <span data-i18n-en>Send a technical question, use case, or collaboration note. One form, same webhook, manual follow-up.</span>
           </p>
 
           <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST" target="contact-submit-frame" onsubmit="return window.__janagiContactSubmit ? window.__janagiContactSubmit(this) : true;">
             <input type="hidden" name="site_id" value="janagi.org">
-            <input type="hidden" name="subject" value="Z&#225;jem o pilot / partnerstv&#237;">
+            <input type="hidden" name="subject" value="Kontakt z janagi.org">
             <div class="honeypot" aria-hidden="true">
               <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
             </div>
@@ -2250,55 +2245,13 @@ docker compose up -d
             </label>
 
             <button type="submit" class="btn primary">
-              <span data-i18n-cs>Odeslat kontakt</span>
-              <span data-i18n-en>Send contact</span>
+              <span data-i18n-cs>Odeslat zpr&#225;vu</span>
+              <span data-i18n-en>Send message</span>
               <span class="arrow">→</span>
             </button>
             <p class="contact-note">
-              <span data-i18n-cs>Workflow: n8n kontakt webhook → ru&#269;n&#237; follow-up.</span>
-              <span data-i18n-en>Workflow: n8n contact webhook → manual follow-up.</span>
-            </p>
-            <p class="form-status" role="status" aria-live="polite"></p>
-          </form>
-        </div>
-
-        <div class="contact-card">
-          <div class="label">WEBHOOK · UPDATES</div>
-          <h3>
-            <span data-i18n-cs>Investor / aktuality</span>
-            <span data-i18n-en>Investor / updates</span>
-          </h3>
-          <p>
-            <span data-i18n-cs>Kontakt pro roadmapu, partnerstv&#237; a pravideln&#233; novinky. Stejn&#253; endpoint a hidden fields jako na star&#233; verzi.</span>
-            <span data-i18n-en>Contact for roadmap, partnerships, and recurring updates. Same endpoint and hidden fields as on the older version.</span>
-          </p>
-
-          <form class="contact-form" action="https://n8n.janagi.org/webhook/contact" method="POST" target="contact-submit-frame" onsubmit="return window.__janagiContactSubmit ? window.__janagiContactSubmit(this) : true;">
-            <input type="hidden" name="site_id" value="janagi.org">
-            <input type="hidden" name="subject" value="P&#345;ihl&#225;&#353;en&#237; k novink&#225;m">
-            <input type="hidden" name="message" value="&#381;&#225;dost o zas&#237;l&#225;n&#237; novinek o janAGI">
-            <div class="honeypot" aria-hidden="true">
-              <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-            </div>
-
-            <label class="contact-field">
-              <span><span data-i18n-cs>JM&#201;NO *</span><span data-i18n-en>NAME *</span></span>
-              <input type="text" name="name" autocomplete="name" required>
-            </label>
-
-            <label class="contact-field">
-              <span><span data-i18n-cs>E-MAIL *</span><span data-i18n-en>EMAIL *</span></span>
-              <input type="email" name="email" autocomplete="email" required>
-            </label>
-
-            <button type="submit" class="btn primary">
-              <span data-i18n-cs>P&#345;ihl&#225;sit se</span>
-              <span data-i18n-en>Subscribe</span>
-              <span class="arrow">→</span>
-            </button>
-            <p class="contact-note">
-              <span data-i18n-cs>Roadmapa, partnerstv&#237;, update o dal&#353;&#237;ch kroc&#237;ch.</span>
-              <span data-i18n-en>Roadmap, partnerships, and updates on next steps.</span>
+              <span data-i18n-cs>Open-source p&#345;&#237;sp&#283;vky b&#283;&#382;&#237; na GitHubu. Komer&#269;n&#237; nasazen&#237; &#345;e&#353;&#237; hezina.cz.</span>
+              <span data-i18n-en>Open-source contributions go through GitHub. Commercial delivery goes through hezina.cz.</span>
             </p>
             <p class="form-status" role="status" aria-live="polite"></p>
           </form>
