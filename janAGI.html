@@ -1,0 +1,1997 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>janAGI — open-source AI orchestration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<script>
+  // Persisted defaults — Tweaks panel rewrites this block on disk.
+  window.__TWEAKS__ = /*EDITMODE-BEGIN*/{
+    "accent": "#7dd3fc",
+    "density": "comfortable",
+    "heroVariant": "terminal",
+    "lang": "cs"
+  }/*EDITMODE-END*/;
+</script>
+
+<style>
+  :root {
+    --bg:        #0a0a0a;
+    --bg-1:     #111113;
+    --bg-2:     #16161a;
+    --line:     #232327;
+    --line-2:   #2e2e34;
+    --fg:        #ededee;
+    --fg-2:     #a8a8ad;
+    --fg-3:     #6c6c74;
+    --accent:   #7dd3fc;
+    --accent-fg: #04141d;
+    --warn:     #f7b955;
+    --ok:       #86efac;
+
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: 'Inter', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --pad-section: clamp(64px, 8vw, 112px);
+    --pad-x: clamp(20px, 5vw, 48px);
+    --maxw: 1200px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  body[data-density="compact"] { --pad-section: clamp(40px, 5vw, 72px); }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  code, pre, .mono { font-family: var(--mono); }
+
+  ::selection { background: var(--accent); color: var(--accent-fg); }
+
+  /* ───── Layout ───── */
+  .container { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad-x); }
+
+  section {
+    padding: var(--pad-section) 0;
+    border-top: 1px solid var(--line);
+  }
+  section:first-of-type { border-top: 0; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-3);
+    letter-spacing: 0.04em;
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  h1 { font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.025em; }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+  h3 { font-size: 18px; line-height: 1.3; }
+  p  { color: var(--fg-2); }
+  p.lede { font-size: 18px; color: var(--fg); max-width: 56ch; }
+
+  hr.thin { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* ───── Top nav ───── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,10,10,0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; gap: 24px;
+    height: 56px;
+    max-width: var(--maxw); margin: 0 auto;
+    padding: 0 var(--pad-x);
+  }
+  .brand {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--fg);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .brand-mark {
+    width: 18px; height: 18px;
+    background: var(--accent);
+    display: inline-block;
+    position: relative;
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: 4px;
+    background: var(--bg);
+  }
+  .nav-links {
+    display: flex; gap: 4px; margin-left: auto;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--fg-2);
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+  .nav-links a:hover { color: var(--fg); background: var(--bg-1); text-decoration: none; }
+  .nav-right {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lang-toggle {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--bg-1); border: 1px solid var(--line);
+    color: var(--fg-2);
+    border-radius: 4px;
+    padding: 0; height: 28px;
+    display: inline-flex; overflow: hidden;
+  }
+  .lang-toggle button {
+    background: transparent; border: 0; color: inherit; font: inherit;
+    padding: 0 10px; cursor: pointer;
+  }
+  .lang-toggle button[aria-pressed="true"] {
+    background: var(--fg); color: var(--bg);
+  }
+
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+  }
+
+  /* ───── Hero ───── */
+  .hero { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(56px, 8vw, 96px); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  @media (max-width: 920px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 3px rgba(134,239,172,0.18);
+  }
+
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .slash { color: var(--fg-3); }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 17px;
+    color: var(--fg-2);
+    max-width: 50ch;
+    line-height: 1.55;
+  }
+  .hero-sub strong { color: var(--fg); font-weight: 500; }
+
+  .hero-cta {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    height: 40px; padding: 0 16px;
+    border: 1px solid var(--line);
+    background: var(--bg-1);
+    color: var(--fg);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--bg-2); border-color: var(--line-2); text-decoration: none; }
+  .btn.primary {
+    background: var(--accent); color: var(--accent-fg); border-color: var(--accent);
+  }
+  .btn.primary:hover { filter: brightness(1.06); background: var(--accent); }
+  .btn .arrow { opacity: 0.6; transition: transform 120ms; }
+  .btn:hover .arrow { transform: translateX(2px); opacity: 1; }
+
+  /* terminal */
+  .terminal {
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .terminal-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: #0d0d10;
+  }
+  .terminal-head .dots { display: flex; gap: 6px; }
+  .terminal-head .dots span {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #2a2a2f;
+  }
+  .terminal-head .dots span:nth-child(1) { background: #4a3a3a; }
+  .terminal-head .dots span:nth-child(2) { background: #4a463a; }
+  .terminal-head .dots span:nth-child(3) { background: #3a4a3d; }
+  .terminal-head .title {
+    font-size: 12px; color: var(--fg-3); margin-left: 4px;
+  }
+  .terminal-body { padding: 18px 20px; }
+  .terminal-body .line { white-space: pre-wrap; }
+  .term-prompt { color: var(--fg-3); user-select: none; }
+  .term-cmd    { color: var(--fg); }
+  .term-out    { color: var(--fg-2); }
+  .term-key    { color: var(--accent); }
+  .term-ok     { color: var(--ok); }
+  .term-cursor {
+    display: inline-block; width: 8px; height: 1em;
+    background: var(--accent); vertical-align: -2px;
+    animation: blink 1.05s steps(1, end) infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* hero stat row */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 1px;
+    margin-top: 56px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .hero-stats .cell {
+    background: var(--bg);
+    padding: 18px 20px;
+  }
+  .hero-stats .k {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .hero-stats .v {
+    font-family: var(--mono); font-size: 16px;
+    color: var(--fg); font-weight: 500;
+  }
+  @media (max-width: 720px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ───── What it is ───── */
+  .twocol {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 56px;
+  }
+  @media (max-width: 920px) { .twocol { grid-template-columns: 1fr; gap: 32px; } }
+
+  .stack-list {
+    list-style: none; padding: 0; margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .stack-list li {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .stack-list .k { font-family: var(--mono); color: var(--fg-3); font-size: 13px; }
+  .stack-list .v { color: var(--fg); }
+
+  /* ───── Architecture diagram ───── */
+  .arch {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: stretch;
+  }
+  @media (max-width: 920px) { .arch { grid-template-columns: 1fr; } }
+
+  .layers {
+    display: flex; flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-1);
+    font-family: var(--mono);
+  }
+  .layer {
+    padding: 22px 22px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 120ms;
+    position: relative;
+  }
+  .layer:last-child { border-bottom: 0; }
+  .layer:hover, .layer.active {
+    background: var(--bg-2);
+  }
+  .layer .layer-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .layer .layer-name {
+    font-size: 15px; font-weight: 600; color: var(--fg);
+    letter-spacing: -0.005em;
+  }
+  .layer .layer-tag {
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: 0.04em;
+  }
+  .layer .layer-bullets {
+    display: flex; flex-wrap: wrap; gap: 6px 12px;
+    color: var(--fg-2); font-size: 13px;
+  }
+  .layer .layer-bullets span {
+    display: inline-flex;
+  }
+  .layer .layer-bullets span::before {
+    content: "·"; color: var(--fg-3); margin-right: 8px;
+  }
+  .layer .layer-bullets span:first-child::before { content: ""; margin-right: 0; }
+
+  .layer.active::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--accent);
+  }
+
+  .arch-detail {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-1);
+    padding: 28px;
+    font-family: var(--sans);
+  }
+  .arch-detail h3 {
+    font-family: var(--mono); font-size: 14px;
+    color: var(--accent); letter-spacing: 0.02em;
+    margin-bottom: 14px;
+  }
+  .arch-detail p { font-size: 14.5px; color: var(--fg-2); line-height: 1.65; }
+  .arch-detail .kv {
+    margin-top: 20px;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+    display: grid; grid-template-columns: 110px 1fr;
+    gap: 8px 14px;
+    font-family: var(--mono); font-size: 12.5px;
+  }
+  .arch-detail .kv dt { color: var(--fg-3); }
+  .arch-detail .kv dd { margin: 0; color: var(--fg); }
+
+  /* ───── Quick start ───── */
+  .qs-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  }
+  @media (max-width: 920px) { .qs-grid { grid-template-columns: 1fr; } }
+
+  .codeblock {
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .codeblock-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px;
+    color: var(--fg-3);
+    background: #0d0d10;
+  }
+  .codeblock-head .copy {
+    background: transparent; border: 0;
+    color: var(--fg-3); font-family: var(--mono); font-size: 12px;
+    cursor: pointer; padding: 2px 6px; border-radius: 3px;
+  }
+  .codeblock-head .copy:hover { color: var(--fg); background: var(--bg-2); }
+  pre.codeblock-body {
+    margin: 0; padding: 18px 20px;
+    font-family: var(--mono); font-size: 13px;
+    line-height: 1.7; color: var(--fg);
+    overflow-x: auto;
+  }
+  pre.codeblock-body .c { color: var(--fg-3); }
+  pre.codeblock-body .k { color: var(--accent); }
+  pre.codeblock-body .s { color: var(--ok); }
+
+  .steps {
+    list-style: none; padding: 0; margin: 0;
+    counter-reset: step;
+  }
+  .steps li {
+    counter-increment: step;
+    border-top: 1px solid var(--line);
+    padding: 16px 0 16px 44px;
+    position: relative;
+  }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute; left: 0; top: 16px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--fg-3);
+  }
+  .steps .step-title {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--fg); font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .steps .step-desc {
+    font-size: 13.5px; color: var(--fg-2);
+  }
+
+  /* ───── Use cases ───── */
+  .uc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  @media (max-width: 920px) { .uc-grid { grid-template-columns: 1fr; } }
+
+  .uc {
+    background: var(--bg);
+    padding: 28px 26px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .uc:hover { background: var(--bg-1); }
+  .uc-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+  .uc-name { font-size: 16px; font-weight: 600; color: var(--fg); }
+  .uc-id { font-family: var(--mono); font-size: 11px; color: var(--fg-3); }
+  .uc-rows { display: grid; gap: 10px; font-size: 13px; }
+  .uc-row {
+    display: grid; grid-template-columns: 72px 1fr;
+    gap: 12px;
+  }
+  .uc-row .label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    padding-top: 2px;
+  }
+  .uc-row .val { color: var(--fg-2); line-height: 1.55; }
+  .uc-row .val .mono { color: var(--fg); font-size: 12.5px; }
+
+  /* ───── Agents ───── */
+  .agents {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-1);
+  }
+  .agents-head, .agent-row {
+    display: grid;
+    grid-template-columns: 36px 220px 120px 1fr;
+    gap: 16px;
+    padding: 14px 20px;
+    align-items: center;
+    font-size: 13.5px;
+  }
+  @media (max-width: 720px) {
+    .agents-head, .agent-row { grid-template-columns: 24px 1fr; }
+    .agents-head .role, .agents-head .desc, .agent-row .role, .agent-row .desc { display: none; }
+  }
+  .agents-head {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--line);
+    background: #0d0d10;
+  }
+  .agent-row {
+    border-bottom: 1px solid var(--line);
+    cursor: default;
+  }
+  .agent-row:last-child { border-bottom: 0; }
+  .agent-row:hover { background: var(--bg-2); }
+  .agent-row .num {
+    font-family: var(--mono); color: var(--fg-3); font-size: 12px;
+  }
+  .agent-row .name {
+    font-family: var(--mono); color: var(--fg); font-weight: 500;
+  }
+  .agent-row .role {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+  }
+  .agent-row .desc { color: var(--fg-2); }
+
+  .agents-foot {
+    padding: 14px 20px;
+    border-top: 1px solid var(--line);
+    background: #0d0d10;
+    font-family: var(--mono); font-size: 12.5px;
+    color: var(--fg-3);
+  }
+  .agents-foot a { color: var(--accent); }
+
+  /* agent expand panel */
+  .agent-row { transition: background 120ms; }
+  .agent-row.expanded { background: var(--bg-2); }
+  .agent-row .name::after {
+    content: " ▸";
+    color: var(--fg-3);
+    font-size: 10px;
+    transition: transform 120ms;
+    display: inline-block;
+  }
+  .agent-row.expanded .name::after { transform: rotate(90deg); }
+  .agent-detail {
+    grid-column: 1 / -1;
+    padding: 0;
+    margin-top: 14px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 220ms ease;
+  }
+  .agent-row.expanded .agent-detail { max-height: 320px; }
+  .agent-detail-inner {
+    border-top: 1px solid var(--line);
+    padding: 16px 0 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-2);
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .agent-detail-inner .c { color: var(--fg-3); }
+  .agent-detail-inner .k { color: var(--accent); }
+  .agent-detail-inner .s { color: var(--ok); }
+
+  /* ───── Flow diagram (interactive) ───── */
+  .flow {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-1);
+    padding: 32px 28px 28px;
+    overflow-x: auto;
+  }
+  .flow-stage {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 8px;
+    align-items: stretch;
+    min-width: 720px;
+  }
+  .flow-node {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 14px;
+    cursor: pointer;
+    transition: border-color 160ms, transform 160ms, background 160ms;
+    position: relative;
+    text-align: left;
+    font: inherit; color: inherit;
+  }
+  .flow-node:hover { border-color: var(--line-2); }
+  .flow-node.active {
+    border-color: var(--accent);
+    background: var(--bg-2);
+    transform: translateY(-1px);
+  }
+  .flow-node .step-n {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .flow-node .step-name {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--fg); font-weight: 500;
+    line-height: 1.3;
+  }
+  .flow-node .step-tech {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--fg-3); margin-top: 6px;
+  }
+  .flow-node.active .step-name { color: var(--accent); }
+
+  .flow-arrows {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 8px;
+    margin: 8px 0 0;
+    min-width: 720px;
+  }
+  .flow-arrows .a {
+    height: 22px; position: relative;
+  }
+  .flow-arrows .a::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 100%; height: 1px;
+    background: var(--line);
+    transform: translateY(-50%);
+  }
+  .flow-arrows .a.lit::after { background: var(--accent); height: 2px; }
+  .flow-arrows .a:last-child { visibility: hidden; }
+
+  .flow-detail {
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 720px) { .flow-detail { grid-template-columns: 1fr; } }
+  .flow-detail h4 {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--accent); letter-spacing: 0.04em;
+    margin: 0 0 10px;
+  }
+  .flow-detail p { font-size: 14px; color: var(--fg-2); margin: 0 0 10px; }
+  .flow-detail .meta {
+    font-family: var(--mono); font-size: 12px; color: var(--fg-3);
+    border-top: 1px solid var(--line);
+    margin-top: 14px; padding-top: 12px;
+    display: grid; grid-template-columns: 90px 1fr; gap: 6px 14px;
+  }
+  .flow-detail .meta dt { color: var(--fg-3); margin: 0; }
+  .flow-detail .meta dd { margin: 0; color: var(--fg); }
+
+  .flow-controls {
+    display: flex; gap: 8px; align-items: center;
+    margin-top: 16px;
+    font-family: var(--mono); font-size: 12px; color: var(--fg-3);
+  }
+  .flow-controls button.play {
+    background: var(--bg-1); border: 1px solid var(--line);
+    color: var(--fg); padding: 6px 12px;
+    border-radius: 4px; font: inherit; cursor: pointer;
+  }
+  .flow-controls button.play:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ───── Use case tabs ───── */
+  .uc-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+    overflow-x: auto;
+  }
+  .uc-tab {
+    background: transparent; border: 0;
+    color: var(--fg-3);
+    font-family: var(--mono); font-size: 13px;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 120ms;
+  }
+  .uc-tab:hover { color: var(--fg); }
+  .uc-tab.active {
+    color: var(--fg); border-bottom-color: var(--accent);
+  }
+  .uc-tab .id { color: var(--fg-3); margin-right: 8px; }
+  .uc-tab.active .id { color: var(--accent); }
+  .uc-pane { display: none; }
+  .uc-pane.active { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; }
+  @media (max-width: 920px) { .uc-pane.active { grid-template-columns: 1fr; } }
+
+  .uc-pane h3 { font-size: 22px; margin-bottom: 14px; }
+  .uc-pane .uc-rows .uc-row { padding: 10px 0; border-top: 1px solid var(--line); grid-template-columns: 80px 1fr; }
+  .uc-pane .uc-rows .uc-row:last-child { border-bottom: 1px solid var(--line); }
+
+  /* ───── Audit ticker ───── */
+  .audit {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-1);
+  }
+  .audit-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px;
+    background: #0d0d10;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--fg-3);
+  }
+  .audit-head .live {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--fg-3);
+  }
+  .audit-head .live .pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--fg-3);
+    animation: none;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  .audit-body {
+    height: 240px;
+    overflow: hidden;
+    font-family: var(--mono); font-size: 12.5px;
+    line-height: 1.85;
+    padding: 12px 16px;
+    position: relative;
+  }
+  .audit-row {
+    display: grid;
+    grid-template-columns: 84px 90px 90px 1fr;
+    gap: 14px;
+    padding: 2px 0;
+  }
+  .audit-row .t { color: var(--fg-3); }
+  .audit-row .lvl { color: var(--fg-3); }
+  .audit-row .lvl.ok { color: var(--ok); }
+  .audit-row .lvl.wait { color: var(--warn); }
+  .audit-row .lvl.err { color: #f87171; }
+  .audit-row .src { color: var(--accent); }
+  .audit-row .msg { color: var(--fg); }
+
+  /* ───── Section header w/ end-meta ───── */
+  .sec-head {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end; margin-bottom: 36px;
+  }
+  .sec-head h2 { margin: 0; }
+  .sec-head .meta { font-family: var(--mono); font-size: 12px; color: var(--fg-3); }
+
+  /* ───── Infra ───── */
+  .infra-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  }
+  @media (max-width: 920px) { .infra-grid { grid-template-columns: 1fr; } }
+
+  .infra-list {
+    list-style: none; padding: 0; margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .infra-list li {
+    display: grid; grid-template-columns: 24px 140px 1fr;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+  }
+  .infra-list .ico {
+    font-family: var(--mono); color: var(--accent); font-size: 12px;
+    padding-top: 1px;
+  }
+  .infra-list .k { font-family: var(--mono); color: var(--fg); font-size: 13px; }
+  .infra-list .v { color: var(--fg-2); }
+
+  .cost {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    background: var(--bg-1);
+  }
+  .cost h4 {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+    margin: 0 0 14px;
+  }
+  .cost .price {
+    font-family: var(--mono);
+    font-size: 36px;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .cost .price .unit { color: var(--fg-3); font-size: 16px; margin-left: 4px; }
+  .cost p { font-size: 13.5px; margin-top: 12px; }
+  .cost ul {
+    margin-top: 18px; padding: 0; list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .cost ul li {
+    display: flex; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12.5px;
+  }
+  .cost ul li:last-child { border-bottom: 0; }
+  .cost ul li span:first-child { color: var(--fg-2); }
+  .cost ul li span:last-child { color: var(--fg); }
+
+  /* ───── Contribute ───── */
+  .contrib-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) { .contrib-grid { grid-template-columns: 1fr; } }
+  .contrib-card {
+    background: var(--bg);
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 120ms;
+  }
+  .contrib-card:hover { background: var(--bg-1); text-decoration: none; }
+  .contrib-card .label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--fg-3); letter-spacing: 0.04em;
+  }
+  .contrib-card .title { font-size: 16px; color: var(--fg); font-weight: 600; }
+  .contrib-card .desc { font-size: 13.5px; color: var(--fg-2); }
+  .contrib-card .arrow {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    margin-top: auto; padding-top: 12px;
+  }
+
+  /* ───── Commercial banner ───── */
+  .banner {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+    background:
+      linear-gradient(180deg, rgba(125,211,252,0.04), transparent 60%),
+      var(--bg-1);
+  }
+  @media (max-width: 720px) { .banner { grid-template-columns: 1fr; } }
+  .banner .label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .banner h3 { font-size: 22px; color: var(--fg); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .banner p { font-size: 14.5px; color: var(--fg-2); max-width: 60ch; margin: 0; }
+
+  /* ───── Footer ───── */
+  footer {
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--line);
+    color: var(--fg-3);
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+  footer .container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+  @media (max-width: 720px) { footer .container { grid-template-columns: 1fr; } }
+  footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
+  footer .links a { color: var(--fg-2); }
+  footer .meta .row { margin-top: 4px; }
+
+  /* ───── i18n helper ───── */
+  [data-i18n-en], [data-i18n-cs] { display: inline; }
+  html[lang="cs"] [data-i18n-en] { display: none; }
+  html[lang="en"] [data-i18n-cs] { display: none; }
+  /* block-level fallback */
+  .i18n-block[data-i18n-en], .i18n-block[data-i18n-cs] { display: block; }
+  html[lang="cs"] .i18n-block[data-i18n-en] { display: none; }
+  html[lang="en"] .i18n-block[data-i18n-cs] { display: none; }
+</style>
+
+<style id="__om-edit-overrides"></style>
+</head>
+
+<body data-density="comfortable">
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>janAGI<span style="color:var(--fg-3)">.org</span></span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#architecture"><span data-i18n-cs>Architektura</span><span data-i18n-en>Architecture</span></a>
+      <a href="#flow"><span data-i18n-cs>Tok</span><span data-i18n-en>Flow</span></a>
+      <a href="#quickstart"><span data-i18n-cs>Rychl&#253;&nbsp;start</span><span data-i18n-en>Quick&nbsp;start</span></a>
+      <a href="#agents"><span data-i18n-cs>Agenti</span><span data-i18n-en>Agents</span></a>
+      <a href="#audit">Audit</a>
+      <a href="#contribute"><span data-i18n-cs>P&#345;isp&#283;j</span><span data-i18n-en>Contribute</span></a>
+    </div>
+
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="cs" aria-pressed="true">CS</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn" href="https://github.com/HonzaHezina/janAGI" style="height:28px;padding:0 10px;font-size:12px;">
+        <span style="font-family:var(--mono)">GitHub</span>
+        <span class="arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<a id="top"></a>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero" data-screen-label="01 Hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n-cs>open-source · self-hosted · audit-ready</span>
+          <span data-i18n-en>open-source · self-hosted · audit-ready</span>
+        </div>
+
+        <h1>
+          <span data-i18n-cs>
+            Open-source AI&nbsp;orchestrace<br>
+            pro <span class="accent">re&#225;ln&#233; firemn&#237;<br>procesy</span>.
+          </span>
+          <span data-i18n-en>
+            Open-source AI&nbsp;orchestration<br>
+            for <span class="accent">real business<br>processes</span>.
+          </span>
+        </h1>
+
+        <p class="hero-sub">
+          <span data-i18n-cs>
+            <strong>AI workflow, kter&#233; vid&#237;&#353;, &#345;&#237;d&#237;&#353; a m&#225;&#353; pod kontrolou.</strong>
+            <strong>n8n</strong> dr&#382;&#237; workflow.
+            <strong>OpenClaw</strong> &#345;e&#353;&#237; rozhodov&#225;n&#237;.
+            <strong>MindsDB</strong> napojuje data.<br>
+            S dohledateln&#253;m b&#283;hem, schvalov&#225;n&#237;m a auditem na ka&#382;d&#233;m kroku.
+          </span>
+          <span data-i18n-en>
+            <strong>AI workflows you can inspect, control, and audit.</strong>
+            <strong>n8n</strong> holds the workflow.
+            <strong>OpenClaw</strong> handles reasoning.
+            <strong>MindsDB</strong> connects the data.<br>
+            With traceable execution, approval gates, and audit at every step.
+          </span>
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn primary" href="#quickstart">
+            <span data-i18n-cs>Proj&#237;t rychl&#253; start</span>
+            <span data-i18n-en>View quick start</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="btn" href="https://github.com/HonzaHezina/janAGI">
+            <span>GitHub</span>
+            <span class="arrow">↗</span>
+          </a>
+          <a class="btn" href="https://hezina.cz">
+            <span data-i18n-cs>Domluvit pilot s hezina.cz</span>
+            <span data-i18n-en>Book a pilot with hezina.cz</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="terminal" aria-hidden="true">
+        <div class="terminal-head">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="title">~/janAGI · zsh</span>
+        </div>
+        <div class="terminal-body">
+<div class="line"><span class="term-prompt">$ </span><span class="term-cmd">git clone https://github.com/HonzaHezina/janAGI.git</span></div>
+<div class="line"><span class="term-out">Cloning into 'janAGI'... done.</span></div>
+<div class="line"><span class="term-prompt">$ </span><span class="term-cmd">cd janAGI &amp;&amp; docker compose up -d</span></div>
+<div class="line"><span class="term-out">[+] Running 4/4</span></div>
+<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">n8n</span>           <span class="term-ok">Started</span></span></div>
+<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">openclaw</span>     <span class="term-ok">Started</span></span></div>
+<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">mindsdb</span>      <span class="term-ok">Started</span></span></div>
+<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">postgres</span>     <span class="term-ok">Started</span></span></div>
+<div class="line">&nbsp;</div>
+<div class="line"><span class="term-out">→ n8n:       http://localhost:5678</span></div>
+<div class="line"><span class="term-out">→ openclaw:  http://localhost:7000</span></div>
+<div class="line"><span class="term-out">→ mindsdb:   http://localhost:47334</span></div>
+<div class="line"><span class="term-prompt">$ </span><span class="term-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat row -->
+    <div class="hero-stats">
+      <div class="cell">
+        <div class="k"><span data-i18n-cs>STACK</span><span data-i18n-en>STACK</span></div>
+        <div class="v">n8n + OpenClaw<br>+ MindsDB + Postgres</div>
+      </div>
+      <div class="cell">
+        <div class="k"><span data-i18n-cs>KONTROLA</span><span data-i18n-en>CONTROL</span></div>
+        <div class="v"><span data-i18n-cs>audit log + schv&#225;len&#237;<br>citliv&#253;ch akc&#237;</span><span data-i18n-en>audit log + approval<br>for sensitive actions</span></div>
+      </div>
+      <div class="cell">
+        <div class="k"><span data-i18n-cs>MODELY</span><span data-i18n-en>MODELS</span></div>
+        <div class="v"><span data-i18n-cs>Claude / GPT / local<br>model = konfigurace</span><span data-i18n-en>Claude / GPT / local<br>model = config</span></div>
+      </div>
+      <div class="cell">
+        <div class="k"><span data-i18n-cs>PROVOZ</span><span data-i18n-en>RUNTIME</span></div>
+        <div class="v"><span data-i18n-cs>docker compose<br>lok&#225;ln&#283; nebo na VPS</span><span data-i18n-en>docker compose<br>local or VPS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHAT IT IS ═══════════════════ -->
+<section id="what" data-screen-label="02 What it is">
+  <div class="container">
+    <p class="section-label">01 · <span data-i18n-cs>Co to je</span><span data-i18n-en>What it is</span></p>
+
+    <div class="twocol">
+      <div>
+        <h2 data-i18n-cs>Framework, ne platforma.</h2>
+        <h2 data-i18n-en style="display:none">A framework, not a platform.</h2>
+        <p class="lede">
+          <span data-i18n-cs>
+            janAGI je framework pro stavbu AI workflow nad re&#225;ln&#253;mi firemn&#237;mi procesy.
+            T&#345;i samostatn&#233; vrstvy, audit jako standard a model jako konfigurace.
+            Ka&#382;dou vrstvu vym&#283;n&#237;&#353; bez rozbit&#237; zbytku.
+          </span>
+          <span data-i18n-en>
+            janAGI is a framework for building AI workflows over real business processes.
+            Three separate layers, audit by default, and the model treated as configuration.
+            Swap any layer without breaking the rest.
+          </span>
+        </p>
+      </div>
+
+      <ul class="stack-list">
+        <li>
+          <span class="k"><span data-i18n-cs>orchestrace</span><span data-i18n-en>orchestration</span></span>
+          <span class="v"><span data-i18n-cs>n8n &#8212; triggery, sm&#283;rov&#225;n&#237;, retry, audit log</span><span data-i18n-en>n8n — triggers, routing, retries, audit log</span></span>
+        </li>
+        <li>
+          <span class="k"><span data-i18n-cs>AI vrstva</span><span data-i18n-en>reasoning</span></span>
+          <span class="v"><span data-i18n-cs>OpenClaw &#8212; agenti, klasifikace, politika n&#225;stroj&#367;</span><span data-i18n-en>OpenClaw — agents, classification, tool policy</span></span>
+        </li>
+        <li>
+          <span class="k"><span data-i18n-cs>data</span><span data-i18n-en>data</span></span>
+          <span class="v"><span data-i18n-cs>MindsDB + PostgreSQL &#8212; federace, dotazy, predikce</span><span data-i18n-en>MindsDB + PostgreSQL — federation, queries, predictions</span></span>
+        </li>
+        <li>
+          <span class="k"><span data-i18n-cs>runtime</span><span data-i18n-en>runtime</span></span>
+          <span class="v"><span data-i18n-cs>Docker Compose &#8212; VPS, VM, managed Docker host</span><span data-i18n-en>Docker Compose — VPS, VM, managed Docker host</span></span>
+        </li>
+        <li>
+          <span class="k"><span data-i18n-cs>rozhran&#237;</span><span data-i18n-en>interfaces</span></span>
+          <span class="v"><span data-i18n-cs>Telegram, REST, webhook, n8n UI</span><span data-i18n-en>Telegram, REST, webhook, n8n UI</span></span>
+        </li>
+        <li>
+          <span class="k"><span data-i18n-cs>licence</span><span data-i18n-en>license</span></span>
+          <span class="v"><span data-i18n-cs>MIT &#8212; fork, kontrola, nasazen&#237;</span><span data-i18n-en>MIT — fork, inspect, deploy</span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ARCHITECTURE ═══════════════════ -->
+<section id="architecture" data-screen-label="03 Architecture">
+  <div class="container">
+    <p class="section-label">02 · <span data-i18n-cs>Architektura</span><span data-i18n-en>Architecture</span></p>
+
+    <div style="display:grid; grid-template-columns:1fr auto; gap:32px; align-items:end; margin-bottom:36px;">
+      <h2 style="margin:0;">
+        <span data-i18n-cs>T&#345;i vrstvy. Jasn&#233; rozhran&#237;.</span>
+        <span data-i18n-en>Three layers. Clean interfaces.</span>
+      </h2>
+      <div style="font-family:var(--mono); font-size:12px; color:var(--fg-3);">
+        <span data-i18n-cs>klikni pro detail</span>
+        <span data-i18n-en>click for detail</span>
+      </div>
+    </div>
+
+    <div class="arch">
+      <div class="layers" id="layers">
+        <div class="layer active" data-layer="n8n">
+          <div class="layer-head">
+            <div class="layer-name">n8n</div>
+            <div class="layer-tag">L1 · ORCHESTRATION</div>
+          </div>
+          <div class="layer-bullets">
+            <span>triggers</span><span>routing</span><span>approval</span><span>retry</span><span>audit&nbsp;log</span>
+          </div>
+        </div>
+        <div class="layer" data-layer="openclaw">
+          <div class="layer-head">
+            <div class="layer-name">OpenClaw</div>
+            <div class="layer-tag">L2 · AI AGENTS</div>
+          </div>
+          <div class="layer-bullets">
+            <span>reasoning</span><span>classification</span><span>action&nbsp;proposal</span><span>tool&nbsp;policy</span>
+          </div>
+        </div>
+        <div class="layer" data-layer="data">
+          <div class="layer-head">
+            <div class="layer-name">MindsDB&nbsp;+&nbsp;PostgreSQL</div>
+            <div class="layer-tag">L3 · DATA</div>
+          </div>
+          <div class="layer-bullets">
+            <span>federation</span><span>predictions</span><span>company&nbsp;systems</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-detail" id="archDetail">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FLOW EXAMPLE ═══════════════════ -->
+<section id="flow" data-screen-label="04 Flow">
+  <div class="container">
+    <p class="section-label">03 · <span data-i18n-cs>Tok po&#382;adavku</span><span data-i18n-en>Request flow</span></p>
+
+    <div class="sec-head">
+      <h2>
+        <span data-i18n-cs>Jak vypad&#225; cesta od po&#382;adavku k odpov&#283;di.</span>
+        <span data-i18n-en>How a request becomes a final reply.</span>
+      </h2>
+      <div class="meta">
+        <span data-i18n-cs>klikni na krok</span>
+        <span data-i18n-en>click a step</span>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-stage" id="flowStage">
+        <button class="flow-node active" data-step="0">
+          <div class="step-n"><span data-i18n-cs>KROK 01 · VSTUP</span><span data-i18n-en>STEP 01 · TRIGGER</span></div>
+          <div class="step-name"><span data-i18n-cs>P&#345;&#237;jem</span><span data-i18n-en>Inbound</span></div>
+          <div class="step-tech">IMAP / webhook</div>
+        </button>
+        <button class="flow-node" data-step="1">
+          <div class="step-n"><span data-i18n-cs>KROK 02 · SM&#282;ROV&#193;N&#205;</span><span data-i18n-en>STEP 02 · ROUTE</span></div>
+          <div class="step-name">n8n</div>
+          <div class="step-tech"><span data-i18n-cs>orchestrace</span><span data-i18n-en>orchestration</span></div>
+        </button>
+        <button class="flow-node" data-step="2">
+          <div class="step-n"><span data-i18n-cs>KROK 03 · VYHODNOCEN&#205;</span><span data-i18n-en>STEP 03 · REASON</span></div>
+          <div class="step-name">OpenClaw</div>
+          <div class="step-tech"><span data-i18n-cs>agent + politika</span><span data-i18n-en>agent + policy</span></div>
+        </button>
+        <button class="flow-node" data-step="3">
+          <div class="step-n"><span data-i18n-cs>KROK 04 · SCHV&#193;LEN&#205;</span><span data-i18n-en>STEP 04 · DECIDE</span></div>
+          <div class="step-name">HITL</div>
+          <div class="step-tech"><span data-i18n-cs>schvalovac&#237; br&#225;na</span><span data-i18n-en>approval gate</span></div>
+        </button>
+        <button class="flow-node" data-step="4">
+          <div class="step-n"><span data-i18n-cs>KROK 05 · AKCE</span><span data-i18n-en>STEP 05 · ACT</span></div>
+          <div class="step-name"><span data-i18n-cs>V&#253;stup</span><span data-i18n-en>Output</span></div>
+          <div class="step-tech">SMTP / API / DB</div>
+        </button>
+      </div>
+      <div class="flow-arrows" id="flowArrows">
+        <div class="a"></div><div class="a"></div><div class="a"></div><div class="a"></div><div class="a"></div>
+      </div>
+
+      <div class="flow-detail" id="flowDetail"><!-- JS populates --></div>
+
+      <div class="flow-controls">
+        <button class="play" id="flowPlay">▶ <span data-i18n-cs>p&#345;ehr&#225;t tok</span><span data-i18n-en>play flow</span></button>
+        <span data-i18n-cs>· ka&#382;d&#253; krok je samostatn&#253; node v n8n, audit log se zapisuje na ka&#382;d&#233; hran&#283;</span>
+        <span data-i18n-en>· each step is a separate n8n node, audit log written on every edge</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ QUICK START ═══════════════════ -->
+<section id="quickstart" data-screen-label="05 Quick start">
+  <div class="container">
+    <p class="section-label">04 · <span data-i18n-cs>Rychl&#253; start</span><span data-i18n-en>Quick start</span></p>
+
+    <div style="display:grid; grid-template-columns:1fr auto; gap:32px; align-items:end; margin-bottom:36px;">
+      <h2 style="margin:0;">
+        <span data-i18n-cs>Spust&#237;&#353; to p&#345;es Docker Compose.</span>
+        <span data-i18n-en>Run it via Docker Compose.</span>
+      </h2>
+      <div style="font-family:var(--mono); font-size:12px; color:var(--fg-3);">
+        <span data-i18n-cs>4 slu&#382;by · Docker Compose</span><span data-i18n-en>4 services · Docker Compose</span>
+      </div>
+    </div>
+
+    <div class="qs-grid">
+      <ol class="steps">
+        <li>
+          <div class="step-title">git clone</div>
+          <div class="step-desc">
+            <span data-i18n-cs>Naklonuj repo. V&#353;e b&#283;&#382;&#237; v Dockeru &#8212; nic se na hostu nestav&#237;.</span>
+            <span data-i18n-en>Clone the repo. Everything runs in Docker — nothing builds on the host.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-title">docker compose up -d</div>
+          <div class="step-desc">
+            <span data-i18n-cs>4 slu&#382;by: n8n, OpenClaw, MindsDB, PostgreSQL. Doba prvn&#237;ho startu z&#225;vis&#237; na image cache a s&#237;ti.</span>
+            <span data-i18n-en>4 services: n8n, OpenClaw, MindsDB, PostgreSQL. First start depends on image cache and network throughput.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-title"><span data-i18n-cs>Import workflowu</span><span data-i18n-en>Import workflow</span></div>
+          <div class="step-desc">
+            <span data-i18n-cs>V n8n UI naimportuj workflow JSON. Triggery, routing a retry logiku dr&#382; v samostatn&#253;ch nodech.</span>
+            <span data-i18n-en>In the n8n UI import a workflow JSON. Keep triggers, routing, and retry logic in separate nodes.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-title"><span data-i18n-cs>Nastaven&#237; agenta</span><span data-i18n-en>Configure agent</span></div>
+          <div class="step-desc">
+            <span data-i18n-cs>Uprav definici agenta. Nastav tool policy, model a syst&#233;mov&#253; prompt.</span>
+            <span data-i18n-en>Edit the agent definition. Set tool policy, model, and system prompt.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-title"><span data-i18n-cs>P&#345;ipojen&#237; dat</span><span data-i18n-en>Connect data</span></div>
+          <div class="step-desc">
+            <span data-i18n-cs>P&#345;ipoj firemn&#237; data p&#345;es MindsDB &#8212; CRM, ERP, soubory, API. Federace nad v&#237;ce zdroji.</span>
+            <span data-i18n-en>Wire company data through MindsDB — CRM, ERP, files, APIs. Federation over many sources.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="codeblock">
+          <div class="codeblock-head">
+            <span>shell</span>
+            <button class="copy" data-copy="qs1"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button>
+          </div>
+<pre class="codeblock-body" id="qs1"><span class="c"># 1. Clone &amp; boot</span>
+ git clone https://github.com/HonzaHezina/janAGI.git
+<span class="k">cd</span> janAGI
+docker compose up -d
+
+<span class="c"># 2. Service URLs</span>
+<span class="c"># n8n</span>       http://localhost:5678
+<span class="c"># OpenClaw</span>  http://localhost:7000
+<span class="c"># MindsDB</span>   http://localhost:47334</pre>
+        </div>
+
+        <div class="codeblock">
+          <div class="codeblock-head">
+            <span>agents/main.yaml</span>
+            <button class="copy" data-copy="qs2"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button>
+          </div>
+<pre class="codeblock-body" id="qs2"><span class="k">name</span>: main
+<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>
+<span class="k">role</span>: dispatcher
+<span class="k">routes</span>:
+  - <span class="s">email</span>     → email_agent
+  - <span class="s">research</span>  → reality_browser
+  - <span class="s">analytics</span> → analytics_agent
+<span class="k">tools</span>:
+  - n8n.webhook
+  - mindsdb.query
+  - postgres.read</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ USE CASES ═══════════════════ -->
+<section id="usecases" data-screen-label="06 Use cases">
+  <div class="container">
+    <p class="section-label">05 · <span data-i18n-cs>P&#345;&#237;klady pou&#382;it&#237;</span><span data-i18n-en>Use cases</span></p>
+
+    <h2 style="margin-bottom:36px;">
+      <span data-i18n-cs>Co na tom postav&#237;&#353; v praxi.</span>
+      <span data-i18n-en>What you build with it in practice.</span>
+    </h2>
+
+    <div class="uc-tabs" role="tablist">
+      <button class="uc-tab active" role="tab" data-pane="uc-email">
+        <span class="id">UC-01</span>
+        <span data-i18n-cs>Email asistent</span><span data-i18n-en>Email assistant</span>
+      </button>
+      <button class="uc-tab" role="tab" data-pane="uc-research">
+        <span class="id">UC-02</span>
+        <span data-i18n-cs>Webov&#225; re&#353;er&#353;e</span><span data-i18n-en>Web research</span>
+      </button>
+      <button class="uc-tab" role="tab" data-pane="uc-crm">
+        <span class="id">UC-03</span>
+        <span data-i18n-cs>CRM/ERP integrace</span><span data-i18n-en>CRM / ERP integration</span>
+      </button>
+      <button class="uc-tab" role="tab" data-pane="uc-analytics">
+        <span class="id">UC-04</span>
+        <span data-i18n-cs>Datov&#225; anal&#253;za</span><span data-i18n-en>Data analytics</span>
+      </button>
+    </div>
+
+    <div class="uc-pane active" id="uc-email">
+      <div>
+        <h3><span data-i18n-cs>P&#345;&#237;chod&#237;c&#237; email &#8594; navr&#382;en&#225; odpov&#283;&#271;</span><span data-i18n-en>Inbound email &#8594; drafted reply</span></h3>
+        <p style="color:var(--fg-2); font-size:14.5px;">
+          <span data-i18n-cs>IMAP listener v n8n vyzvedne zpr&#225;vu, OpenClaw klasifikuje intent (nab&#237;dka / dotaz / st&#237;&#382;nost), dot&#225;hne kontext z Postgres a navrhne odpov&#283;&#271;. &#268;lov&#283;k ji schv&#225;l&#237; v Telegramu, n8n ode&#353;le v&#253;sledek p&#345;es SMTP.</span>
+          <span data-i18n-en>n8n's IMAP listener picks up the message, OpenClaw classifies intent (offer / question / complaint), pulls context from Postgres, and drafts a reply. A human approves it in Telegram, and n8n sends the result via SMTP.</span>
+        </p>
+        <div class="uc-rows">
+          <div class="uc-row"><span class="label">TRIGGER</span><span class="val"><span class="mono">IMAP listener</span> v n8n</span></div>
+          <div class="uc-row"><span class="label">AI</span><span class="val">OpenClaw <span class="mono">email</span> agent &#8212; klasifikace, draft</span></div>
+          <div class="uc-row"><span class="label">HITL</span><span class="val">schv&#225;len&#237; v Telegramu p&#345;ed odesl&#225;n&#237;m</span></div>
+          <div class="uc-row"><span class="label">ACTION</span><span class="val"><span class="mono">SMTP</span> odesl&#225;n&#237; + log do Postgres</span></div>
+          <div class="uc-row"><span class="label">DATA</span><span class="val">kontext z&#225;kazn&#237;ka, hist. komunikace</span></div>
+        </div>
+      </div>
+      <div class="codeblock">
+        <div class="codeblock-head"><span>workflows/email-assistant.json</span><button class="copy" data-copy="uc-email-code"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button></div>
+<pre class="codeblock-body" id="uc-email-code"><span class="c"># n8n nodes (excerpt)</span>
+<span class="k">trigger</span>:  IMAP → INBOX
+<span class="k">classify</span>: openclaw.agents.email
+<span class="k">enrich</span>:   postgres.SELECT customer_ctx
+<span class="k">draft</span>:    openclaw.tools.compose
+<span class="k">approve</span>:  telegram.sendMessage
+           waitForResponse(<span class="s">'✓ / ✘'</span>)
+<span class="k">act</span>:      smtp.send
+<span class="k">audit</span>:    postgres.INSERT audit_log</pre>
+      </div>
+    </div>
+
+    <div class="uc-pane" id="uc-research">
+      <div>
+        <h3><span data-i18n-cs>Cron &#8594; webov&#225; re&#353;er&#353;e &#8594; souhrn do DB</span><span data-i18n-en>Cron &#8594; web scrape &#8594; summary in DB</span></h3>
+        <p style="color:var(--fg-2); font-size:14.5px;">
+          <span data-i18n-cs>Pravideln&#253; cron nebo manu&#225;ln&#237; trigger spust&#237; <span class="mono">reality_browser</span>. Agent prohled&#225; zdroje, sumarizuje, MindsDB skoruje relevanci. V&#253;sledek do Postgres, notifikace na Telegram.</span>
+          <span data-i18n-en>A cron or manual trigger fires <span class="mono">reality_browser</span>. The agent fetches sources, summarises, MindsDB scores relevance. Result lands in Postgres, notification on Telegram.</span>
+        </p>
+        <div class="uc-rows">
+          <div class="uc-row"><span class="label">TRIGGER</span><span class="val">manu&#225;ln&#237; nebo <span class="mono">cron</span> v n8n</span></div>
+          <div class="uc-row"><span class="label">AI</span><span class="val"><span class="mono">reality_browser</span> &#8594; <span class="mono">analytics</span></span></div>
+          <div class="uc-row"><span class="label">ACTION</span><span class="val">z&#225;pis do DB, notifikace p&#345;es Telegram</span></div>
+          <div class="uc-row"><span class="label">DATA</span><span class="val">MindsDB predikce relevance</span></div>
+        </div>
+      </div>
+      <div class="codeblock">
+        <div class="codeblock-head"><span>workflows/research.json</span><button class="copy" data-copy="uc-research-code"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button></div>
+<pre class="codeblock-body" id="uc-research-code"><span class="c"># schedule: 08:00 daily</span>
+<span class="k">trigger</span>:  cron(<span class="s">'0 8 * * *'</span>)
+<span class="k">fetch</span>:    reality_browser.scrape
+           sources: [hn, rss, custom_urls]
+<span class="k">score</span>:    mindsdb.predict relevance
+<span class="k">filter</span>:   relevance &gt; 0.65
+<span class="k">store</span>:    postgres.INSERT findings
+<span class="k">notify</span>:   telegram.send digest</pre>
+      </div>
+    </div>
+
+    <div class="uc-pane" id="uc-crm">
+      <div>
+        <h3><span data-i18n-cs>Webhook &#8594; valida&#269;n&#237; agent &#8594; z&#225;pis do CRM</span><span data-i18n-en>Webhook &#8594; validating agent &#8594; CRM write</span></h3>
+        <p style="color:var(--fg-2); font-size:14.5px;">
+          <span data-i18n-cs>Extern&#237; syst&#233;m po&#353;le webhook, n8n p&#345;ed&#225; OpenClawu k valida&#269;ci. Agent zkontroluje konzistenci p&#345;es <span class="mono">reality_calibrator</span>, navrhne akci, n8n zavol&#225; CRM/ERP API.</span>
+          <span data-i18n-en>An external system fires a webhook, n8n hands it to OpenClaw for validation. The <span class="mono">reality_calibrator</span> checks consistency, an action is proposed, n8n calls the CRM/ERP API.</span>
+        </p>
+        <div class="uc-rows">
+          <div class="uc-row"><span class="label">TRIGGER</span><span class="val"><span class="mono">webhook</span> z extern&#237;ho syst&#233;mu</span></div>
+          <div class="uc-row"><span class="label">AI</span><span class="val"><span class="mono">reality_calibrator</span> &#8212; valida&#269;e &amp; akce</span></div>
+          <div class="uc-row"><span class="label">ACTION</span><span class="val"><span class="mono">REST</span> call do CRM/ERP</span></div>
+          <div class="uc-row"><span class="label">DATA</span><span class="val">MindsDB federace nad v&#237;ce zdroji</span></div>
+        </div>
+      </div>
+      <div class="codeblock">
+        <div class="codeblock-head"><span>workflows/crm-bridge.json</span><button class="copy" data-copy="uc-crm-code"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button></div>
+<pre class="codeblock-body" id="uc-crm-code"><span class="c"># inbound from any system</span>
+<span class="k">trigger</span>:  webhook POST /hooks/event
+<span class="k">validate</span>: reality_calibrator.check
+           against: postgres + mindsdb
+<span class="k">propose</span>:  openclaw.tool_policy.allow
+<span class="k">act</span>:      http.request CRM /api/v2
+<span class="k">retry</span>:    3x exp-backoff
+<span class="k">audit</span>:    postgres.INSERT audit_log</pre>
+      </div>
+    </div>
+
+    <div class="uc-pane" id="uc-analytics">
+      <div>
+        <h3><span data-i18n-cs>Dotaz &#8594; analytick&#253; agent &#8594; report</span><span data-i18n-en>SQL question &#8594; <span class="mono">analytics</span> agent &#8594; report</span></h3>
+        <p style="color:var(--fg-2); font-size:14.5px;">
+          <span data-i18n-cs>U&#382;ivatel po&#353;le do Telegramu dotaz v&nbsp;p&#345;irozen&#233;m jazyce. <span class="mono">analytics</span> agent pou&#382;ije MindsDB nad firemn&#237;mi daty, vr&#225;t&#237; tabulku + koment&#225;&#345;. SQL, kter&#233; se spustilo, je v&#382;dy v auditu.</span>
+          <span data-i18n-en>User asks in natural language via Telegram. The <span class="mono">analytics</span> agent runs MindsDB over company data and returns table + commentary. The exact query that ran is always in the audit log.</span>
+        </p>
+        <div class="uc-rows">
+          <div class="uc-row"><span class="label">TRIGGER</span><span class="val">Telegram message v p&#345;irozen&#233;m jazyce</span></div>
+          <div class="uc-row"><span class="label">AI</span><span class="val"><span class="mono">analytics</span> &#8212; NL2SQL p&#345;es MindsDB</span></div>
+          <div class="uc-row"><span class="label">ACTION</span><span class="val">Telegram odpov&#283;&#271; + CSV link</span></div>
+          <div class="uc-row"><span class="label">DATA</span><span class="val">MindsDB &#8594; Postgres + ERP federace</span></div>
+        </div>
+      </div>
+      <div class="codeblock">
+        <div class="codeblock-head"><span>workflows/analytics.json</span><button class="copy" data-copy="uc-analytics-code"><span data-i18n-cs>kop&#237;rovat</span><span data-i18n-en>copy</span></button></div>
+<pre class="codeblock-body" id="uc-analytics-code"><span class="c"># conversational analytics</span>
+<span class="k">trigger</span>:  telegram.onMessage
+<span class="k">parse</span>:    openclaw.analytics.nl2sql
+<span class="k">explain</span>:  preview SQL to user
+<span class="k">execute</span>:  mindsdb.query
+<span class="k">format</span>:   render table + chart
+<span class="k">reply</span>:    telegram.send + csv
+<span class="k">audit</span>:    postgres.INSERT audit_log</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ AGENTS ═══════════════════ -->
+<section id="agents" data-screen-label="07 Agents">
+  <div class="container">
+    <p class="section-label">06 · <span data-i18n-cs>Agenti (OpenClaw)</span><span data-i18n-en>Agents (OpenClaw)</span></p>
+
+    <h2 style="margin-bottom:36px;">
+      <span data-i18n-cs>Specializovan&#237; agenti m&#237;sto jednoho univerz&#225;ln&#237;ho.</span>
+      <span data-i18n-en>Specialised agents instead of one do-it-all model.</span>
+    </h2>
+
+    <div class="agents">
+      <div class="agents-head">
+        <div>#</div>
+        <div><span data-i18n-cs>n&#225;zev</span><span data-i18n-en>name</span></div>
+        <div class="role"><span data-i18n-cs>role</span><span data-i18n-en>role</span></div>
+        <div class="desc"><span data-i18n-cs>popis</span><span data-i18n-en>description</span></div>
+      </div>
+      <div class="agent-row" data-agent="main">
+        <div class="num">01</div>
+        <div class="name">main</div>
+        <div class="role">dispatcher</div>
+        <div class="desc"><span data-i18n-cs>sm&#283;ruje po&#382;adavky na specializovan&#233; agenty</span><span data-i18n-en>routes requests to specialised agents</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agent-row" data-agent="reality_calibrator">
+        <div class="num">02</div>
+        <div class="name">reality_calibrator</div>
+        <div class="role">validator</div>
+        <div class="desc"><span data-i18n-cs>ov&#283;&#345;uje konzistenci v&#253;stup&#367;</span><span data-i18n-en>verifies output consistency</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agent-row" data-agent="reality_browser">
+        <div class="num">03</div>
+        <div class="name">reality_browser</div>
+        <div class="role">research</div>
+        <div class="desc"><span data-i18n-cs>web scraping a re&#353;er&#353;e</span><span data-i18n-en>web scraping &amp; research</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agent-row" data-agent="analytics">
+        <div class="num">04</div>
+        <div class="name">analytics</div>
+        <div class="role">data</div>
+        <div class="desc"><span data-i18n-cs>datov&#225; anal&#253;za p&#345;es MindsDB</span><span data-i18n-en>data analysis through MindsDB</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agent-row" data-agent="email">
+        <div class="num">05</div>
+        <div class="name">email</div>
+        <div class="role">comms</div>
+        <div class="desc"><span data-i18n-cs>zpracov&#225;n&#237; emailov&#233; komunikace</span><span data-i18n-en>handles email communication</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agent-row" data-agent="reality_dom_analyzer">
+        <div class="num">06</div>
+        <div class="name">reality_dom_analyzer</div>
+        <div class="role">ui</div>
+        <div class="desc"><span data-i18n-cs>anal&#253;za DOM/UI stavu</span><span data-i18n-en>analyses DOM/UI state</span></div>
+        <div class="agent-detail"><div class="agent-detail-inner"></div></div>
+      </div>
+      <div class="agents-foot">
+        <span data-i18n-cs>Vlastn&#237; agent? &nbsp;</span>
+        <span data-i18n-en>Custom agent? &nbsp;</span>
+        <span>→ docs/agents/custom.md · WIP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ AUDIT / HITL ═══════════════════ -->
+<section id="audit" data-screen-label="08 Audit">
+  <div class="container">
+    <p class="section-label">07 · <span data-i18n-cs>Audit &amp; HITL</span><span data-i18n-en>Audit &amp; HITL</span></p>
+
+    <div class="sec-head">
+      <h2>
+        <span data-i18n-cs>Ka&#382;d&#253; krok je dohledateln&#253;. Ka&#382;dou citlivou akci schvaluje &#269;lov&#283;k.</span>
+        <span data-i18n-en>Every step is traceable. Sensitive actions go through human approval.</span>
+      </h2>
+      <div class="meta"><span data-i18n-cs>bezpe&#269;n&#233; v&#253;choz&#237; nastaven&#237;</span><span data-i18n-en>built-in defaults</span></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap: 32px;" class="audit-grid">
+      <div class="audit">
+        <div class="audit-head">
+          <span>postgres &gt; audit_log <span style="color:var(--fg-3)">·</span> tail -f</span>
+          <span class="live"><span class="pulse"></span><span data-i18n-cs>uk&#225;zkov&#253; stream</span><span data-i18n-en>sample stream</span></span>
+        </div>
+        <div class="audit-body" id="auditBody"><!-- JS populates --></div>
+      </div>
+
+      <div>
+        <ul class="infra-list" style="border-top:1px solid var(--line);">
+          <li><span class="ico">01</span><span class="k">audit_log</span><span class="v"><span data-i18n-cs>ka&#382;d&#225; hrana toku z&#225;pis do Postgres &#8212; trigger, agent, tool, v&#253;sledek, latence</span><span data-i18n-en>every flow edge writes to Postgres — trigger, agent, tool, result, latency</span></span></li>
+          <li><span class="ico">02</span><span class="k">tool policy</span><span class="v"><span data-i18n-cs>YAML whitelist, co agent sm&#283; volat. Bez explicitn&#237;ho povolen&#237; ne.</span><span data-i18n-en>YAML whitelist of what an agent may call. No explicit allow = no.</span></span></li>
+          <li><span class="ico">03</span><span class="k">HITL gate</span><span class="v"><span data-i18n-cs>v&#353;e citliv&#233; (odesl&#225;n&#237; emailu, z&#225;pis do CRM, platby) p&#345;ed akc&#237; jde na schv&#225;len&#237; &#269;lov&#283;ka v\u00a0Telegramu</span><span data-i18n-en>anything sensitive (sending email, CRM writes, payments) waits for human approval in Telegram</span></span></li>
+          <li><span class="ico">04</span><span class="k">replay</span><span class="v"><span data-i18n-cs>z auditu lze ka&#382;d&#253; b&#283;h p&#345;ehr&#225;t krok po kroku v\u00a0n8n &#8212; debug i compliance</span><span data-i18n-en>any run can be replayed step-by-step in n8n — debug and compliance</span></span></li>
+          <li><span class="ico">05</span><span class="k">model swap</span><span class="v"><span data-i18n-cs>prom&#283;n&#237;te Claude / GPT / lok&#225;ln&#237; model bez zm&#283;ny zbytku &#8212; model je konfig, ne k&#243;d</span><span data-i18n-en>swap Claude / GPT / local model without changing the rest — model is config, not code</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <style>
+      @media (max-width: 920px) {
+        #audit .audit-grid { grid-template-columns: 1fr !important; }
+      }
+    </style>
+  </div>
+</section>
+
+<!-- ═══════════════════ INFRA ═══════════════════ -->
+<section id="infra" data-screen-label="09 Infra">
+  <div class="container">
+    <p class="section-label">08 · <span data-i18n-cs>Infrastruktura</span><span data-i18n-en>Infrastructure</span></p>
+
+    <h2 style="margin-bottom:36px;">
+      <span data-i18n-cs>B&#283;&#382;&#237; tam, kde m&#225;&#353; Docker.</span>
+      <span data-i18n-en>Runs anywhere you already have Docker.</span>
+    </h2>
+
+    <div class="infra-grid">
+      <ul class="infra-list">
+        <li><span class="ico">01</span><span class="k">host</span><span class="v">Hetzner VPS, AWS EC2, vlastn&#237; server &#8212; jakkoli Docker tam doje&#382;d&#237;</span></li>
+        <li><span class="ico">02</span><span class="k">deploy</span><span class="v">plain <span class="mono">docker compose</span> nebo managed Docker host</span></li>
+        <li><span class="ico">03</span><span class="k">ci/cd</span><span class="v">extern&#237; pipeline &#8212; build, test, deploy hooks</span></li>
+        <li><span class="ico">04</span><span class="k">context</span><span class="v">repo docs, DB stav a audit log</span></li>
+        <li><span class="ico">05</span><span class="k">interface</span><span class="v">u&#382;ivatel komunikuje p&#345;es Telegram, REST API nebo n8n UI</span></li>
+        <li><span class="ico">06</span><span class="k">backup</span><span class="v">Postgres dump cron + S3-compatible bucket</span></li>
+      </ul>
+
+      <div class="cost">
+        <h4><span data-i18n-cs>n&#225;klady · orienta&#269;n&#237; minimum</span><span data-i18n-en>cost · indicative minimum</span></h4>
+        <div class="price">~&nbsp;15&nbsp;€<span class="unit">/mo</span></div>
+        <p>
+          <span data-i18n-cs>Orienta&#269;n&#237; rozpo&#269;et pro men&#353;&#237; pilot na jednom VPS. Re&#225;ln&#225; cena se odv&#237;j&#237; od provozu, zvolen&#233;ho modelu a retence dat.</span>
+          <span data-i18n-en>Indicative budget for a small pilot on one VPS. Actual cost depends on traffic, model choice, and data retention.</span>
+        </p>
+        <ul>
+          <li><span>VPS · Hetzner CX22</span><span>~ 4.50 €</span></li>
+          <li><span>Backups · S3</span><span>~ 1 €</span></li>
+          <li><span>LLM tokens · light usage</span><span>~ 9.50 €</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTRIBUTE ═══════════════════ -->
+<section id="contribute" data-screen-label="10 Contribute">
+  <div class="container">
+    <p class="section-label">09 · <span data-i18n-cs>P&#345;isp&#283;j</span><span data-i18n-en>Contribute</span></p>
+
+    <h2 style="margin-bottom:36px;">
+      <span data-i18n-cs>Otev&#345;en&#253; k&#243;d pro t&#253;my, kter&#233; cht&#283;j&#237; rozum&#283;t provozu.</span>
+      <span data-i18n-en>Open code for teams that want to understand the runtime.</span>
+    </h2>
+
+    <div class="contrib-grid">
+      <a class="contrib-card" href="https://github.com/HonzaHezina/janAGI">
+        <span class="label"><span data-i18n-cs>REPOZIT&#193;&#344;</span><span data-i18n-en>REPOSITORY</span></span>
+        <span class="title">HonzaHezina/janAGI</span>
+        <span class="desc"><span data-i18n-cs>hlavn&#237; repozit&#225;&#345; projektu &#8212; zdrojov&#253; k&#243;d, konfigurace, workflow a kontext k janAGI.</span><span data-i18n-en>primary project repository — janAGI source, configuration, workflows, and project context.</span></span>
+        <span class="arrow">→ <span data-i18n-cs>otev&#345;&#237;t na GitHubu</span><span data-i18n-en>open on GitHub</span></span>
+      </a>
+      <div class="contrib-card">
+        <span class="label"><span data-i18n-cs>PULL REQUEST</span><span data-i18n-en>PULL REQUEST</span></span>
+        <span class="title">CONTRIBUTING.md · WIP</span>
+        <span class="desc"><span data-i18n-cs>ve&#345;ejn&#225; pravidla pro p&#345;isp&#237;v&#225;n&#237; je&#353;t&#283; nejsou publikovan&#225;. Workflow z&#367;st&#225;v&#225; fork &#8594; branch &#8594; PR.</span><span data-i18n-en>public contribution guidelines are not published yet. The workflow stays fork → branch → PR.</span></span>
+        <span class="arrow">→ <span data-i18n-cs>pravidla brzy</span><span data-i18n-en>guidelines soon</span></span>
+      </div>
+      <div class="contrib-card">
+        <span class="label"><span data-i18n-cs>DISKUSE</span><span data-i18n-en>DISCUSS</span></span>
+        <span class="title"><span data-i18n-cs>GitHub Discussions · soukrom&#225; beta</span><span data-i18n-en>GitHub Discussions · Private beta</span></span>
+        <span class="desc"><span data-i18n-cs>ve&#345;ejn&#233; diskuse je&#353;t&#283; nejsou otev&#345;en&#233;. Dotazy, n&#225;vrhy a RFC zat&#237;m b&#283;&#382;&#237; v priv&#225;tn&#237;m beta re&#382;imu.</span><span data-i18n-en>public discussions are not open yet. Questions, proposals, and RFCs currently run in private beta.</span></span>
+        <span class="arrow">→ <span data-i18n-cs>po&#382;&#225;dat o p&#345;&#237;stup</span><span data-i18n-en>request access</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ COMMERCIAL ═══════════════════ -->
+<section id="commercial" data-screen-label="11 Commercial">
+  <div class="container">
+    <p class="section-label">10 · <span data-i18n-cs>Komer&#269;n&#237; nasazen&#237;</span><span data-i18n-en>Commercial</span></p>
+
+    <div class="banner">
+      <div>
+        <div class="label"><span data-i18n-cs>NECHCE&#352; TO STAV&#282;T S&#193;M?</span><span data-i18n-en>DON'T WANT TO BUILD IT YOURSELF?</span></div>
+        <h3>
+          <span data-i18n-cs>hezina.cz nasad&#237; janAGI do re&#225;ln&#233;ho provozu.</span>
+          <span data-i18n-en>hezina.cz deploys janAGI into real production workflows.</span>
+        </h3>
+        <p>
+        <span data-i18n-cs>Pilot za 2&#8211;4 t&#253;dny, m&#283;s&#237;&#269;n&#237; provoz a dal&#353;&#237; rozvoj podle c&#237;le. janagi.org je motor &#8212; hezina.cz je showroom.</span>
+        <span data-i18n-en>Pilot in 2–4 weeks, followed by ongoing ops and development based on the target scope. janagi.org is the engine — hezina.cz is the showroom.</span>
+        </p>
+      </div>
+      <div>
+        <a class="btn primary" href="https://hezina.cz">
+          <span>hezina.cz</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="container">
+    <div>
+      <div style="color:var(--fg); margin-bottom:12px;">
+        <span class="brand-mark" style="vertical-align:-3px; margin-right:8px;"></span>
+        janAGI<span style="color:var(--fg-3)">.org</span>
+      </div>
+      <div class="links">
+        <a href="https://github.com/HonzaHezina/janAGI">GitHub</a>
+        <span><span data-i18n-cs>Dokumentace · rozpracov&#225;no</span><span data-i18n-en>Docs · WIP</span></span>
+        <span><span data-i18n-cs>Diskuse · soukrom&#225; beta</span><span data-i18n-en>Discussions · Private beta</span></span>
+        <span><span data-i18n-cs>Changelog · rozpracov&#225;no</span><span data-i18n-en>Changelog · WIP</span></span>
+        <a href="https://hezina.cz">hezina.cz ↗</a>
+      </div>
+    </div>
+    <div class="meta" style="text-align:right;">
+      <div>MIT · 2024–2026</div>
+      <div class="row" data-i18n-cs>k&#243;d mluv&#237; v&#237;c ne&#382; slova</div>
+      <div class="row" data-i18n-en>code talks louder than words</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script>
+  // ───── Language toggle (CS / EN) ─────
+  (function () {
+    const root = document.documentElement;
+    const saved = window.__TWEAKS__.lang || 'cs';
+    root.setAttribute('lang', saved);
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.lang === saved ? 'true' : 'false');
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        root.setAttribute('lang', lang);
+        document.querySelectorAll('.lang-toggle button').forEach(b => {
+          b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false');
+        });
+        try {
+          window.parent.postMessage({type: '__edit_mode_set_keys', edits: {lang}}, '*');
+        } catch (e) {}
+      });
+    });
+  })();
+
+  // ───── Architecture layer detail ─────
+  (function () {
+    const data = {
+      n8n: {
+        title: { cs: 'L1 · Orchestrace / n8n', en: 'L1 · Orchestration / n8n' },
+        cs: 'n8n je dirigent. Drží workflow, triggery, retries, audit log a schvalovací kroky. Když přijde request — IMAP, webhook, cron — rozhodne, kterého agenta zavolat a co s výsledkem udělat.',
+        en: 'n8n is the conductor. It holds workflows, triggers, retries, audit log and approval steps. When a request comes in — IMAP, webhook, cron — it decides which agent to call and what to do with the result.',
+        kv: { cs: [['rozhraní', 'vizuální editor + REST'], ['rozsah', 'triggery, směrování, retry'], ['běh', 'Docker']], en: [['interface', 'visual editor + REST'], ['scope', 'triggers, routing, retries'], ['runtime', 'Docker']] }
+      },
+      openclaw: {
+        title: { cs: 'L2 · Vyhodnocení / OpenClaw', en: 'L2 · Reasoning / OpenClaw' },
+        cs: 'OpenClaw drží AI rozhodování — agenti, klasifikace, návrhy akcí, tool policy. Není to chat-bot. Je to vrstva, která rozhodne "co dělat" a vrátí to do n8n k vykonání.',
+        en: 'OpenClaw holds the AI reasoning — agents, classification, action proposals, tool policy. Not a chatbot. A layer that decides "what to do" and hands it back to n8n to execute.',
+        kv: { cs: [['modely', 'Claude / GPT / local'], ['politika', 'YAML + whitelist nástrojů'], ['kontext', 'repo dokumentace + stav DB']], en: [['models', 'Claude / GPT / local'], ['policy', 'YAML + tool whitelist'], ['context', 'repo docs + DB state']] }
+      },
+      data: {
+        title: { cs: 'L3 · Data / MindsDB + PostgreSQL', en: 'L3 · Data / MindsDB + PostgreSQL' },
+        cs: 'PostgreSQL drží stav (zákazníci, kontext, audit). MindsDB nad ním a nad firemními systémy dělá federaci a predikce. Agent neví, odkud data jsou — vidí jednotné rozhraní.',
+        en: 'PostgreSQL holds state (customers, context, audit). MindsDB sits on top and federates company systems plus predictions. The agent does not know the source — it sees a uniform interface.',
+        kv: { cs: [['databáze', 'PostgreSQL'], ['federace', 'MindsDB'], ['konektory', 'CRM, ERP, soubory, API']], en: [['db', 'PostgreSQL'], ['federation', 'MindsDB'], ['connectors', 'CRM, ERP, files, APIs']] }
+      }
+    };
+
+    const layers = document.querySelectorAll('.layer');
+    const detail = document.getElementById('archDetail');
+
+    function render(key) {
+      const d = data[key];
+      const lang = document.documentElement.getAttribute('lang') || 'cs';
+        const title = typeof d.title === 'string' ? d.title : d.title[lang];
+        const kv = Array.isArray(d.kv) ? d.kv : d.kv[lang];
+        detail.innerHTML = `
+          <h3>${title}</h3>
+          <p>${lang === 'cs' ? d.cs : d.en}</p>
+          <dl class="kv">
+            ${kv.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}
+          </dl>
+        `;
+    }
+    layers.forEach(l => {
+      l.addEventListener('click', () => {
+        layers.forEach(x => x.classList.remove('active'));
+        l.classList.add('active');
+        render(l.dataset.layer);
+      });
+    });
+    // re-render on language change
+    new MutationObserver(() => {
+      const active = document.querySelector('.layer.active');
+      if (active) render(active.dataset.layer);
+    }).observe(document.documentElement, {attributes: true, attributeFilter: ['lang']});
+
+    render('n8n');
+  })();
+
+  // ───── Flow diagram ─────
+  (function () {
+    const STEPS = [
+      {title:{ cs:'Příjem · IMAP / webhook', en:'Inbound · IMAP / webhook' }, cs:'n8n trigger zachytí příchozí email, webhook nebo cron událost. Žádná business logika — jen normalizace payloadu a první zápis do audit_log.', en:'An n8n trigger picks up an inbound email, webhook or cron event. No business logic — just payload normalisation and the first audit_log write.', kv:{ cs:[['uzel','n8n.IMAP'],['vstup','email / webhook / cron'],['audit','event.received']], en:[['node','n8n.IMAP'],['input','email / webhook / cron'],['audit','event.received']] }},
+      {title:{ cs:'n8n · směrování a obohacení', en:'n8n · routing & enrichment' }, cs:'n8n se rozhodne, kterého agenta zavolat. Předem natáhne kontext z Postgres a připraví prompt + tool whitelist.', en:'n8n decides which agent to call. Pre-fetches context from Postgres and prepares prompt + tool whitelist.', kv:{ cs:[['uzel','n8n.Function'],['úloha','směrování + obohacení'],['audit','route.dispatched']], en:[['node','n8n.Function'],['task','route + enrich'],['audit','route.dispatched']] }},
+      {title:{ cs:'OpenClaw · vyhodnocení agenta', en:'OpenClaw · agent reasoning' }, cs:'OpenClaw spustí konkrétního agenta s tool policy. Klasifikuje, navrhne akci a draft. Nic se nevykoná — jen návrh.', en:'OpenClaw runs the specific agent with a tool policy. Classifies, proposes action and draft. Nothing executes — only proposes.', kv:{ cs:[['uzel','openclaw.agent.run'],['úloha','klasifikace + draft'],['audit','agent.proposed']], en:[['node','openclaw.agent.run'],['task','classify + draft'],['audit','agent.proposed']] }},
+      {title:{ cs:'HITL · schválení', en:'HITL · approval gate' }, cs:'Citlivé akce čekají na schválení člověka. Návrh jde do Telegramu nebo jiného schvalovacího kanálu. ✓ pokračuje. ✘ vrací workflow zpět do revize.', en:'Sensitive actions wait for human sign-off. The proposal goes to Telegram or another approval channel. ✓ proceeds. ✘ sends the workflow back for review.', kv:{ cs:[['brána','telegram.wait'],['rozhodnutí','schválit / zamítnout'],['audit','hitl.decided']], en:[['gate','telegram.wait'],['decision','approve / reject'],['audit','hitl.decided']] }},
+      {title:{ cs:'Výstup · SMTP / API / DB', en:'Output · SMTP / API / DB' }, cs:'Schválená akce se vykoná. Retry s exp. backoffem. Finální audit záznam.', en:'Approved action executes. Retry with exp. backoff. Final audit record.', kv:{ cs:[['uzel','smtp / http / pg'],['retry','3× exp-backoff'],['audit','action.committed']], en:[['node','smtp / http / pg'],['retry','3× exp-backoff'],['audit','action.committed']] }}
+    ];
+    const stage = document.getElementById('flowStage');
+    const arrows = document.querySelectorAll('#flowArrows .a');
+    const detail = document.getElementById('flowDetail');
+    const playBtn = document.getElementById('flowPlay');
+    const nodes = stage.querySelectorAll('.flow-node');
+    function setStep(i) {
+      nodes.forEach((n,j)=>n.classList.toggle('active',j===i));
+      arrows.forEach((a,j)=>a.classList.toggle('lit',j<i));
+      const lang = document.documentElement.getAttribute('lang')||'cs';
+      const s = STEPS[i];
+      const title = typeof s.title === 'string' ? s.title : s.title[lang];
+      const kv = Array.isArray(s.kv) ? s.kv : s.kv[lang];
+      detail.innerHTML = `<div><h4>${title}</h4><p>${lang==='cs'?s.cs:s.en}</p></div><div><dl class="meta">${kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>`;
+    }
+    nodes.forEach((n,i)=>n.addEventListener('click',()=>setStep(i)));
+    let timer;
+    playBtn.addEventListener('click',()=>{
+      clearInterval(timer); let i=0; setStep(0);
+      timer = setInterval(()=>{ i++; if(i>=STEPS.length){clearInterval(timer);return;} setStep(i); },1100);
+    });
+    new MutationObserver(()=>{
+      const a=[...nodes].findIndex(n=>n.classList.contains('active'));
+      if(a>=0) setStep(a);
+    }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+    setStep(0);
+  })();
+
+  // ───── Use case tabs ─────
+  document.querySelectorAll('.uc-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      document.querySelectorAll('.uc-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.uc-pane').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.pane).classList.add('active');
+    });
+  });
+
+  // ───── Agent expand ─────
+  (function () {
+    const YAML = {
+      main:`<span class="c"># agents/main.yaml</span>\n<span class="k">name</span>: main\n<span class="k">role</span>: dispatcher\n<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>\n<span class="k">routes</span>:\n  email     → email_agent\n  research  → reality_browser\n  data      → analytics\n<span class="k">tools</span>: [n8n.webhook, postgres.read]`,
+      reality_calibrator:`<span class="c"># agents/reality_calibrator.yaml</span>\n<span class="k">name</span>: reality_calibrator\n<span class="k">role</span>: validator\n<span class="k">model</span>: <span class="s">claude-haiku-4-5</span>\n<span class="k">checks</span>: [schema, cross-source, hallucination]\n<span class="k">tools</span>: [postgres.read, mindsdb.query]`,
+      reality_browser:`<span class="c"># agents/reality_browser.yaml</span>\n<span class="k">name</span>: reality_browser\n<span class="k">role</span>: research\n<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>\n<span class="k">sources</span>: [hn, rss, custom_urls]\n<span class="k">tools</span>: [http.fetch, dom.parse, postgres.write]`,
+      analytics:`<span class="c"># agents/analytics.yaml</span>\n<span class="k">name</span>: analytics\n<span class="k">role</span>: data\n<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>\n<span class="k">capabilities</span>: [nl2sql, chart, csv_export]\n<span class="k">tools</span>: [mindsdb.query, postgres.read]`,
+      email:`<span class="c"># agents/email.yaml</span>\n<span class="k">name</span>: email\n<span class="k">role</span>: comms\n<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>\n<span class="k">hitl</span>: required_before_send\n<span class="k">tools</span>: [smtp.send, postgres.read]`,
+      reality_dom_analyzer:`<span class="c"># agents/reality_dom_analyzer.yaml</span>\n<span class="k">name</span>: reality_dom_analyzer\n<span class="k">role</span>: ui\n<span class="k">model</span>: <span class="s">claude-sonnet-4-6</span>\n<span class="k">capabilities</span>: [dom_diff, selector_suggest]\n<span class="k">tools</span>: [browser.snapshot, dom.query]`
+    };
+    document.querySelectorAll('.agent-row').forEach(row=>{
+      row.addEventListener('click',()=>{
+        const exp = row.classList.contains('expanded');
+        document.querySelectorAll('.agent-row').forEach(r=>r.classList.remove('expanded'));
+        if(!exp){ row.classList.add('expanded'); row.querySelector('.agent-detail-inner').innerHTML = YAML[row.dataset.agent]||''; }
+      });
+    });
+  })();
+
+  // ───── Audit log ticker ─────
+  (function () {
+    const body = document.getElementById('auditBody');
+    if(!body) return;
+    const SRC = ['n8n','openclaw','mindsdb','postgres','telegram','smtp'];
+    const M = [
+      ['ok','event.received','IMAP message id=8FA32B'],
+      ['ok','route.dispatched','→ agent: email'],
+      ['ok','agent.proposed','classify=offer, confidence=0.92'],
+      ['wait','hitl.pending','awaiting approval (telegram)'],
+      ['ok','hitl.decided','✓ approved by reviewer@company.tld'],
+      ['ok','action.committed','smtp.send · 312 ms'],
+      ['ok','audit.written','audit_log id=#48217'],
+      ['ok','mindsdb.query','SELECT * FROM revenue_q4 · 184 ms'],
+      ['ok','agent.proposed','render: chart + csv'],
+      ['err','tool.denied','agent tried http.post — not in policy'],
+      ['ok','cron.fired','reality_browser · 08:00 daily'],
+      ['ok','mindsdb.predict','relevance=0.81 → store'],
+      ['ok','reality_calibrator','consistency check passed'],
+      ['ok','action.committed','http POST /api/v2/leads · 408 ms']
+    ];
+    function ts(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`; }
+    let i=0;
+    function push(){
+      const [lvl,src,msg]=M[i%M.length]; i++;
+      const r=document.createElement('div'); r.className='audit-row';
+      r.innerHTML=`<span class="t">${ts()}</span><span class="lvl ${lvl}">${lvl==='ok'?'✓ ok':lvl==='wait'?'… wait':'✗ err'}</span><span class="src">${SRC[Math.floor(Math.random()*SRC.length)]}</span><span class="msg">${src} <span style="color:var(--fg-3)">·</span> ${msg}</span>`;
+      body.appendChild(r);
+      while(body.children.length>11) body.removeChild(body.firstChild);
+    }
+    for(let k=0;k<6;k++) push();
+    setInterval(push,1400);
+  })();
+
+  // ───── Copy buttons ─────
+  (function () {
+    const buttons = document.querySelectorAll('.copy');
+    const labels = {
+      cs: { idle: 'kop&#237;rovat', done: 'zkop&#237;rov&#225;no' },
+      en: { idle: 'copy', done: 'copied' }
+    };
+
+    function currentLabels() {
+      return labels[(document.documentElement.getAttribute('lang') || 'cs') === 'en' ? 'en' : 'cs'];
+    }
+
+    function syncLabels() {
+      const { idle } = currentLabels();
+      buttons.forEach((btn) => {
+        if (btn.dataset.state !== 'done') btn.textContent = idle;
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.copy);
+        if (!target) return;
+        navigator.clipboard.writeText(target.textContent).then(() => {
+          btn.dataset.state = 'done';
+          btn.textContent = currentLabels().done;
+          setTimeout(() => {
+            btn.dataset.state = '';
+            btn.textContent = currentLabels().idle;
+          }, 1200);
+        });
+      });
+    });
+
+    new MutationObserver(syncLabels).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['lang']
+    });
+
+    syncLabels();
+  })();
+
+  // ───── Apply persisted tweaks on load ─────
+  (function () {
+    const t = window.__TWEAKS__;
+    document.documentElement.style.setProperty('--accent', t.accent);
+    // contrast color for accent buttons
+    const accentFg = isDark(t.accent) ? '#ffffff' : '#04141d';
+    document.documentElement.style.setProperty('--accent-fg', accentFg);
+    document.body.dataset.density = t.density;
+
+    function isDark(hex) {
+      const c = hex.replace('#', '');
+      const r = parseInt(c.substr(0, 2), 16);
+      const g = parseInt(c.substr(2, 2), 16);
+      const b = parseInt(c.substr(4, 2), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000 < 140;
+    }
+  })();
+</script>
+
+<!-- Tweaks panel app -->
+<div id="tweaks-root"></div>
+<script type="text/babel">
+  const { useEffect } = React;
+  const ACCENTS = ['#7dd3fc', '#86efac', '#fbbf24', '#f472b6'];
+
+  function App() {
+    const [t, setTweak] = useTweaks(window.__TWEAKS__);
+
+    useEffect(() => {
+      document.documentElement.style.setProperty('--accent', t.accent);
+      const c = t.accent.replace('#','');
+      const r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+      const dark = (r*299+g*587+b*114)/1000 < 140;
+      document.documentElement.style.setProperty('--accent-fg', dark ? '#ffffff' : '#04141d');
+      document.body.dataset.density = t.density;
+    }, [t.accent, t.density]);
+
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Accent">
+          <TweakColor
+            label="Color"
+            value={t.accent}
+            options={ACCENTS}
+            onChange={v => setTweak('accent', v)}
+          />
+        </TweakSection>
+
+        <TweakSection label="Layout">
+          <TweakRadio
+            label="Density"
+            value={t.density}
+            options={[
+              {value: 'comfortable', label: 'Comfortable'},
+              {value: 'compact', label: 'Compact'}
+            ]}
+            onChange={v => setTweak('density', v)}
+          />
+        </TweakSection>
+
+        <TweakSection label="Language">
+          <TweakRadio
+            label="Default"
+            value={t.lang}
+            options={[
+              {value: 'cs', label: 'CS'},
+              {value: 'en', label: 'EN'}
+            ]}
+            onChange={v => {
+              setTweak('lang', v);
+              document.documentElement.setAttribute('lang', v);
+              document.querySelectorAll('.lang-toggle button').forEach(b => {
+                b.setAttribute('aria-pressed', b.dataset.lang === v ? 'true' : 'false');
+              });
+            }}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<App />);
+</script>
+
+</body>
+</html>
