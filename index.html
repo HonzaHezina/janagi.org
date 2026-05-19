@@ -6,14 +6,13 @@
 <title>janAGI — open-source AI orchestration</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 
 <script>
   // Persisted defaults — Tweaks panel rewrites this block on disk.
   window.__TWEAKS__ = /*EDITMODE-BEGIN*/{
-    "accent": "#7dd3fc",
+    "accent": "#22c55e",
     "density": "comfortable",
-    "heroVariant": "terminal",
     "lang": "cs"
   }/*EDITMODE-END*/;
 
@@ -114,32 +113,37 @@
 
 <style>
   :root {
-    --bg:        #0a0a0a;
-    --bg-1:     #111113;
-    --bg-2:     #16161a;
-    --line:     #232327;
-    --line-2:   #2e2e34;
-    --fg:        #ededee;
-    --fg-2:     #a8a8ad;
-    --fg-3:     #6c6c74;
-    --accent:   #7dd3fc;
+    --bg:        #0f172a;
+    --bg-1:     #111827;
+    --bg-2:     #1e293b;
+    --line:     #1f2937;
+    --line-2:   #334155;
+    --fg:        #f8fafc;
+    --fg-2:     #cbd5e1;
+    --fg-3:     #94a3b8;
+    --accent:   #22c55e;
+    --accent-rgb: 34, 197, 94;
     --accent-fg: #04141d;
-    --warn:     #f7b955;
-    --ok:       #86efac;
+    --warn:     #f59e0b;
+    --ok:       #22c55e;
 
     --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    --sans: 'Inter', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sans: 'Plus Jakarta Sans', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     --pad-section: clamp(64px, 8vw, 112px);
     --pad-x: clamp(20px, 5vw, 48px);
     --maxw: 1200px;
+    --shadow-card: 0 24px 60px rgba(2, 6, 23, 0.28);
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
+    background:
+      radial-gradient(circle at top left, rgba(var(--accent-rgb), 0.14), transparent 34%),
+      radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 28%),
+      var(--bg);
     color: var(--fg);
     font-family: var(--sans);
     font-size: 15px;
@@ -147,6 +151,16 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 72%);
+    opacity: 0.35;
   }
   body[data-density="compact"] { --pad-section: clamp(40px, 5vw, 72px); }
 
@@ -156,6 +170,29 @@
   code, pre, .mono { font-family: var(--mono); }
 
   ::selection { background: var(--accent); color: var(--accent-fg); }
+
+  a, button, input, textarea, .layer, .flow-node, .uc-tab, .contrib-card, .agent-row {
+    transition: color 180ms, background-color 180ms, border-color 180ms, box-shadow 180ms, transform 180ms, opacity 180ms;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    text-decoration: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 
   /* ───── Layout ───── */
   .container { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad-x); }
@@ -195,16 +232,20 @@
   /* ───── Top nav ───── */
   .nav {
     position: sticky; top: 0; z-index: 50;
-    background: rgba(10,10,10,0.78);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--line);
+    background: transparent;
+    border-bottom: 0;
   }
   .nav-inner {
     display: flex; align-items: center; gap: 24px;
-    height: 56px;
-    max-width: var(--maxw); margin: 0 auto;
-    padding: 0 var(--pad-x);
+    height: 60px;
+    max-width: var(--maxw); margin: 12px auto 0;
+    padding: 0 18px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.86);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-card);
   }
   .brand {
     font-family: var(--mono);
@@ -230,10 +271,10 @@
     font-family: var(--mono);
     font-size: 13px;
     color: var(--fg-2);
-    padding: 6px 10px;
-    border-radius: 4px;
+    padding: 8px 10px;
+    border-radius: 10px;
   }
-  .nav-links a:hover { color: var(--fg); background: var(--bg-1); text-decoration: none; }
+  .nav-links a:hover { color: var(--fg); background: rgba(30, 41, 59, 0.92); text-decoration: none; }
   .nav-right {
     display: flex; align-items: center; gap: 8px;
   }
@@ -258,12 +299,12 @@
   }
 
   /* ───── Hero ───── */
-  .hero { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(56px, 8vw, 96px); }
+  .hero { padding-top: clamp(38px, 6vw, 76px); padding-bottom: clamp(56px, 8vw, 96px); }
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 56px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: 42px;
+    align-items: stretch;
   }
   @media (max-width: 920px) {
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -271,27 +312,58 @@
 
   .hero-eyebrow {
     font-family: var(--mono); font-size: 12px;
-    color: var(--fg-3); letter-spacing: 0.04em;
+    color: var(--fg-2); letter-spacing: 0.04em;
     display: inline-flex; align-items: center; gap: 10px;
-    margin-bottom: 28px;
+    margin-bottom: 26px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(15, 23, 42, 0.76);
+    box-shadow: var(--shadow-card);
   }
   .hero-eyebrow .dot {
     width: 7px; height: 7px; border-radius: 50%;
-    background: var(--ok);
-    box-shadow: 0 0 0 3px rgba(134,239,172,0.18);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.18);
   }
 
   .hero h1 .accent { color: var(--accent); }
   .hero h1 .slash { color: var(--fg-3); }
 
   .hero-sub {
-    margin-top: 24px;
-    font-size: 17px;
+    margin-top: 22px;
+    font-size: 18px;
     color: var(--fg-2);
-    max-width: 50ch;
+    max-width: 58ch;
     line-height: 1.55;
   }
-  .hero-sub strong { color: var(--fg); font-weight: 500; }
+  .hero-sub strong { color: var(--fg); font-weight: 600; }
+
+  .hero-proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .hero-proof span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.78);
+    color: var(--fg);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-note {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--fg-3);
+    max-width: 56ch;
+  }
 
   .hero-cta {
     display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px;
@@ -299,17 +371,22 @@
 
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: 13px; font-weight: 500;
-    height: 40px; padding: 0 16px;
-    border: 1px solid var(--line);
-    background: var(--bg-1);
+    font-family: var(--sans); font-size: 14px; font-weight: 600;
+    height: 44px; padding: 0 18px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(17, 24, 39, 0.92);
     color: var(--fg);
-    border-radius: 4px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 120ms, border-color 120ms;
+    text-decoration: none;
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.16);
+  }
+  .btn:hover {
+    background: var(--bg-2);
+    border-color: rgba(148, 163, 184, 0.28);
+    transform: translateY(-1px);
     text-decoration: none;
   }
-  .btn:hover { background: var(--bg-2); border-color: var(--line-2); text-decoration: none; }
   .btn.primary {
     background: var(--accent); color: var(--accent-fg); border-color: var(--accent);
   }
@@ -317,62 +394,142 @@
   .btn .arrow { opacity: 0.6; transition: transform 120ms; }
   .btn:hover .arrow { transform: translateX(2px); opacity: 1; }
 
-  /* terminal */
-  .terminal {
-    background: var(--bg-1);
-    border: 1px solid var(--line);
-    border-radius: 8px;
+  .hero-demo {
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 24px;
+    background:
+      linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98)),
+      var(--bg-1);
     overflow: hidden;
-    font-family: var(--mono);
+    box-shadow: var(--shadow-card);
+  }
+  .hero-demo .demo-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(15, 23, 42, 0.88);
+  }
+  .hero-demo .demo-title {
     font-size: 13px;
-    line-height: 1.65;
+    font-weight: 600;
+    color: var(--fg);
   }
-  .terminal-head {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--line);
-    background: #0d0d10;
+  .hero-demo .demo-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    padding: 6px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--accent-rgb), 0.24);
+    background: rgba(var(--accent-rgb), 0.08);
   }
-  .terminal-head .dots { display: flex; gap: 6px; }
-  .terminal-head .dots span {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: #2a2a2f;
+  .hero-demo .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 18px;
   }
-  .terminal-head .dots span:nth-child(1) { background: #4a3a3a; }
-  .terminal-head .dots span:nth-child(2) { background: #4a463a; }
-  .terminal-head .dots span:nth-child(3) { background: #3a4a3d; }
-  .terminal-head .title {
-    font-size: 12px; color: var(--fg-3); margin-left: 4px;
+  @media (max-width: 720px) {
+    .hero-demo .demo-grid { grid-template-columns: 1fr; }
   }
-  .terminal-body { padding: 18px 20px; }
-  .terminal-body .line { white-space: pre-wrap; }
-  .term-prompt { color: var(--fg-3); user-select: none; }
-  .term-cmd    { color: var(--fg); }
-  .term-out    { color: var(--fg-2); }
-  .term-key    { color: var(--accent); }
-  .term-ok     { color: var(--ok); }
-  .term-cursor {
-    display: inline-block; width: 8px; height: 1em;
-    background: var(--accent); vertical-align: -2px;
-    animation: blink 1.05s steps(1, end) infinite;
-    margin-left: 2px;
+  .hero-demo .demo-card {
+    padding: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.72);
   }
-  @keyframes blink { 50% { opacity: 0; } }
+  .hero-demo .demo-card .k {
+    display: inline-flex;
+    margin-bottom: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: 0.04em;
+  }
+  .hero-demo .demo-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--fg);
+  }
+  .hero-demo .demo-card p {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--fg-2);
+  }
+  .hero-demo .demo-log {
+    margin: 0 18px 18px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.74);
+  }
+  .hero-demo .demo-log-head,
+  .hero-demo .demo-log-row {
+    display: grid;
+    grid-template-columns: 78px 120px 1fr;
+    gap: 14px;
+    padding: 11px 14px;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .hero-demo .demo-log-head {
+    color: var(--fg-3);
+    background: rgba(2, 6, 23, 0.38);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+  .hero-demo .demo-log-row {
+    color: var(--fg-2);
+    border-top: 1px solid rgba(148, 163, 184, 0.08);
+  }
+  .hero-demo .demo-log-row:first-of-type { border-top: 0; }
+  .hero-demo .demo-log-row strong { color: var(--fg); font-weight: 500; }
+  .hero-demo .demo-log-row .ok { color: var(--ok); }
+  .hero-demo .demo-log-row .wait { color: var(--warn); }
+  .hero-demo .demo-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(148, 163, 184, 0.12);
+  }
+  @media (max-width: 720px) {
+    .hero-demo .demo-meta { grid-template-columns: 1fr; }
+  }
+  .hero-demo .demo-meta .cell {
+    background: rgba(15, 23, 42, 0.84);
+    padding: 14px 18px 16px;
+  }
+  .hero-demo .demo-meta .k {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-3);
+  }
+  .hero-demo .demo-meta .v {
+    color: var(--fg);
+    font-size: 14px;
+    line-height: 1.45;
+  }
 
   /* hero stat row */
   .hero-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 1px;
+    gap: 12px;
     margin-top: 56px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
+    background: transparent;
+    border: 0;
   }
   .hero-stats .cell {
-    background: var(--bg);
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.92));
     padding: 18px 20px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
   }
   .hero-stats .k {
     font-family: var(--mono); font-size: 11px;
@@ -380,11 +537,25 @@
     margin-bottom: 6px;
   }
   .hero-stats .v {
-    font-family: var(--mono); font-size: 16px;
-    color: var(--fg); font-weight: 500;
+    font-size: 16px;
+    color: var(--fg); font-weight: 600;
+    line-height: 1.4;
   }
   @media (max-width: 720px) {
     .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .layers,
+  .arch-detail,
+  .codeblock,
+  .agents,
+  .flow,
+  .audit,
+  .cost,
+  .banner,
+  .contact-meta,
+  .contact-card {
+    box-shadow: var(--shadow-card);
   }
 
   /* ───── What it is ───── */
@@ -396,19 +567,28 @@
   @media (max-width: 920px) { .twocol { grid-template-columns: 1fr; gap: 32px; } }
 
   .stack-list {
-    list-style: none; padding: 0; margin: 0;
-    border-top: 1px solid var(--line);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    border-top: 0;
   }
+  @media (max-width: 720px) { .stack-list { grid-template-columns: 1fr; } }
   .stack-list li {
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 116px 1fr;
     gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line);
+    padding: 16px 18px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.92));
     font-size: 14px;
+    box-shadow: var(--shadow-card);
   }
   .stack-list .k { font-family: var(--mono); color: var(--fg-3); font-size: 13px; }
-  .stack-list .v { color: var(--fg); }
+  .stack-list .v { color: var(--fg); line-height: 1.5; }
 
   /* ───── Architecture diagram ───── */
   .arch {
@@ -969,7 +1149,7 @@
     gap: 24px;
     align-items: center;
     background:
-      linear-gradient(180deg, rgba(125,211,252,0.04), transparent 60%),
+      linear-gradient(180deg, rgba(var(--accent-rgb), 0.08), transparent 60%),
       var(--bg-1);
   }
   @media (max-width: 720px) { .banner { grid-template-columns: 1fr; } }
@@ -1090,7 +1270,7 @@
   .contact-form textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.12);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.16);
   }
   .contact-form .btn {
     justify-content: center;
@@ -1207,69 +1387,147 @@
         <h1>
           <span data-i18n-cs>
             Open-source AI&nbsp;orchestrace<br>
-            pro <span class="accent">re&#225;ln&#233; firemn&#237;<br>procesy</span>.
+            pro <span class="accent">procesy, kter&#233;<br>mus&#237;&#353; &#345;&#237;dit</span>.
           </span>
           <span data-i18n-en>
             Open-source AI&nbsp;orchestration<br>
-            for <span class="accent">real business<br>processes</span>.
+            for <span class="accent">processes you<br>need to control</span>.
           </span>
         </h1>
 
         <p class="hero-sub">
           <span data-i18n-cs>
-            <strong>AI workflow, kter&#233; vid&#237;&#353;, &#345;&#237;d&#237;&#353; a m&#225;&#353; pod kontrolou.</strong>
-            <strong>n8n</strong> dr&#382;&#237; workflow.
-            <strong>OpenClaw</strong> &#345;e&#353;&#237; rozhodov&#225;n&#237;.
-            <strong>MindsDB</strong> napojuje data.<br>
-            S dohledateln&#253;m b&#283;hem, schvalov&#225;n&#237;m a auditem na ka&#382;d&#233;m kroku.
+            <strong>janAGI skl&#225;d&#225; open-source stack pro workflow, kter&#225; opravdu udr&#382;&#237;&#353; pod kontrolou.</strong>
+            n8n dr&#382;&#237; orchestrace, OpenClaw rozhodov&#225;n&#237; a MindsDB datovou vrstvu.
+            Audit, approval gates a model swap z&#367;st&#225;vaj&#237; sou&#269;&#225;st&#237; n&#225;vrhu od prvn&#237;ho dne.
           </span>
           <span data-i18n-en>
-            <strong>AI workflows you can inspect, control, and audit.</strong>
-            <strong>n8n</strong> holds the workflow.
-            <strong>OpenClaw</strong> handles reasoning.
-            <strong>MindsDB</strong> connects the data.<br>
-            With traceable execution, approval gates, and audit at every step.
+            <strong>janAGI composes an open-source stack for workflows you can actually control.</strong>
+            n8n handles orchestration, OpenClaw reasoning, and MindsDB the data layer.
+            Audit, approval gates, and model swap stay part of the design from day one.
           </span>
         </p>
 
+        <div class="hero-proof">
+          <span><span data-i18n-cs>audit log od za&#269;&#225;tku</span><span data-i18n-en>audit log from day one</span></span>
+          <span><span data-i18n-cs>approval gates</span><span data-i18n-en>approval gates</span></span>
+          <span><span data-i18n-cs>model swap bez p&#345;epis&#367;</span><span data-i18n-en>model swap without rewrites</span></span>
+          <span><span data-i18n-cs>MIT + self-hosted</span><span data-i18n-en>MIT + self-hosted</span></span>
+        </div>
+
         <div class="hero-cta">
-          <a class="btn primary" href="#quickstart">
+          <a class="btn primary" href="#contact">
+            <span data-i18n-cs>Domluvit pilot</span>
+            <span data-i18n-en>Book a pilot</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="btn" href="#quickstart">
             <span data-i18n-cs>Proj&#237;t rychl&#253; start</span>
             <span data-i18n-en>View quick start</span>
             <span class="arrow">→</span>
           </a>
           <a class="btn" href="https://github.com/HonzaHezina/janAGI">
-            <span>GitHub</span>
-            <span class="arrow">↗</span>
-          </a>
-          <a class="btn" href="https://hezina.cz">
-            <span data-i18n-cs>Domluvit pilot s hezina.cz</span>
-            <span data-i18n-en>Book a pilot with hezina.cz</span>
+            <span data-i18n-cs>Repo na GitHubu</span>
+            <span data-i18n-en>View GitHub repo</span>
             <span class="arrow">↗</span>
           </a>
         </div>
+
+        <p class="hero-note">
+          <span data-i18n-cs>Chce&#353; za&#269;&#237;t s&#225;m? Vezmi open-source repo. Chce&#353; pilot nebo produk&#269;n&#237; rollout? Pokra&#269;uj na kontakt nebo hezina.cz.</span>
+          <span data-i18n-en>Want to start on your own? Use the open-source repo. Need a pilot or production rollout? Continue to contact or hezina.cz.</span>
+        </p>
       </div>
 
-      <!-- Terminal -->
-      <div class="terminal" aria-hidden="true">
-        <div class="terminal-head">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <span class="title">~/janAGI · zsh</span>
+      <div class="hero-demo">
+        <div class="demo-head">
+          <div class="demo-title">
+            <span data-i18n-cs>Uk&#225;zka provozn&#237;ho patternu</span>
+            <span data-i18n-en>Operational pattern preview</span>
+          </div>
+          <span class="demo-pill">
+            <span data-i18n-cs>request &rarr; decision &rarr; action</span>
+            <span data-i18n-en>request &rarr; decision &rarr; action</span>
+          </span>
         </div>
-        <div class="terminal-body">
-<div class="line"><span class="term-prompt">$ </span><span class="term-cmd">git clone https://github.com/HonzaHezina/janAGI.git</span></div>
-<div class="line"><span class="term-out">Cloning into 'janAGI'... done.</span></div>
-<div class="line"><span class="term-prompt">$ </span><span class="term-cmd">cd janAGI &amp;&amp; docker compose up -d</span></div>
-<div class="line"><span class="term-out">[+] Running 4/4</span></div>
-<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">n8n</span>           <span class="term-ok">Started</span></span></div>
-<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">openclaw</span>     <span class="term-ok">Started</span></span></div>
-<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">mindsdb</span>      <span class="term-ok">Started</span></span></div>
-<div class="line"><span class="term-out"> &#x2713; Container <span class="term-key">postgres</span>     <span class="term-ok">Started</span></span></div>
-<div class="line">&nbsp;</div>
-<div class="line"><span class="term-out">→ n8n:       http://localhost:5678</span></div>
-<div class="line"><span class="term-out">→ openclaw:  http://localhost:7000</span></div>
-<div class="line"><span class="term-out">→ mindsdb:   http://localhost:47334</span></div>
-<div class="line"><span class="term-prompt">$ </span><span class="term-cursor"></span></div>
+
+        <div class="demo-grid">
+          <div class="demo-card">
+            <span class="k">01 &middot; TRIGGER</span>
+            <h3>
+              <span data-i18n-cs>Email / webhook / cron</span>
+              <span data-i18n-en>Email / webhook / cron</span>
+            </h3>
+            <p>
+              <span data-i18n-cs>Jeden vstup, jednotn&#233; event schema a prvn&#237; z&#225;pis do audit logu.</span>
+              <span data-i18n-en>One ingress, a normalised event schema, and the first audit-log write.</span>
+            </p>
+          </div>
+          <div class="demo-card">
+            <span class="k">02 &middot; AGENT</span>
+            <h3>
+              <span data-i18n-cs>OpenClaw + tool policy</span>
+              <span data-i18n-en>OpenClaw + tool policy</span>
+            </h3>
+            <p>
+              <span data-i18n-cs>Agent klasifikuje a navrhuje akci, ale nic citliv&#233;ho nepust&#237; bez pravidel.</span>
+              <span data-i18n-en>The agent classifies and proposes actions, but nothing sensitive runs without policy.</span>
+            </p>
+          </div>
+          <div class="demo-card">
+            <span class="k">03 &middot; APPROVAL</span>
+            <h3>
+              <span data-i18n-cs>&#268;lov&#283;k p&#345;ed akc&#237;</span>
+              <span data-i18n-en>Human gate before action</span>
+            </h3>
+            <p>
+              <span data-i18n-cs>n8n vr&#225;t&#237; n&#225;vrh ke schv&#225;len&#237; a a&#382; potom vol&#225; SMTP, API nebo datab&#225;zi.</span>
+              <span data-i18n-en>n8n routes the proposal for approval and only then calls SMTP, API, or the database.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="demo-log">
+          <div class="demo-log-head">
+            <span><span data-i18n-cs>krok</span><span data-i18n-en>step</span></span>
+            <span><span data-i18n-cs>vrstva</span><span data-i18n-en>owner</span></span>
+            <span><span data-i18n-cs>ud&#225;lost</span><span data-i18n-en>event</span></span>
+          </div>
+          <div class="demo-log-row">
+            <span>01</span>
+            <strong>n8n</strong>
+            <span><span data-i18n-cs>Inbound payload p&#345;ijat a normalizov&#225;n</span><span data-i18n-en>Inbound payload received and normalised</span></span>
+          </div>
+          <div class="demo-log-row">
+            <span>02</span>
+            <strong>OpenClaw</strong>
+            <span><span data-i18n-cs>Intent klasifikov&#225;n, tools zkontrolov&#225;ny</span><span data-i18n-en>Intent classified, tools checked</span></span>
+          </div>
+          <div class="demo-log-row">
+            <span>03</span>
+            <strong>HITL</strong>
+            <span class="wait"><span data-i18n-cs>&#268;ek&#225; na schv&#225;len&#237; &#269;lov&#283;ka v Telegramu</span><span data-i18n-en>Waiting for human approval in Telegram</span></span>
+          </div>
+          <div class="demo-log-row">
+            <span>04</span>
+            <strong>n8n</strong>
+            <span class="ok"><span data-i18n-cs>Akce potvrzena, z&#225;pis proveden a audit ulo&#382;en</span><span data-i18n-en>Action confirmed, write committed, audit persisted</span></span>
+          </div>
+        </div>
+
+        <div class="demo-meta">
+          <div class="cell">
+            <span class="k">STACK</span>
+            <div class="v">n8n + OpenClaw + MindsDB + Postgres</div>
+          </div>
+          <div class="cell">
+            <span class="k"><span data-i18n-cs>GUARDRAILS</span><span data-i18n-en>GUARDRAILS</span></span>
+            <div class="v"><span data-i18n-cs>audit log, retries, approval gate a whitelist n&#225;stroj&#367;</span><span data-i18n-en>audit log, retries, approval gate, and tool whitelist</span></div>
+          </div>
+          <div class="cell">
+            <span class="k"><span data-i18n-cs>DELIVERY</span><span data-i18n-en>DELIVERY</span></span>
+            <div class="v"><span data-i18n-cs>self-hosted repo pro build, pilot a rollout p&#345;es hezina.cz</span><span data-i18n-en>self-hosted repo for builders, with pilot and rollout via hezina.cz</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2311,18 +2569,28 @@ docker compose up -d
   (function () {
     const t = window.__TWEAKS__;
     document.documentElement.style.setProperty('--accent', t.accent);
-    // contrast color for accent buttons
-    const accentFg = isDark(t.accent) ? '#ffffff' : '#04141d';
+    const c = t.accent.replace('#', '');
+    const r = parseInt(c.substr(0, 2), 16);
+    const g = parseInt(c.substr(2, 2), 16);
+    const b = parseInt(c.substr(4, 2), 16);
+    const luminance = (x, y, z) => {
+      const channels = [x, y, z].map((value) => {
+        const srgb = value / 255;
+        return srgb <= 0.03928 ? srgb / 12.92 : Math.pow((srgb + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+    };
+    const contrast = (a, bLum) => {
+      const lighter = Math.max(a, bLum);
+      const darker = Math.min(a, bLum);
+      return (lighter + 0.05) / (darker + 0.05);
+    };
+    document.documentElement.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+    const accentLum = luminance(r, g, b);
+    const darkLum = luminance(4, 20, 29);
+    const accentFg = contrast(accentLum, darkLum) >= contrast(accentLum, 1) ? '#04141d' : '#ffffff';
     document.documentElement.style.setProperty('--accent-fg', accentFg);
     document.body.dataset.density = t.density;
-
-    function isDark(hex) {
-      const c = hex.replace('#', '');
-      const r = parseInt(c.substr(0, 2), 16);
-      const g = parseInt(c.substr(2, 2), 16);
-      const b = parseInt(c.substr(4, 2), 16);
-      return (r * 299 + g * 587 + b * 114) / 1000 < 140;
-    }
   })();
 </script>
 
@@ -2330,7 +2598,7 @@ docker compose up -d
 <div id="tweaks-root"></div>
 <script type="text/babel">
   const { useEffect } = React;
-  const ACCENTS = ['#7dd3fc', '#86efac', '#fbbf24', '#f472b6'];
+  const ACCENTS = ['#22c55e', '#38bdf8', '#f59e0b', '#a78bfa'];
 
   function App() {
     const [t, setTweak] = useTweaks(window.__TWEAKS__);
@@ -2339,8 +2607,22 @@ docker compose up -d
       document.documentElement.style.setProperty('--accent', t.accent);
       const c = t.accent.replace('#','');
       const r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
-      const dark = (r*299+g*587+b*114)/1000 < 140;
-      document.documentElement.style.setProperty('--accent-fg', dark ? '#ffffff' : '#04141d');
+      const luminance = (x, y, z) => {
+        const channels = [x, y, z].map((value) => {
+          const srgb = value / 255;
+          return srgb <= 0.03928 ? srgb / 12.92 : Math.pow((srgb + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+      };
+      const contrast = (a, bLum) => {
+        const lighter = Math.max(a, bLum);
+        const darker = Math.min(a, bLum);
+        return (lighter + 0.05) / (darker + 0.05);
+      };
+      document.documentElement.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+      const accentLum = luminance(r, g, b);
+      const darkLum = luminance(4, 20, 29);
+      document.documentElement.style.setProperty('--accent-fg', contrast(accentLum, darkLum) >= contrast(accentLum, 1) ? '#04141d' : '#ffffff');
       document.body.dataset.density = t.density;
     }, [t.accent, t.density]);
 
